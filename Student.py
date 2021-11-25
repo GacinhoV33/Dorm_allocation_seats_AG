@@ -24,8 +24,8 @@ class Student:
         self.standard_of_room = standard_of_room
         self.PESEL = PESEL
         self.income = income
-        if self.year_of_studies == 1 and gpa is not None:
-            raise ImportWarning("Invalid data imported. There's no gpa when year == 1")
+        # if self.year_of_studies == 1 and gpa is not None:
+            # raise ImportWarning("Invalid data imported. There's no gpa when year == 1")
         self.gpa = gpa
         self.friends_in_room = friends_in_room
 

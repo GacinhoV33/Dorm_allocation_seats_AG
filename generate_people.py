@@ -1,10 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from Student import Student
 import pandas as pd
 import numpy as np
 import random
-
+import time
+import xlsxwriter
 
 Male_first_names = ("Aaron", "Adam", "Adrian", "Adolf", "Albert", "Artur", "Alfred", "Aleksander", "Arkadiusz", 
                     "Bartłomiej", "Bartosz", "Beniamin", "Błażej", "Bogdan", "Bogusław", "Bryan", 
@@ -72,19 +74,52 @@ Female_last_names = ("Nowak", "Kowalska", "Wiśniewska", "Wójcik", "Kowalczyk",
 
 )
 
-def generate_random_people(n:int = 100) ->list:
+
+def generate_random_people(n:int = 100) -> list:
     """ CREATING DATA """
     male_first_names, female_first_names = generate_first_name(n//2, n//2)
     male_last_names, female_last_names = generate_last_name(n//2, n//2)
+    distances = generate_distance(n)
+    y_of_study = generate_year_of_study(n)
+    standards = generate_standard(n)
+    PESELs = generate_PESEL(n)
+    incomes = generate_income(n)
+    """First year students shouldn't have a GPA """
+    gpas = generate_gpa(n)
+    write_to_excel("First_test", [(male_first_names+female_first_names), (male_last_names+female_last_names),
+                    distances, y_of_study, standards, PESELs, incomes, gpas
+    ])
 
+    friends_in_room = generate_friends_in_room(n, 0.05)
 
     """ CREATING INSTANCES OF CLASS STUDENT"""
+    people = list()
+    for i in range(n // 2):
+        people.append(Student(
+            female_first_names[i], female_last_names,
+            distances[i], y_of_study[i], standards[i], incomes[i], gpas[i], PESELs[i], sex='F')
+        )
+        people.append(Student(
+            male_first_names[i], male_last_names,
+            distances[i], y_of_study[i], standards[i], incomes[i], gpas[i], PESELs[i], sex='M')
+        )
+    return people
+
+
+def generate_gpa(n: int) ->list:
+    gpas = list()
+    for _ in range(n):
+        r = random.randint(2, 4)
+        r += random.random()
+        gpas.append(r)
+    return gpas
+
 
 def generate_first_name(males_number: int=0, females_number: int=0) ->tuple:
     amount = males_number + females_number 
     male_names = list()
     females_names = list()
-    for i in range(males_number):
+    for _ in range(males_number):
         male_names.append(Male_first_names[random.randint(0, len(Male_first_names)-1)])
     for _ in range(females_number):
         females_names.append(Female_first_names[random.randint(0, len(Female_first_names)-1)])
@@ -136,7 +171,7 @@ def generate_standard(number_of_people: int) ->list:
 def generate_PESEL(number_of_people: int)->list:
     """"""
     def make_pesel():
-        pesel = str
+        pesel = ''
         for _ in range(6):
             pesel += str(random.randint(0, 9))
         return pesel
@@ -144,8 +179,8 @@ def generate_PESEL(number_of_people: int)->list:
     PESELs = list()    
     for _ in range(number_of_people):
         p = make_pesel()
-        while p not in PESELs:
-            p = make_pesel()
+        # while p not in PESELs:
+        #     p = make_pesel()
         PESELs.append(p)
     return PESELs
 
@@ -153,7 +188,7 @@ def generate_PESEL(number_of_people: int)->list:
 def generate_income(number_of_people: int)->list:
     incomes = list()
     for _ in range(number_of_people):
-        r = random.randint(1, 5):
+        r = random.randint(1, 5)
         if r==1:
             incomes.append(random.randint(0, 1000))
         elif r==2:
@@ -169,9 +204,25 @@ def generate_income(number_of_people: int)->list:
     return incomes
 
 
-def generate_friends_in_room(number_of_people: int) -> list:
-    #TODO 
-    pass 
+def generate_friends_in_room(number_of_people: int, p: float) -> list:
+    """parameter p is responsible for amount of people who wants friends in room"""
+    friends_in_room = list()
+    return friends_in_room
 
 
-generate_random_people(50)
+def write_to_excel(name: str, data: list):
+    WorkBook = xlsxwriter.Workbook(f'Data/{name}.xlsx')
+    sheet = WorkBook.add_worksheet()
+    Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+    for i in range(1, len(data)):
+        for j in range(len(data[0])):
+            sheet.write_row(i, j, str(data[i][j]))
+    WorkBook.close()
+
+t = time.time()
+ppl = generate_random_people(100)
+"""Writing data to excel"""
+
+at = time.time()
+print(f"It took {float(at - t)} seconds.")
+
