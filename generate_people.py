@@ -141,7 +141,7 @@ def generate_last_name(males_number: int, females_number: int) ->tuple:
     return male_names, females_names
 
 
-def generate_distance(number_of_people: int, diversity: int=0) ->list:
+def generate_distance(number_of_people: int, diversity: int=0) -> list:
     """ Diversity describes how randomly generated distances should be. Range 1-10
         #TODO implement diversity
     """
@@ -152,7 +152,7 @@ def generate_distance(number_of_people: int, diversity: int=0) ->list:
     return distances
 
 
-def generate_year_of_study(number_of_people: int) ->list:
+def generate_year_of_study(number_of_people: int) -> list:
     """#TODO Consult whether this function should create First Year student or not"""
     y_of_study = list()
     for _ in range(number_of_people):
@@ -160,7 +160,7 @@ def generate_year_of_study(number_of_people: int) ->list:
     return y_of_study
 
 
-def generate_standard(number_of_people: int) ->list:
+def generate_standard(number_of_people: int) -> list:
     """#TODO Consult amount of standards (right now 3) """
     standards = list()
     for _ in range(number_of_people):
@@ -168,7 +168,7 @@ def generate_standard(number_of_people: int) ->list:
     return standards
 
 
-def generate_PESEL(number_of_people: int)->list:
+def generate_PESEL(number_of_people: int) -> list:
     """"""
     def make_pesel():
         pesel = ''
@@ -185,7 +185,7 @@ def generate_PESEL(number_of_people: int)->list:
     return PESELs
 
 
-def generate_income(number_of_people: int)->list:
+def generate_income(number_of_people: int) -> list:
     incomes = list()
     for _ in range(number_of_people):
         r = random.randint(1, 5)
