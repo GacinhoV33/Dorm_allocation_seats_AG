@@ -219,6 +219,7 @@ def write_to_excel(name: str, data: list):
             sheet.write_row(i, j, str(data[i][j]))
     WorkBook.close()
 
+
 t = time.time()
 ppl = generate_random_people(100)
 """Writing data to excel"""

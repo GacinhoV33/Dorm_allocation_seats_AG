@@ -6,9 +6,8 @@ from Student import Student
 """IMPORT LIBRARIES"""
 import pandas as pd
 import numpy as np
-
-
-
+from Dorm import Dorm, Room, Rooms
+from Population import Population
 """ 'P' is reserved for whole kind of probabilities"""
 
 
@@ -27,6 +26,14 @@ GIRLS CANNOT LIVE WITH BOYS
 
 """
 
+if __name__ == "__main__":
+    """ETAP 0 - stworzenie niezbędnych struktur i danych"""
 
-if __name__ == '__main__':
-    x = 0
+    """ETAP 1 - Stworzenie Akademika"""
+    Dorm_TEST = Dorm("Test_dorm", Rooms, n_floors=5)
+    """ ETAP 2 - Stworzenie pierwszej populacji """
+    test_population = Population(200, Rooms)
+    test_population.initialize_population()
+    """ ETAP 3 - Przypisanie pokoji do instancji klasy Student"""
+    # TODO
+
