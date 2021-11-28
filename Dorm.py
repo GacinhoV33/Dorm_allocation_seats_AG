@@ -45,6 +45,11 @@ class Dorm:
         self.all_rooms = all_rooms
         self.n_floors = n_floors
 
+    def find_room_by_number(self, number: int) -> Room:
+        for room in self.all_rooms:
+            if room.number == number:
+                return room
+
     def divide_rooms_via_standard(self,):
         for room in self.all_rooms:
             if room.standard == 1:
@@ -59,16 +64,6 @@ class Dorm:
     def __str__(self,):
         #TODO DIVIDE IT BY FLOOR 
         return str(f"Dorm Name:{self.name} \n" + " ".join([f'Door number: {room.number}\n Locators: {[memb for memb in room.members]}\n Standard: {room.standard}\n-----------------\n' for room in self.all_rooms]))
-
-
-def calc_score():
-    """FUNKCJA CELU"""
-    score = 0
-    for student in ppl:
-        ach = student.calc_achievements()
-        sat = student.calc_satisfaction()
-        score += (sat * ach)
-    return score
 
 
 Rooms = list()

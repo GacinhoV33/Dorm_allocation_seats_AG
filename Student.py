@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from Dorm import Room
 """ ZALOZENIA ODNOŚNIE PARAMETRÓW STUDENTA """
 """
 year_of_studies -> przedział (1-5)
@@ -12,7 +11,7 @@ PESEL -> PAMIĘTAC ŻE TO STRING
 
 """
 
-
+#Chromosom
 class Student:
     def __init__(self, first_name: str, last_name: str, distance: float, year_of_studies: int,
                  standard_of_room: int, income: float, gpa: float,  PESEL: str, sex: str, friends_in_room: list = None):
@@ -29,7 +28,7 @@ class Student:
             # raise ImportWarning("Invalid data imported. There's no gpa when year == 1")
         self.gpa = gpa
         self.friends_in_room = friends_in_room
-
+        """ Gen"""
         self.actual_room = None
 
     def calc_achievements(self):
@@ -72,6 +71,7 @@ class Student:
             score += 5
         else:
             raise ValueError("Wrong distance. ")
+        return score
 
     def calc_satisfaction(self):
         """ JEŚLI ZNAJOMI W POKOJU DODAJ PUNKTY"""
@@ -79,14 +79,15 @@ class Student:
         """ WYMYŚLI JAKIEŚ WYMAGANIE BO BIEDA""" #TODO
         score = 0
         if self.actual_room:
-            for friend in self.friends_in_room:
-                if friend.actual_room.number == self.actual_room.number:
-                    score += 4
+            if self.friends_in_room:
+                for friend in self.friends_in_room:
+                    if friend.actual_room.number == self.actual_room.number:
+                        score += 4
             if self.standard_of_room == self.actual_room.standard:
                 score += 5
         return score
 
-    def set_room(self, room: Room):
+    def set_room(self, room):
         self.actual_room = room
 
     def reset_room(self):

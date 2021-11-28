@@ -6,7 +6,9 @@ from Student import Student
 """IMPORT LIBRARIES"""
 import pandas as pd
 import numpy as np
-from Dorm import Dorm, Room, Rooms
+# from Dorm import
+from Individual import Individual, Dorm, Room, Rooms
+from generate_people import ppl
 from Population import Population
 """ 'P' is reserved for whole kind of probabilities"""
 
@@ -32,8 +34,25 @@ if __name__ == "__main__":
     """ETAP 1 - Stworzenie Akademika"""
     Dorm_TEST = Dorm("Test_dorm", Rooms, n_floors=5)
     """ ETAP 2 - Stworzenie pierwszej populacji """
-    test_population = Population(200, Rooms)
-    test_population.initialize_population()
+    test_population = Population(10, 100, ppl)
     """ ETAP 3 - Przypisanie pokoji do instancji klasy Student"""
+
+    """TEST INDIVIDUAL"""
+    if test_population.Individual_lst[0].arr_bin.shape[0] != 100:
+        print("Wrong Individual test 1")
+
+    f = 0
+
+    print(test_population.Individual_lst[0].arr_bin)
+    for room in Rooms:
+
+        c = 0
+        for i in test_population.Individual_lst[0].arr_bin:
+            if int(room.number) == int(i):
+                c += 1
+        if room.capacity != c:
+            f += 1
+            print(f"Wrong Individual test 2 -{f}")
+
     # TODO
 

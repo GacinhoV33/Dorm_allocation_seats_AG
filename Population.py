@@ -1,34 +1,36 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from Student import Student
-from random import shuffle
-from Dorm import Dorm, Room, Rooms
-import numpy as np
-""""""
+
+from Dorm import Dorm, Room
+from random import randint
+from Individual import Individual
+from generate_people import generate_random_people
 
 
 class Population:
-    def __init__(self, length: int, rooms: list):
-        self.arr_bin = np.zeros((length, 1))
-        self.rooms = rooms
+    def __init__(self, number_of_individual: int, number_of_students: int, ppl: list):
+        """GENERATE INDIVIDUALS"""
+        self.Individual_lst = list()
+        self.Rooms = list()
+        self.ppl = ppl
+        for i in range(1, 6):
+            for j in range(4):
+                if j % 2 == 0:
+                    self.Rooms.append(Room(number=i * 100 + j * 1, capacity=2, standard=randint(1, 3)))
+                else:
+                    self.Rooms.append(Room(number=i * 100 + j * 1, capacity=3, standard=randint(1, 3)))
+        self.Dorm = Dorm("Test_dorm", self.Rooms, n_floors=5)
+        for i in range(number_of_individual):
+            self.Individual_lst.append(Individual(number_of_students, self.Rooms, self.Dorm, self.ppl))
 
-    def initialize_population(self):
-        c = 0
-        for i, room in enumerate(self.rooms, 0):
-            for _ in range(room.capacity):
-                self.arr_bin[i+c] = room.number
-                c += 1
-        shuffle(self.arr_bin)
+        for individual in self.Individual_lst:
+            individual.initialize_Individual()
+            individual.set_rooms()
 
-    def __repr__(self):
-        return self.arr_bin
+    def add_Individual(self, individual: Individual):
+        self.Individual_lst.append(individual)
 
-    def __str__(self):
-        return str(self.arr_bin.transpose())
+    def delete_Individual(self, individual: Individual):
+        self.Individual_lst.remove(individual)
 
-
-if __name__ == "__main__":
-    test_population = Population(200, Rooms)
-    test_population.initialize_population()
-    print(test_population)
-    """ SOMETHING IS NO YES -> too many 100 rooms"""
+    #TODO write function to present Population readibly
