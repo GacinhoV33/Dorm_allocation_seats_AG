@@ -4,7 +4,6 @@
 from Student import Student
 
 """IMPORT LIBRARIES"""
-import pandas as pd
 import numpy as np
 # from Dorm import
 from Individual import Individual, Dorm, Room, Rooms
@@ -38,21 +37,8 @@ if __name__ == "__main__":
     """ ETAP 3 - Przypisanie pokoji do instancji klasy Student"""
 
     """TEST INDIVIDUAL"""
-    if test_population.Individual_lst[0].arr_bin.shape[0] != 100:
-        print("Wrong Individual test 1")
+    for individual in test_population.Individual_lst:
+        individual.check_correctness()
 
-    f = 0
-
-    print(test_population.Individual_lst[0].arr_bin)
-    for room in Rooms:
-
-        c = 0
-        for i in test_population.Individual_lst[0].arr_bin:
-            if int(room.number) == int(i):
-                c += 1
-        if room.capacity != c:
-            f += 1
-            print(f"Wrong Individual test 2 -{f}")
-
-    # TODO
+    test_population.print_pop()
 

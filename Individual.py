@@ -14,6 +14,7 @@ class Individual:
         self.arr_bin = np.zeros((length, 1))
         self.rooms = rooms
         self.dorm = dorm
+        self.length = length
 
     def initialize_Individual(self):
         c = 0
@@ -25,7 +26,7 @@ class Individual:
         self.set_rooms()
 
     def calc_score(self, students_lst: list):
-        """FUNKCJA CELU"""
+        """COST FUNCTION"""
         score = 0
         for student in students_lst:
             ach = student.calc_achievements()
@@ -34,10 +35,26 @@ class Individual:
         return score
 
     def set_rooms(self):
+        """ FUNCTION IS RESPONSIBLE FOR ASSIGNING ROOMS TO STUDENTS AFTER INITIALIZING"""
+        """ MAY BE USED ALSO AFTER CROSSING, MUTATING ETC."""
         for i in range(len(self.ppl)):
             if self.arr_bin[i] != 0:
                 room = self.dorm.find_room_by_number(self.arr_bin[i])
                 self.ppl[i].actual_room = room
+
+    def check_correctness(self,):
+        """ TEST 1 - Length of array (it may change after crossing)"""
+        if self.arr_bin.shape[0] != self.length:
+            raise ValueError("Wrong operation on Individual. Shape of array is not correct.")
+
+        """ TEST 2 - Amount of place granted for specific room (it may be too big after crossing)"""
+        for room in self.rooms:
+            c = 0
+            for i in self.arr_bin:
+                if int(room.number) == int(i):
+                    c += 1
+            if room.capacity != c:
+                raise ValueError("Too many rooms granted for students.")
 
     def __repr__(self):
         return self.arr_bin
@@ -54,4 +71,3 @@ if __name__ == "__main__":
     # test_Individual = Individual(200, Rooms)
     # test_Individual.initialize_Individual()
     # print(test_Individual)
-    # """ SOMETHING IS NO YES -> too many 100 rooms"""
