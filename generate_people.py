@@ -169,19 +169,7 @@ def generate_standard(number_of_people: int) -> list:
 
 
 def generate_PESEL(number_of_people: int) -> list:
-    """"""
-    def make_pesel():
-        pesel = ''
-        for _ in range(6):
-            pesel += str(random.randint(0, 9))
-        return pesel
-
-    PESELs = list()    
-    for _ in range(number_of_people):
-        p = make_pesel()
-        # while p not in PESELs:
-        #     p = make_pesel()
-        PESELs.append(p)
+    PESELs = random.sample(range(1000, 10000), number_of_people)
     return PESELs
 
 

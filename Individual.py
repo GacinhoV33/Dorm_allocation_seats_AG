@@ -25,14 +25,31 @@ class Individual:
         np.random.shuffle(self.arr_bin)
         self.set_rooms()
 
-    def calc_score(self, students_lst: list):
+    def calc_score(self):
         """COST FUNCTION"""
         score = 0
-        for student in students_lst:
+        for student in self.ppl:
             ach = student.calc_achievements()
             sat = student.calc_satisfaction()
             score += (sat * ach)
-        return score
+
+        punish = self.calc_punishment()
+        return score - punish
+
+    def calc_punishment(self):
+
+        total_punish = 0
+        """ PUNISH GIRLS AND BOYS IN THE SAME ROOM"""
+
+        for room in self.rooms:
+            locators = room.members
+            x = list()
+            for locator in locators:
+                x.append(locator.sex)
+            if set(x) != 1:
+                total_punish += 5
+        
+        return total_punish
 
     def set_rooms(self):
         """ FUNCTION IS RESPONSIBLE FOR ASSIGNING ROOMS TO STUDENTS AFTER INITIALIZING"""
@@ -41,6 +58,14 @@ class Individual:
             if self.arr_bin[i] != 0:
                 room = self.dorm.find_room_by_number(self.arr_bin[i])
                 self.ppl[i].actual_room = room
+                room.add_locator(self.ppl[i])
+
+    def reset_rooms(self):
+        """ #TODO"""
+        for i in range(len(self.ppl)):
+            room_n = self.ppl[i].actual_room
+            self.ppl[i].actual_room = None
+
 
     def check_correctness(self,):
         """ TEST 1 - Length of array (it may change after crossing)"""
@@ -55,6 +80,11 @@ class Individual:
                     c += 1
             if room.capacity != c:
                 raise ValueError("Too many rooms granted for students.")
+
+        """ TEST 3 - GIRLS NOT IN ROOMS WITH BOYS """
+
+    def Genetic_Algortihm(self, ):
+        pass
 
     def __repr__(self):
         return self.arr_bin

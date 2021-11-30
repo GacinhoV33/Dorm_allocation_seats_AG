@@ -4,6 +4,8 @@
 from Dorm import Dorm, Room
 from random import randint
 from Individual import Individual
+from copy import deepcopy
+
 from generate_people import generate_random_people
 
 
@@ -23,7 +25,7 @@ class Population:
                     self.Rooms.append(Room(number=i * 100 + j * 1, capacity=3, standard=randint(1, 3)))
         self.Dorm = Dorm("Test_dorm", self.Rooms, n_floors=5)
         for i in range(self.number_of_individuals):
-            self.Individual_lst.append(Individual(self.number_of_students, self.Rooms, self.Dorm, self.ppl))
+            self.Individual_lst.append(Individual(self.number_of_students, deepcopy(self.Rooms), self.Dorm, deepcopy(self.ppl)))
 
         for individual in self.Individual_lst:
             individual.initialize_Individual()
@@ -59,3 +61,10 @@ class Population:
                         one_line += f'     {int(self.Individual_lst[j].arr_bin[i])}         |'
 
             print(one_line)
+        score = f"Score|"
+        for i in range(self.number_of_individuals):
+            # self.Individual_lst[i].initialize_Individual()
+            score += f'     {self.Individual_lst[i].calc_score()}       |'
+            # self.Individual_lst[i].reset_rooms()
+
+        print(score)
