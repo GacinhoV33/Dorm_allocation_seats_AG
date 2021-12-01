@@ -14,7 +14,7 @@ PESEL -> PAMIĘTAC ŻE TO STRING
 #Chromosom
 class Student:
     def __init__(self, first_name: str, last_name: str, distance: float, year_of_studies: int,
-                 standard_of_room: int, income: float, gpa: float,  PESEL: str, sex: str, friends_in_room: list = None):
+                 standard_of_room: int, income: float, gpa: float,  PESEL: str, sex: str, friends_in_room: list = list()):
         self.first_name = first_name
         self.last_name = last_name
         self.sex = sex
@@ -81,8 +81,9 @@ class Student:
         if self.actual_room:
             if self.friends_in_room:
                 for friend in self.friends_in_room:
-                    if friend.actual_room.number == self.actual_room.number:
-                        score += 4
+                    if friend.actual_room:
+                        if friend.actual_room.number == self.actual_room.number:
+                            score += 5
             if self.standard_of_room == self.actual_room.standard:
                 score += 5
         return score

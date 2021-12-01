@@ -3,7 +3,6 @@
 
 from random import randint
 from Student import Student
-from generate_people import ppl
 """ Capacity is always 2 or 3"""
 #TODO CREATE MEANINGFUL DORM DATASET
 
@@ -37,20 +36,23 @@ class Room:
 
 
 class Dorm:
-    def __init__(self, name: str, all_rooms: list, n_floors: int):
+    def __init__(self, name: str, all_rooms: list, n_floors: int, ppl: list):
         self.name = name
         self.rooms_standard_1 = list()
         self.rooms_standard_2 = list()
         self.rooms_standard_3 = list()
         self.all_rooms = all_rooms
         self.n_floors = n_floors
+        self.ppl = ppl
 
     def find_room_by_number(self, number: int) -> Room:
+        """Function find instance of class Room by assigned to him number."""
         for room in self.all_rooms:
             if room.number == number:
                 return room
 
     def divide_rooms_via_standard(self,):
+        """This function divide rooms which were created with specific standard to 3 groups"""
         for room in self.all_rooms:
             if room.standard == 1:
                 self.rooms_standard_1.append(room)

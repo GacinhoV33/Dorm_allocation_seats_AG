@@ -3,7 +3,6 @@
 from Student import Student
 from random import shuffle
 from Dorm import Dorm, Room, Rooms
-from generate_people import ppl
 import numpy as np
 """"""
 

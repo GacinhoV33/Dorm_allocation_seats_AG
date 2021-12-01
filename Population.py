@@ -10,7 +10,7 @@ from generate_people import generate_random_people
 
 
 class Population:
-    def __init__(self, number_of_individuals: int, number_of_students: int, ppl: list):
+    def __init__(self, number_of_individuals: int, number_of_students: int, ppl: list, dorm: Dorm):
         """GENERATE INDIVIDUALS"""
         self.Individual_lst = list()
         self.number_of_students = number_of_students
@@ -23,9 +23,9 @@ class Population:
                     self.Rooms.append(Room(number=i * 100 + j * 1, capacity=2, standard=randint(1, 3)))
                 else:
                     self.Rooms.append(Room(number=i * 100 + j * 1, capacity=3, standard=randint(1, 3)))
-        self.Dorm = Dorm("Test_dorm", self.Rooms, n_floors=5)
+        self.dorm = dorm
         for i in range(self.number_of_individuals):
-            self.Individual_lst.append(Individual(self.number_of_students, deepcopy(self.Rooms), self.Dorm, deepcopy(self.ppl)))
+            self.Individual_lst.append(Individual(self.number_of_students, deepcopy(self.Rooms), self.dorm, deepcopy(self.ppl)))
 
         for individual in self.Individual_lst:
             individual.initialize_Individual()

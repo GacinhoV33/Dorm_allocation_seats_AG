@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from Student import Student
-import pandas as pd
+# import pandas as pd
 import numpy as np
 import random
 import time
-import xlsxwriter
+# import xlsxwriter
 
 Male_first_names = ("Aaron", "Adam", "Adrian", "Adolf", "Albert", "Artur", "Alfred", "Aleksander", "Arkadiusz", 
                     "Bartłomiej", "Bartosz", "Beniamin", "Błażej", "Bogdan", "Bogusław", "Bryan", 
@@ -86,11 +86,11 @@ def generate_random_people(n:int = 100) -> list:
     incomes = generate_income(n)
     """First year students shouldn't have a GPA """
     gpas = generate_gpa(n)
-    write_to_excel("First_test", [(male_first_names+female_first_names), (male_last_names+female_last_names),
-                    distances, y_of_study, standards, PESELs, incomes, gpas
-    ])
+    # write_to_excel("First_test", [(male_first_names+female_first_names), (male_last_names+female_last_names),
+    #                 distances, y_of_study, standards, PESELs, incomes, gpas
+    # ])
 
-    friends_in_room = generate_friends_in_room(n, 0.05)
+
 
     """ CREATING INSTANCES OF CLASS STUDENT"""
     people = list()
@@ -103,6 +103,9 @@ def generate_random_people(n:int = 100) -> list:
             male_first_names[i], male_last_names,
             distances[i], y_of_study[i], standards[i], incomes[i], gpas[i], PESELs[i], sex='M')
         )
+    """TEST WHETHER FUNCTION WORKS PROPERLY #TODO"""
+    people = generate_friends_in_room(100, people, 0.08)
+
     return people
 
 
@@ -192,24 +195,38 @@ def generate_income(number_of_people: int) -> list:
     return incomes
 
 
-def generate_friends_in_room(number_of_people: int, p: float) -> list:
+def generate_friends_in_room(number_of_people: int, people: list, p: float) -> list:
     """parameter p is responsible for amount of people who wants friends in room"""
-    friends_in_room = list()
-    return friends_in_room
+    fr_lst = [[-1, -1] for _ in range(number_of_people)]
+    for j in range(number_of_people):
+        for i in range(2):
+            """CHECKING PROBABILITY"""
+            r = random.random()
+            if r <= p and fr_lst[j][i] == -1:
+                f = random.randint(0, number_of_people)
+                fr_lst[j][i] = f
+                fr_lst[f][i] = j
+    for i, person in enumerate(people):
+        for j in range(2):
+            if fr_lst[i][j] != -1:
+                person.friends_in_room.append(people[i])
+    
+    print(f'friends list: {fr_lst}')
+    return people
 
 
-def write_to_excel(name: str, data: list):
-    WorkBook = xlsxwriter.Workbook(f'Data/{name}.xlsx')
-    sheet = WorkBook.add_worksheet()
-    Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
-    for i in range(1, len(data)):
-        for j in range(len(data[0])):
-            sheet.write_row(i, j, str(data[i][j]))
-    WorkBook.close()
+# def write_to_excel(name: str, data: list):
+#     # WorkBook = xlsxwriter.Workbook(f'Data/{name}.xlsx')
+#     # sheet = WorkBook.add_worksheet()
+#     Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+#     for i in range(1, len(data)):
+#         for j in range(len(data[0])):
+#             sheet.write_row(i, j, str(data[i][j]))
+#     WorkBook.close()
 
 
 t = time.time()
-ppl = generate_random_people(100)
+# ppl = generate_random_people(100)
 """Writing data to excel"""
 
 at = time.time()
