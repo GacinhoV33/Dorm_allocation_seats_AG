@@ -48,7 +48,7 @@ class Individual:
                 x.append(locator.sex)
             if set(x) != 1:
                 total_punish += 5
-        
+
         return total_punish
 
     def set_rooms(self):
@@ -66,7 +66,6 @@ class Individual:
             room_n = self.ppl[i].actual_room
             self.ppl[i].actual_room = None
 
-
     def check_correctness(self,):
         """ TEST 1 - Length of array (it may change after crossing)"""
         if self.arr_bin.shape[0] != self.length:
@@ -83,8 +82,15 @@ class Individual:
 
         """ TEST 3 - GIRLS NOT IN ROOMS WITH BOYS """
 
-    def Genetic_Algortihm(self, ):
+    def selection(self):
         pass
+
+    def Genetic_Algortihm(self, ):
+        """SELEKCJA"""
+        # selection()
+        """KRZYŻOWANIE"""
+
+        """MUTACJA"""
 
     def __repr__(self):
         return self.arr_bin
@@ -96,8 +102,6 @@ class Individual:
 if __name__ == "__main__":
     lst = np.array([1, 3, 8, 0, 0, 1, 0, 2])
     shuffle(lst)
-    print(lst)
-
     # test_Individual = Individual(200, Rooms)
     # test_Individual.initialize_Individual()
     # print(test_Individual)
