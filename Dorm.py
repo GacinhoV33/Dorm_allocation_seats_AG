@@ -3,8 +3,9 @@
 
 from random import randint
 from Student import Student
+
 """ Capacity is always 2 or 3"""
-#TODO CREATE MEANINGFUL DORM DATASET
+# TODO CREATE MEANINGFUL DORM DATASET
 
 """
 DORM - 5 floors : from 1 to 5
@@ -19,11 +20,12 @@ ROOMS - 2 or 3 people
 
 
 class Room:
-    def __init__(self, number: int, capacity: int, standard: int):
+    def __init__(self, number: int, capacity: int, standard: int, floor: int):
         self.number = number
         self.capacity = capacity
         self.members = list()
         self.standard = standard
+        self.floor = floor
 
     def add_locator(self, locator: Student):
         if len(self.members) >= self.capacity:
@@ -36,14 +38,16 @@ class Room:
 
 
 class Dorm:
-    def __init__(self, name: str, all_rooms: list, n_floors: int, ppl: list):
+    def __init__(self, name: str, n_floors: int, n_rooms: int, ppl: list):
         self.name = name
         self.rooms_standard_1 = list()
         self.rooms_standard_2 = list()
         self.rooms_standard_3 = list()
-        self.all_rooms = all_rooms
+        self.all_rooms = list()
+        self.n_rooms = n_rooms
         self.n_floors = n_floors
         self.ppl = ppl
+        self.create_rooms()
 
     def find_room_by_number(self, number: int) -> Room:
         """Function find instance of class Room by assigned to him number."""
@@ -51,7 +55,7 @@ class Dorm:
             if room.number == number:
                 return room
 
-    def divide_rooms_via_standard(self,):
+    def divide_rooms_via_standard(self, ):
         """This function divide rooms which were created with specific standard to 3 groups"""
         for room in self.all_rooms:
             if room.standard == 1:
@@ -63,17 +67,28 @@ class Dorm:
             else:
                 raise ValueError("Wrong standard of room! ")
 
-    def __str__(self,):
-        #TODO DIVIDE IT BY FLOOR 
-        return str(f"Dorm Name:{self.name} \n" + " ".join([f'Door number: {room.number}\n Locators: {[memb for memb in room.members]}\n Standard: {room.standard}\n-----------------\n' for room in self.all_rooms]))
+    def create_rooms(self):
+        for i in range(1, self.n_floors + 1):
+            for j in range(self.n_rooms):
+                if j % 2 == 0:
+                    self.all_rooms.append(Room(number=i * 100 + j * 1, capacity=2, standard=randint(1, 3), floor=i))
+                else:
+                    self.all_rooms.append(Room(number=i * 100 + j * 1, capacity=3, standard=randint(1, 3), floor=i))
 
+    def __str__(self, ):
+        # TODO DIVIDE IT BY FLOOR
+        return str(f" Dorm Name:{self.name} \n " + " ".join(
+            [f'Floor Number: 'f'{room.floor}\n' if str(room.number)[1:] == "00"
+             else
+             f'     Door number: {room.number}\n '
+             f'     Locators: {[memb for memb in room.members]}\n '
+             f'     Standard: {room.standard}\n     -----------------\n'
+             for room in self.all_rooms]))
 
-Rooms = list()
-for i in range(1, 6):
-    for j in range(4):
-        if j % 2 == 0:
-            Rooms.append(Room(number=i * 100 + j * 1, capacity=2, standard=randint(1, 3)))
-        else:
-            Rooms.append(Room(number=i * 100 + j * 1, capacity=3, standard=randint(1, 3)))
-
-
+# Rooms = list()
+# for i in range(1, 6):
+#     for j in range(4):
+#         if j % 2 == 0:
+#             Rooms.append(Room(number=i * 100 + j * 1, capacity=2, standard=randint(1, 3)))
+#         else:
+#             Rooms.append(Room(number=i * 100 + j * 1, capacity=3, standard=randint(1, 3)))

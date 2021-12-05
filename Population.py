@@ -20,9 +20,9 @@ class Population:
         for i in range(1, 6):
             for j in range(4):
                 if j % 2 == 0:
-                    self.Rooms.append(Room(number=i * 100 + j * 1, capacity=2, standard=randint(1, 3)))
+                    self.Rooms.append(Room(number=i * 100 + j * 1, capacity=2, standard=randint(1, 3), floor=i))
                 else:
-                    self.Rooms.append(Room(number=i * 100 + j * 1, capacity=3, standard=randint(1, 3)))
+                    self.Rooms.append(Room(number=i * 100 + j * 1, capacity=3, standard=randint(1, 3), floor=i))
         self.dorm = dorm
         for i in range(self.number_of_individuals):
             self.Individual_lst.append(Individual(self.number_of_students, deepcopy(self.Rooms), self.dorm, deepcopy(self.ppl)))

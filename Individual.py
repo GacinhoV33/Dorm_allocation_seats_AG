@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from Student import Student
 from random import shuffle
-from Dorm import Dorm, Room, Rooms
+from Dorm import Dorm, Room
 import numpy as np
 """"""
 

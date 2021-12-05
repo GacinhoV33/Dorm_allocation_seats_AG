@@ -6,7 +6,7 @@ from Student import Student
 """IMPORT LIBRARIES"""
 import numpy as np
 # from Dorm import
-from Individual import Individual, Dorm, Room, Rooms
+from Individual import Individual, Dorm, Room
 from generate_people import generate_random_people
 from Population import Population
 """ 'P' is reserved for whole kind of probabilities"""
@@ -31,11 +31,11 @@ if __name__ == "__main__":
     """ETAP 0 - stworzenie niezbędnych struktur i danych"""
     ppl = generate_random_people(100)
     """ETAP 1 - Stworzenie Akademika"""
-    Dorm_TEST = Dorm("Test_dorm", Rooms, n_floors=5, ppl=ppl)
+    Dorm_TEST = Dorm("Test_dorm", n_floors=5, n_rooms=4,  ppl=ppl)
     """ ETAP 2 - Stworzenie pierwszej populacji """
     test_population = Population(10, 100, ppl, Dorm_TEST)
     """ ETAP 3 - Przypisanie pokoji do instancji klasy Student"""
-
+    print(Dorm_TEST)
     """TEST INDIVIDUAL"""
     for individual in test_population.Individual_lst:
         individual.check_correctness()
