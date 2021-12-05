@@ -78,7 +78,10 @@ class Dorm:
     def __str__(self, ):
         # TODO DIVIDE IT BY FLOOR
         return str(f" Dorm Name:{self.name} \n " + " ".join(
-            [f'Floor Number: 'f'{room.floor}\n' if str(room.number)[1:] == "00"
+            [f'Floor Number: 'f'{room.floor}\n '
+             f'     Door number: {room.number}\n '
+             f'     Locators: {[memb for memb in room.members]}\n '
+             f'     Standard: {room.standard}\n     -----------------\n' if str(room.number)[1:] == "00"
              else
              f'     Door number: {room.number}\n '
              f'     Locators: {[memb for memb in room.members]}\n '
