@@ -40,8 +40,8 @@ if __name__ == "__main__":
     for individual in test_population.Individual_lst:
         individual.check_correctness()
 
-    # test_population.print_pop()
-    for i in range(10):
-        print(ppl[i])
+    test_population.print_pop()
+    # for i in range(10):
+    #     print(ppl[i])
 
 

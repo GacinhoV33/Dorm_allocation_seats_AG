@@ -90,8 +90,6 @@ def generate_random_people(n: int = 100) -> list:
     """ CREATING DATA """
     male_first_names, female_first_names = generate_first_name(n // 2, n // 2)
     male_last_names, female_last_names = generate_last_name(n // 2, n // 2)
-    print("Męskie nazwiska:     ", male_last_names)
-    print("Żeńskie nazwiska:    ", female_last_names)
     distances = generate_distance(n)
     y_of_study = generate_year_of_study(n)
     standards = generate_standard(n)
@@ -222,7 +220,7 @@ def generate_friends_in_room(number_of_people: int, people: list, p: float) -> l
             if fr_lst[i][j] != -1:
                 person.friends_in_room.append(people[i])
 
-    print(f'friends list: {fr_lst}')
+    # print(f'friends list: {fr_lst}')
     return people
 
 

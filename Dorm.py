@@ -79,11 +79,13 @@ class Dorm:
         return str(f" Dorm Name:{self.name} \n " + " ".join(
             [f'Floor Number: 'f'{room.floor}\n '
              f'     Door number: {room.number}\n '
+             f'     Standard: {room.standard}\n '
              f'     Locators: {[memb for memb in room.members]}\n '
-             f'     Standard: {room.standard}\n     -----------------\n' if str(room.number)[1:] == "00"
+             f'     ----------------\n' if str(room.number)[1:] == "00"
              else
              f'     Door number: {room.number}\n '
+             f'     Standard: {room.standard}\n '
              f'     Locators: {[memb for memb in room.members]}\n '
-             f'     Standard: {room.standard}\n     -----------------\n'
+             '      ----------------\n'
              for room in self.all_rooms]))
 

@@ -95,8 +95,13 @@ class Student:
         self.actual_room = None
 
     def __str__(self):
-        return f'Name: {self.first_name} {self.last_name}\n ID: {self.PESEL}'
+        return f' Name: {self.first_name}\n Lastname: {self.last_name}\n ID: {self.PESEL}'
+
+    def __repr__(self):
+        return f" name: '{self.first_name}' lastname: '{self.last_name}' ID: '{self.PESEL}'"
 
 
 if __name__ == "__main__":
-    pass
+    student = Student(first_name='Krzysiek', last_name='Babicki', distance=100, year_of_studies=3,
+                      standard_of_room=1, income=4000, friends_in_room=['Filip', 'Olaf'], gpa=4.5, PESEL=1234, sex='M')
+    print(student)

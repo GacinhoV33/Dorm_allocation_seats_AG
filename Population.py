@@ -64,7 +64,7 @@ class Population:
         score = f"Score|"
         for i in range(self.number_of_individuals):
             # self.Individual_lst[i].initialize_Individual()
-            score += f'     {self.Individual_lst[i].calc_score()}       |'
+            score += f'     {self.Individual_lst[i].calc_score()}      |'
             # self.Individual_lst[i].reset_rooms()
 
         print(score)
