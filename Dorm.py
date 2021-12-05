@@ -76,7 +76,6 @@ class Dorm:
                     self.all_rooms.append(Room(number=i * 100 + j * 1, capacity=3, standard=randint(1, 3), floor=i))
 
     def __str__(self, ):
-        # TODO DIVIDE IT BY FLOOR
         return str(f" Dorm Name:{self.name} \n " + " ".join(
             [f'Floor Number: 'f'{room.floor}\n '
              f'     Door number: {room.number}\n '
@@ -88,10 +87,3 @@ class Dorm:
              f'     Standard: {room.standard}\n     -----------------\n'
              for room in self.all_rooms]))
 
-# Rooms = list()
-# for i in range(1, 6):
-#     for j in range(4):
-#         if j % 2 == 0:
-#             Rooms.append(Room(number=i * 100 + j * 1, capacity=2, standard=randint(1, 3)))
-#         else:
-#             Rooms.append(Room(number=i * 100 + j * 1, capacity=3, standard=randint(1, 3)))
