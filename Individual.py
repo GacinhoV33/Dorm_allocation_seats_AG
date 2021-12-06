@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from Student import Student
 from random import shuffle
-from Dorm import Dorm, Room
+from Dorm import Dorm
 import numpy as np
 """"""
 
@@ -97,10 +96,10 @@ class Individual:
     def __str__(self):
         return str(self.arr_bin.transpose())
 
+    def __iter__(self):
+        for room_number in self.arr_bin:
+            yield int(room_number)
 
 if __name__ == "__main__":
     lst = np.array([1, 3, 8, 0, 0, 1, 0, 2])
     shuffle(lst)
-    # test_Individual = Individual(200, Rooms)
-    # test_Individual.initialize_Individual()
-    # print(test_Individual)

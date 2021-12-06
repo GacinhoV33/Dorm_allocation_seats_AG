@@ -28,13 +28,15 @@ class Room:
         self.floor = floor
 
     def add_locator(self, locator: Student):
-        if len(self.members) >= self.capacity:
-            return ValueError("Too many people in room")
-        self.members.append(locator)
+        # if len(self.members) >= self.capacity:
+        # return ValueError("Too many people in room") -> add only if we don't want punish for overplacing people in room
+        if isinstance(locator, Student):
+            self.members.append(locator)
 
     def delete_locator(self, locator: Student):
         """Possible error while one person takes two slots in room"""
-        self.members.remove(locator)
+        if locator in self.members:
+            self.members.remove(locator)
 
 
 class Dorm:

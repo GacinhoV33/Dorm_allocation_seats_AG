@@ -1,12 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """ IMPORT FILES"""
-from Student import Student
 
 """IMPORT LIBRARIES"""
-import numpy as np
-# from Dorm import
-from Individual import Individual, Dorm, Room
+from Dorm import Dorm
 from generate_people import generate_random_people
 from Population import Population
 """ 'P' is reserved for whole kind of probabilities"""
@@ -41,7 +38,5 @@ if __name__ == "__main__":
         individual.check_correctness()
 
     test_population.print_pop()
-    # for i in range(10):
-    #     print(ppl[i])
 
 

@@ -2,12 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from Student import Student
-# import pandas as pd
-import numpy as np
+import xlsxwriter
 import random
 import time
 
-# import xlsxwriter
 
 Male_first_names = ("Aaron", "Adam", "Adrian", "Adolf", "Albert", "Artur", "Alfred", "Aleksander", "Arkadiusz",
                     "Bartłomiej", "Bartosz", "Beniamin", "Błażej", "Bogdan", "Bogusław", "Bryan",
@@ -86,10 +84,10 @@ Female_last_names = ("Nowak", "Kowalska", "Wiśniewska", "Wójcik", "Kowalczyk",
                      )
 
 
-def generate_random_people(n: int = 100) -> list:
+def generate_random_people(n:int = 100) -> list:
     """ CREATING DATA """
-    male_first_names, female_first_names = generate_first_name(n // 2, n // 2)
-    male_last_names, female_last_names = generate_last_name(n // 2, n // 2)
+    male_first_names, female_first_names = generate_first_name(n//2, n//2)
+    male_last_names, female_last_names = generate_last_name(n//2, n//2)
     distances = generate_distance(n)
     y_of_study = generate_year_of_study(n)
     standards = generate_standard(n)
@@ -103,18 +101,17 @@ def generate_random_people(n: int = 100) -> list:
 
     """ CREATING INSTANCES OF CLASS STUDENT"""
     people = list()
-    for i in range(n // 2):
+    for i in range(int(n / 2)):
         people.append(Student(
             female_first_names[i], female_last_names[i],
             distances[i], y_of_study[i], standards[i], incomes[i], gpas[i], PESELs[i], sex='F')
         )
         people.append(Student(
-            male_first_names[i], male_last_names[i],
-            distances[i], y_of_study[i], standards[i], incomes[i], gpas[i], PESELs[i + n // 2], sex='M')
+            male_first_names[-i-1], male_last_names[-i-1],
+            distances[-i-1], y_of_study[-i-1], standards[-i-1], incomes[-i-1], gpas[-i-1], PESELs[-i-1], sex='M')
         )
     """TEST WHETHER FUNCTION WORKS PROPERLY #TODO"""
-    people = generate_friends_in_room(100, people, 0.08)
-
+    people = generate_friends_in_room(len(people), people, 0.09)
     return people
 
 
@@ -186,6 +183,7 @@ def generate_PESEL(number_of_people: int) -> list:
 
 
 def generate_income(number_of_people: int) -> list:
+    #TODO think about good criterium of score
     incomes = list()
     for _ in range(number_of_people):
         r = random.randint(1, 5)
@@ -212,7 +210,7 @@ def generate_friends_in_room(number_of_people: int, people: list, p: float) -> l
             """CHECKING PROBABILITY"""
             r = random.random()
             if r <= p and fr_lst[j][i] == -1:
-                f = random.randint(0, number_of_people)
+                f = random.randint(0, number_of_people-1)
                 fr_lst[j][i] = f
                 fr_lst[f][i] = j
     for i, person in enumerate(people):
@@ -220,18 +218,30 @@ def generate_friends_in_room(number_of_people: int, people: list, p: float) -> l
             if fr_lst[i][j] != -1:
                 person.friends_in_room.append(people[i])
 
-    # print(f'friends list: {fr_lst}')
+    print(f'friends list: {fr_lst}')
     return people
 
 
-# def write_to_excel(name: str, data: list):
-#     # WorkBook = xlsxwriter.Workbook(f'Data/{name}.xlsx')
-#     # sheet = WorkBook.add_worksheet()
-#     Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
-#     for i in range(1, len(data)):
-#         for j in range(len(data[0])):
-#             sheet.write_row(i, j, str(data[i][j]))
-#     WorkBook.close()
+def write_to_excel(name: str, data: list):
+    WorkBook = xlsxwriter.Workbook(f'Data/{name}.xlsx')
+    sheet = WorkBook.add_worksheet()
+    Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+    for i, student in enumerate(data):
+        sheet.write_row(i, 1, f'{str(student.first_name)}')
+        sheet.write_row(i, 2, str(student.last_name))
+        sheet.write_row(i, 3, str(student.sex))
+        sheet.write_row(i, 4, str(student.distance))
+        sheet.write_row(i, 5, str(student.year_of_studies))
+        sheet.write_row(i, 6, str(student.standard_of_room))
+        sheet.write_row(i, 7, str(student.PESEL))
+        sheet.write_row(i, 8, str(student.income))
+        sheet.write_row(i, 9, str(student.gpa))
+        sheet.write_row(i, 10, str(student.friends_in_room))
+        sheet.write_row(i, 11, str(student.actual_room))
+        sheet.write_row(i, 12, str(student.is_special))
+
+    WorkBook.close()
+
 
 
 t = time.time()

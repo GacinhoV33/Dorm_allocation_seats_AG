@@ -9,7 +9,23 @@ friends_in_room -> lista PESELI osób z którymi chce mieszkać
 PESEL -> PAMIĘTAC ŻE TO STRING 
 
 
+#TODO LATER 
+WAZNE: 
+Zgodnie z ideą przydzialu istnieja osoby ktorym szczegolnie nalezy sie miejsce do akademika:
+MUSZA MIEC ZAGWARANTOWANE:
+- ososby niepelnosprawne 
+- osoby z innych panstw
+odpowiedzialne za to będzie pole klasy Student -> is_special 
+Funkcja satysfakcji natrafiajac na takie osoby bedzie przydzielac olbrzymią liczbe punktów
+
+NIE MUSZA ALE DOBRZE BY BYLO:
+- studenci pierwszego roku 
+
+Funkcja natrafiając na taką osobę będzie dodawać bonusowe punkty
+
+
 """
+
 
 #Chromosom
 class Student:
