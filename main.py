@@ -38,5 +38,7 @@ if __name__ == "__main__":
         individual.check_correctness()
 
     test_population.print_pop()
+    test_population.rullet_selection()
+    print(test_population.best_solution.score)
 
 

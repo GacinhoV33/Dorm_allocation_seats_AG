@@ -13,6 +13,10 @@ class Individual:
         self.rooms = rooms
         self.dorm = dorm
         self.length = length
+        self.score = None
+
+        """To simulation"""
+        self.rullet_percent = 0
 
     def initialize_Individual(self):
         c = 0
@@ -22,6 +26,7 @@ class Individual:
                 c += 1
         np.random.shuffle(self.arr_bin)
         self.set_rooms()
+        self.calc_score()
 
     def calc_score(self):
         """COST FUNCTION"""
@@ -32,7 +37,8 @@ class Individual:
             score += (sat * ach)
 
         punish = self.calc_punishment()
-        return score - punish
+        self.score = score - punish
+        return self.score
 
     def calc_punishment(self):
 
