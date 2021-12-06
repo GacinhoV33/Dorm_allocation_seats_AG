@@ -86,16 +86,6 @@ class Individual:
 
         """ TEST 3 - GIRLS NOT IN ROOMS WITH BOYS """
 
-    def selection(self):
-        pass
-
-    def Genetic_Algortihm(self, ):
-        """SELEKCJA"""
-        # selection()
-        """KRZYŻOWANIE"""
-
-        """MUTACJA"""
-
     def __repr__(self):
         return self.arr_bin
 
@@ -105,6 +95,7 @@ class Individual:
     def __iter__(self):
         for room_number in self.arr_bin:
             yield int(room_number)
+
 
 if __name__ == "__main__":
     lst = np.array([1, 3, 8, 0, 0, 1, 0, 2])

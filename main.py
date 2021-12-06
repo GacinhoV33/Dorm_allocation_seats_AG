@@ -32,13 +32,17 @@ if __name__ == "__main__":
     """ ETAP 2 - Stworzenie pierwszej populacji """
     test_population = Population(10, 100, ppl, Dorm_TEST)
     """ ETAP 3 - Przypisanie pokoji do instancji klasy Student"""
-    print(Dorm_TEST)
+    # print(Dorm_TEST)
     """TEST INDIVIDUAL"""
     for individual in test_population.Individual_lst:
         individual.check_correctness()
 
     test_population.print_pop()
-    test_population.rullet_selection()
-    print(test_population.best_solution.score)
+    test_population.cross_population()
+    test_population.print_pop()
+    # test_population.print_pop()
+    # test_population.rullet_selection()
+    # print(test_population.best_solution.score)
+    # test_population.Genetic_Algortihm()
 
 

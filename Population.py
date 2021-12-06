@@ -42,6 +42,12 @@ class Population:
             else:
                 self.best_solution = individual
 
+    def actualize_Individuals(self,):
+        for individual in self.Individual_lst:
+            individual.calc_score()
+
+
+
     def add_Individual(self, individual: Individual):
         if isinstance(individual, Individual):
             self.Individual_lst.append(individual)
@@ -60,7 +66,12 @@ class Population:
         individual1.arr_bin[r:], individual2.arr_bin[r:] = individual2.arr_bin[r:], individual1.arr_bin[r:]
 
     def cross_population(self):
-        pass
+        """ 1 OPTION"""
+        for i in range(self.number_of_individuals//2):
+            self.crossing(self.Individual_lst[2*i], self.Individual_lst[2*i+1])
+        """ 2 OPTION"""
+        # for i in range(self.number_of_individuals//2):
+        #     self.crossing(self.Individual_lst[i], self.Individual_lst[-i-1])
 
     def rullet_selection(self):
         all_score = 0
@@ -80,13 +91,21 @@ class Population:
             for i, individiual in enumerate(self.Individual_lst):
                     if rullet[i] < r[j] < rullet[i+1]:
                         generated_ind.append(individiual)
-        for i in generated_ind:
-            print(i.score)
-        print(rullet)
+
+        self.Individual_lst = generated_ind
          # TODO SOME ERROR WITH PRINTING
 
+    def Genetic_Algortihm(self, ):
+        for i in range(self.number_of_iterations):
+            """SELEKCJA"""
+            self.rullet_selection()
+            """KRZYŻOWANIE"""
+            #TODO think about slot place
+            self.cross_population()
+            """MUTACJA"""
 
-
+            self.actualize_Individuals()
+            print(self.best_solution.score)
 
     def check_best(self):
         pass
