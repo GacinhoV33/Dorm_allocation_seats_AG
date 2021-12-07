@@ -63,6 +63,7 @@ class Population:
 
     def crossing(self, individual1: Individual, individual2: Individual):
         r = randint(0, self.number_of_students - 1)
+        print(r)
         individual1.arr_bin[r:], individual2.arr_bin[r:] = individual2.arr_bin[r:], individual1.arr_bin[r:]
 
     def cross_population(self):
@@ -72,6 +73,25 @@ class Population:
         """ 2 OPTION"""
         # for i in range(self.number_of_individuals//2):
         #     self.crossing(self.Individual_lst[i], self.Individual_lst[-i-1])
+
+    def mutate_population(self):
+        for i, individual in enumerate(self.Individual_lst, 0):
+            self.mutation1(individual, i)
+
+    def mutation1(self,  individual, test, p: float=0.05):
+        r = randint(1, (self.number_of_students - 1)//2)
+        if random() < p:
+            # temp = individual.arr_bin[:r]
+            beginning = individual.arr_bin[:r]
+            end = individual.arr_bin[-r:]
+            individual.arr_bin[:r] = end
+            individual.arr_bin[-r:] = beginning
+            individual.actualize_Individual()
+            print(f"IT MUTATE XD KMWTW KADLUCZKA ATAKUJE Individuala {test}")
+            self.print_pop()
+
+    def mutation2(self, p: float, individual):
+        pass
 
     def rullet_selection(self):
         all_score = 0
@@ -86,26 +106,30 @@ class Population:
             rullet.append(individiual.rullet_percent+y)
             y += individiual.rullet_percent
 
-        r = [random() for _ in range(10)]
+        r = sorted([random() for _ in range(10)])
         for j in range(10):
             for i, individiual in enumerate(self.Individual_lst):
                     if rullet[i] < r[j] < rullet[i+1]:
-                        generated_ind.append(individiual)
+                        generated_ind.append(deepcopy(individiual))
 
         self.Individual_lst = generated_ind
+        # for individiual in self.Individual_lst:
+        #     individiual.actualize_Individual()
+
          # TODO SOME ERROR WITH PRINTING
 
     def Genetic_Algortihm(self, ):
         for i in range(self.number_of_iterations):
+            """MUTACJA"""
+            self.mutate_population()
             """SELEKCJA"""
+            self.print_pop()
             self.rullet_selection()
             """KRZYŻOWANIE"""
             #TODO think about slot place
             self.cross_population()
-            """MUTACJA"""
 
             self.actualize_Individuals()
-            print(self.best_solution.score)
 
     def check_best(self):
         pass

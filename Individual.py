@@ -28,6 +28,11 @@ class Individual:
         self.set_rooms()
         self.calc_score()
 
+    def actualize_Individual(self):
+        self.reset_rooms()
+        self.set_rooms()
+        self.calc_score()
+
     def calc_score(self):
         """COST FUNCTION"""
         score = 0
@@ -67,7 +72,6 @@ class Individual:
     def reset_rooms(self):
         """ #TODO"""
         for i in range(len(self.ppl)):
-            room_n = self.ppl[i].actual_room
             self.ppl[i].actual_room = None
 
     def check_correctness(self,):
@@ -90,7 +94,7 @@ class Individual:
         return self.arr_bin
 
     def __str__(self):
-        return str(self.arr_bin.transpose())
+        return str(self.arr_bin)
 
     def __iter__(self):
         for room_number in self.arr_bin:

@@ -30,16 +30,19 @@ if __name__ == "__main__":
     """ETAP 1 - Stworzenie Akademika"""
     Dorm_TEST = Dorm("Test_dorm", n_floors=5, n_rooms=4,  ppl=ppl)
     """ ETAP 2 - Stworzenie pierwszej populacji """
-    test_population = Population(10, 100, ppl, Dorm_TEST)
+    test_population = Population(10, 100, ppl, Dorm_TEST, 40)
     """ ETAP 3 - Przypisanie pokoji do instancji klasy Student"""
     # print(Dorm_TEST)
     """TEST INDIVIDUAL"""
     for individual in test_population.Individual_lst:
         individual.check_correctness()
 
-    test_population.print_pop()
-    test_population.cross_population()
-    test_population.print_pop()
+    # test_population.print_pop()
+    # test_population.cross_population()
+    # test_population.print_pop()
+    test_population.Genetic_Algortihm()
+    # test_population.mutation1(test_population.Individual_lst[0], 1)
+    # print(test_population.best_solution.score)
     # test_population.print_pop()
     # test_population.rullet_selection()
     # print(test_population.best_solution.score)
