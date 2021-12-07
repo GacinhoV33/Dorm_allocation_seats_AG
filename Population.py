@@ -42,12 +42,6 @@ class Population:
             else:
                 self.best_solution = individual
 
-    def actualize_Individuals(self,):
-        for individual in self.Individual_lst:
-            individual.calc_score()
-
-
-
     def add_Individual(self, individual: Individual):
         if isinstance(individual, Individual):
             self.Individual_lst.append(individual)
@@ -65,30 +59,34 @@ class Population:
         r = randint(0, self.number_of_students - 1)
         print(r)
         individual1.arr_bin[r:], individual2.arr_bin[r:] = individual2.arr_bin[r:], individual1.arr_bin[r:]
+        individual1.actualize_Individual(), individual2.actualize_Individual()
 
     def cross_population(self):
-        """ 1 OPTION"""
-        for i in range(self.number_of_individuals//2):
-            self.crossing(self.Individual_lst[2*i], self.Individual_lst[2*i+1])
-        """ 2 OPTION"""
-        # for i in range(self.number_of_individuals//2):
-        #     self.crossing(self.Individual_lst[i], self.Individual_lst[-i-1])
+        """ We generate random int to chose in what way we should take individuals to crossing"""
+        if randint(0, 1) % 2 == 0:
+            """ 1 OPTION"""
+            for i in range(self.number_of_individuals//2):
+                self.crossing(self.Individual_lst[2*i], self.Individual_lst[2*i+1])
+        else:
+            """ 2 OPTION"""
+            for i in range(self.number_of_individuals//2):
+                self.crossing(self.Individual_lst[i], self.Individual_lst[-i-1])
 
     def mutate_population(self):
-        for i, individual in enumerate(self.Individual_lst, 0):
-            self.mutation1(individual, i)
+        # for i, individual in enumerate(self.Individual_lst, 0):
+            # self.mutation1(individual, i)
+        list(map(self.mutation1, self.Individual_lst, [i for i in range(len(self.Individual_lst))]))
 
     def mutation1(self,  individual, test, p: float=0.05):
         r = randint(1, (self.number_of_students - 1)//2)
         if random() < p:
-            # temp = individual.arr_bin[:r]
             beginning = individual.arr_bin[:r]
             end = individual.arr_bin[-r:]
             individual.arr_bin[:r] = end
             individual.arr_bin[-r:] = beginning
             individual.actualize_Individual()
             print(f"IT MUTATE XD KMWTW KADLUCZKA ATAKUJE Individuala {test}")
-            self.print_pop()
+            # self.print_pop()
 
     def mutation2(self, p: float, individual):
         pass
@@ -106,15 +104,13 @@ class Population:
             rullet.append(individiual.rullet_percent+y)
             y += individiual.rullet_percent
 
-        r = sorted([random() for _ in range(10)])
+        r = [random() for _ in range(10)]
         for j in range(10):
             for i, individiual in enumerate(self.Individual_lst):
                     if rullet[i] < r[j] < rullet[i+1]:
                         generated_ind.append(deepcopy(individiual))
 
         self.Individual_lst = generated_ind
-        # for individiual in self.Individual_lst:
-        #     individiual.actualize_Individual()
 
          # TODO SOME ERROR WITH PRINTING
 
@@ -128,11 +124,14 @@ class Population:
             """KRZYŻOWANIE"""
             #TODO think about slot place
             self.cross_population()
+            self.check_best()
 
-            self.actualize_Individuals()
+        print(''*10, f"BEST SOLUTION GETS {self.best_solution.score} points!", ''*10)
 
     def check_best(self):
-        pass
+        for individual in self.Individual_lst:
+            if individual.score > self.best_solution.score:
+                self.best_solution = individual
 
     def print_pop(self, ):
         first_line = "       "  # 7 x space
@@ -161,4 +160,4 @@ class Population:
         score = f"Score|"
         for i in range(self.number_of_individuals):
             score += f'     {self.Individual_lst[i].score}      |'
-        print(score)
+        print(score, "\n\n")

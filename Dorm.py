@@ -52,7 +52,7 @@ class Dorm:
         self.create_rooms()
 
     def find_room_by_number(self, number: int) -> Room:
-        """Function find instance of class Room by assigned to him number."""
+        """Function find instance of class Room assigned to its number."""
         for room in self.all_rooms:
             if room.number == number:
                 return room
