@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """ IMPORT FILES"""
-
-"""IMPORT LIBRARIES"""
+from plots import show_best_score, show_score_individual, show_frequency_Individual
 from Dorm import Dorm
 from generate_people import generate_random_people
 from Population import Population
@@ -40,7 +39,12 @@ if __name__ == "__main__":
     # test_population.cross_population()
     # test_population.print_pop()
     test_population.Genetic_Algortihm()
-    # test_population.mutation1(test_population.Individual_lst[0], 1)
+    print(test_population.Individual_lst[0].chose_list)
+    print(test_population.Individual_lst[9].n_of_mutations)
+    show_best_score(test_population.best_solutions_lst)
+    show_score_individual(test_population.Individual_lst[0].score_lst)
+    show_frequency_Individual(test_population.Individual_lst[0].chose_list)
+    # test_population.mutation_swap(test_population.Individual_lst[0], 1)
     # print(test_population.best_solution.score)
     # test_population.print_pop()
     # test_population.rullet_selection()

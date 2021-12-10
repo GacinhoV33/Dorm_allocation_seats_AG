@@ -17,6 +17,9 @@ class Individual:
 
         """To simulation"""
         self.rullet_percent = 0
+        self.chose_list = np.array([0 for _ in range(length)])
+        self.n_of_mutations = 0
+        self.score_lst = list()
 
     def initialize_Individual(self):
         c = 0
@@ -27,11 +30,15 @@ class Individual:
         np.random.shuffle(self.arr_bin)
         self.set_rooms()
         self.calc_score()
+        self.score_lst.append(self.score)
 
-    def actualize_Individual(self):
+    def actualize_Individual(self, flag_act=True):
         self.reset_rooms()
         self.set_rooms()
         self.calc_score()
+        if flag_act:
+            self.check_diversity()
+            self.score_lst.append(self.score)
 
     def calc_score(self):
         """COST FUNCTION"""
@@ -89,6 +96,15 @@ class Individual:
                 raise ValueError("Too many rooms granted for students.")
 
         """ TEST 3 - GIRLS NOT IN ROOMS WITH BOYS """
+
+    def check_diversity(self):
+        #TODO
+        """This function is responsible for checking whether every single Student were tried to fit and also how diverse
+        algorithm works
+        """
+        for i in range(self.length):
+            if self.arr_bin[i] != 0:
+                self.chose_list[i] += 1
 
     def __repr__(self):
         return self.arr_bin

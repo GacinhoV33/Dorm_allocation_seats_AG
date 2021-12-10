@@ -20,8 +20,11 @@ class Population:
         """INITIALIZING STRUCTURES"""
         self.Rooms = self.dorm.all_rooms
 
+        """To simulation"""
         self.number_of_iterations = number_of_iterations
         self.best_solution = None
+        self.best_solutions_lst = list()
+
         self.init_Individuals()
 
     def init_Individuals(self):
@@ -57,7 +60,7 @@ class Population:
 
     def crossing(self, individual1: Individual, individual2: Individual):
         r = randint(0, self.number_of_students - 1)
-        print(r)
+        # print(r)
         individual1.arr_bin[r:], individual2.arr_bin[r:] = individual2.arr_bin[r:], individual1.arr_bin[r:]
         individual1.actualize_Individual(), individual2.actualize_Individual()
 
@@ -74,21 +77,23 @@ class Population:
 
     def mutate_population(self):
         # for i, individual in enumerate(self.Individual_lst, 0):
-            # self.mutation1(individual, i)
-        list(map(self.mutation1, self.Individual_lst, [i for i in range(len(self.Individual_lst))]))
+            # self.mutation_swap(individual, i)
+        list(map(self.mutation_swap, self.Individual_lst, [i for i in range(len(self.Individual_lst))]))
 
-    def mutation1(self,  individual, test, p: float=0.05):
+    def mutation_swap(self,  individual, test, p: float=0.9):
         r = randint(1, (self.number_of_students - 1)//2)
         if random() < p:
             beginning = individual.arr_bin[:r]
             end = individual.arr_bin[-r:]
             individual.arr_bin[:r] = end
             individual.arr_bin[-r:] = beginning
-            individual.actualize_Individual()
+            individual.actualize_Individual(False)
+            individual.n_of_mutations += 1
             print(f"IT MUTATE XD KMWTW KADLUCZKA ATAKUJE Individuala {test}")
-            # self.print_pop()
 
-    def mutation2(self, p: float, individual):
+    def mutation_add_non_included(self, p: float, individual):
+        """Mutation takes student with the highest frequence and replace it with the student with low frequence"""
+        #TODO
         pass
 
     def rullet_selection(self):
@@ -125,6 +130,10 @@ class Population:
             #TODO think about slot place
             self.cross_population()
             self.check_best()
+            """To simulation"""
+            self.best_solutions_lst.append(self.best_solution.score)
+
+
 
         print(''*10, f"BEST SOLUTION GETS {self.best_solution.score} points!", ''*10)
 

@@ -223,6 +223,7 @@ def generate_friends_in_room(number_of_people: int, people: list, p: float) -> l
 
 
 def write_to_excel(name: str, data: list):
+    #TODO FILIP
     WorkBook = xlsxwriter.Workbook(f'Data/{name}.xlsx')
     sheet = WorkBook.add_worksheet()
     Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
