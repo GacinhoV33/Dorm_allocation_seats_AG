@@ -1,11 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from Student import Student
-import xlsxwriter
 import random
 import time
 
+import xlrd
+import xlsxwriter
+
+from Student import Student
 
 Male_first_names = ("Aaron", "Adam", "Adrian", "Adolf", "Albert", "Artur", "Alfred", "Aleksander", "Arkadiusz",
                     "Bartłomiej", "Bartosz", "Beniamin", "Błażej", "Bogdan", "Bogusław", "Bryan",
@@ -111,7 +113,7 @@ def generate_random_people(n:int = 100) -> list:
             distances[-i-1], y_of_study[-i-1], standards[-i-1], incomes[-i-1], gpas[-i-1], PESELs[-i-1], sex='M')
         )
     """TEST WHETHER FUNCTION WORKS PROPERLY #TODO"""
-    people = generate_friends_in_room(len(people), people, 0.09)
+    people = generate_friends_in_room(len(people), people, 0.25)
     return people
 
 
@@ -204,6 +206,7 @@ def generate_income(number_of_people: int) -> list:
 
 def generate_friends_in_room(number_of_people: int, people: list, p: float) -> list:
     """parameter p is responsible for amount of people who wants friends in room"""
+    #TODO It may generete situation where one person was chosen more than twice and some information are lost, cause max friends limit is 2
     fr_lst = [[-1, -1] for _ in range(number_of_people)]
     for j in range(number_of_people):
         for i in range(2):
@@ -214,40 +217,78 @@ def generate_friends_in_room(number_of_people: int, people: list, p: float) -> l
                 fr_lst[j][i] = f
                 fr_lst[f][i] = j
     for i, person in enumerate(people):
+        person.friends_in_room = list()
         for j in range(2):
             if fr_lst[i][j] != -1:
-                person.friends_in_room.append(people[i])
+                person.friends_in_room.append(people[fr_lst[i][j]])
 
     print(f'friends list: {fr_lst}')
     return people
 
 
+def find_by_PESEL(people: list, PESEL: str):
+    for person in people:
+        if person.PESEL == PESEL:
+            return person
+    return None
+
+
+def read_from_excel(path: str) -> list:
+    Workbook = xlrd.open_workbook(path)
+    sheet = Workbook.sheet_by_index(0)
+    people = list()
+    data = list()
+    for i in range(12):
+        data.append(sheet.col_values(colx=i, start_rowx=2))
+
+    for i in range(len(data[0])):
+        people.append(Student(str(data[0][i]), str(data[1][i]),
+                              float(data[3][i]), int(data[4][i]), int(data[5][i]),
+                              float(data[7][i]), float(data[8][i]), str(data[6][i]),
+                              str(data[2][i]), list(), False
+                              )
+                      )
+    Pesels = sheet.col_values(colx=10, start_rowx=2)
+    for i, person in enumerate(people):
+        if len(Pesels[i]) > 0:
+            for pesel in Pesels[i]:
+                person.friends_in_room.append(find_by_PESEL(people, str(pesel)))
+    return people
+
+
 def write_to_excel(name: str, data: list):
-    #TODO FILIP
     WorkBook = xlsxwriter.Workbook(f'Data/{name}.xlsx')
     sheet = WorkBook.add_worksheet()
-    Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
-    for i, student in enumerate(data):
-        sheet.write_row(i, 1, f'{str(student.first_name)}')
-        sheet.write_row(i, 2, str(student.last_name))
-        sheet.write_row(i, 3, str(student.sex))
-        sheet.write_row(i, 4, str(student.distance))
-        sheet.write_row(i, 5, str(student.year_of_studies))
-        sheet.write_row(i, 6, str(student.standard_of_room))
-        sheet.write_row(i, 7, str(student.PESEL))
-        sheet.write_row(i, 8, str(student.income))
-        sheet.write_row(i, 9, str(student.gpa))
-        sheet.write_row(i, 10, str(student.friends_in_room))
-        sheet.write_row(i, 11, str(student.actual_room))
-        sheet.write_row(i, 12, str(student.is_special))
+    Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
+    Names = ["First Name", "Last Name", "Sex", "Distance", "Year of Studies", "Room standard",
+             "PESEL", "Income", "GPA", "Friends in room", "Actual room", "Special"]
+    for i, letter in enumerate(Letters):
+        sheet.write(f"{letter}1", Names[i])
+
+    for i, student in enumerate(data, 0):
+        sheet.write(f'{Letters[0]}{i+2}', f'{str(student.first_name)}')
+        sheet.write(f'{Letters[1]}{i+2}', str(student.last_name))
+        sheet.write(f'{Letters[2]}{i+2}', str(student.sex))
+        sheet.write(f'{Letters[3]}{i+2}', str(student.distance))
+        sheet.write(f'{Letters[4]}{i+2}', str(student.year_of_studies))
+        sheet.write(f'{Letters[5]}{i+2}', str(student.standard_of_room))
+        sheet.write(f'{Letters[6]}{i+2}', str(student.PESEL))
+        sheet.write(f'{Letters[7]}{i+2}', str(student.income))
+        sheet.write(f'{Letters[8]}{i+2}', str(round(student.gpa, 4)))
+        fr_str = " ".join([str(friend.PESEL) for friend in student.friends_in_room])
+        sheet.write(f'{Letters[9]}{i+2}', str(fr_str))
+        sheet.write(f'{Letters[10]}{i+2}', str(student.actual_room))
+        sheet.write(f'{Letters[11]}{i+2}', str(student.is_special))
 
     WorkBook.close()
-
+    print("-----DONE-----")
 
 
 t = time.time()
-# ppl = generate_random_people(100)
+ppl = generate_random_people(100)
 """Writing data to excel"""
-
+write_to_excel("Test_december5", ppl)
+# ppl = read_from_excel("Data/Test_december5.xls")
+print(ppl)
 at = time.time()
 print(f"It took {float(at - t)} seconds.")
