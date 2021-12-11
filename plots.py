@@ -36,5 +36,5 @@ def show_frequency_Individual(frequency_lst: list):
     plt.xlabel("N of student")
     plt.ylabel("Frequency")
     plt.grid()
-    plt.bar(iterations, frequency_lst)
+    plt.scatter(iterations, frequency_lst, c='g')
     plt.show()

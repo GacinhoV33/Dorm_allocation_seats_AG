@@ -25,8 +25,8 @@ GIRLS CANNOT LIVE WITH BOYS
 
 if __name__ == "__main__":
     """ETAP 0 - stworzenie niezbędnych struktur i danych"""
-    # ppl = generate_random_people(100)
-    ppl = read_from_excel("Data/Test_december5.xls")
+    # ppl = generate_random_people(10010
+    ppl = read_from_excel("Data/Test_december19.xls")
     """ETAP 1 - Stworzenie Akademika"""
     Dorm_TEST = Dorm("Test_dorm", n_floors=5, n_rooms=4,  ppl=ppl)
     """ ETAP 2 - Stworzenie pierwszej populacji """
@@ -44,7 +44,7 @@ if __name__ == "__main__":
     # print(test_population.Individual_lst[9].n_of_mutations)
     # show_best_score(test_population.best_solutions_lst)
     # show_score_individual(test_population.Individual_lst[0].score_lst)
-    # show_frequency_Individual(test_population.Individual_lst[0].chose_list)
+    show_frequency_Individual(test_population.Individual_lst[4].chose_list)
     # test_population.mutation_swap(test_population.Individual_lst[0], 1)
     # print(test_population.best_solution.score)
     # test_population.print_pop()

@@ -70,6 +70,8 @@ class Dorm:
                 raise ValueError("Wrong standard of room! ")
 
     def create_rooms(self):
+        """This function is responsible for creating rooms."""
+        #TODO CREATE OTHER TYPE OF DORM
         for i in range(1, self.n_floors + 1):
             for j in range(self.n_rooms):
                 if j % 2 == 0:

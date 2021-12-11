@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import numpy as np
 from random import randint, random
 from Dorm import Dorm
 from Individual import Individual
@@ -75,12 +76,14 @@ class Population:
             for i in range(self.number_of_individuals//2):
                 self.crossing(self.Individual_lst[i], self.Individual_lst[-i-1])
 
-    def mutate_population(self):
+    def mutate_population(self, it: int):
         # for i, individual in enumerate(self.Individual_lst, 0):
             # self.mutation_swap(individual, i)
         list(map(self.mutation_swap, self.Individual_lst, [i for i in range(len(self.Individual_lst))]))
+        if it > 5:
+            list(map(self.mutation_add_non_included, self.Individual_lst))
 
-    def mutation_swap(self,  individual, test, p: float=0.9):
+    def mutation_swap(self,  individual, test, p: float=0.1):
         r = randint(1, (self.number_of_students - 1)//2)
         if random() < p:
             beginning = individual.arr_bin[:r]
@@ -91,10 +94,34 @@ class Population:
             individual.n_of_mutations += 1
             print(f"IT MUTATE XD KMWTW KADLUCZKA ATAKUJE Individuala {test}")
 
-    def mutation_add_non_included(self, p: float, individual):
+    def mutation_add_non_included(self, individual, p: float=0.09):
         """Mutation takes student with the highest frequence and replace it with the student with low frequence"""
-        #TODO
-        pass
+        """ STEPS: FIND STUDENT WITH HIGHEST FREQUENCY
+                   FIND STUDENT WITH LOWEST FREQUENCY
+                   REPLACE THEM  
+        """
+        if random() <= p:
+            freq_low_lst = np.where(individual.chose_list == np.min(individual.chose_list))
+            freq_max_lst = np.where(individual.chose_list == np.max(individual.chose_list))
+            for i in range(min(len(freq_max_lst), len(freq_low_lst))):
+                if individual.arr_bin[freq_max_lst[0][i]] != 0 and individual.arr_bin[freq_low_lst[0][i]] == 0:
+                    individual.arr_bin[freq_low_lst[0][i]] = individual.arr_bin[freq_max_lst[0][i]]
+                    individual.arr_bin[freq_max_lst[0][i]] = 0
+
+            individual.actualize_Individual(flag_act=False)
+            print("MUTATION Add non")
+
+
+        # freq_lst = list()
+        # lowest_freq = 1000
+        # for i in range(individual.length):
+        #     if individual.chose_list[i] < lowest_freq:
+        #         freq_lst = list()
+        #         freq_lst.append(i)
+        #         lowest_freq = individual.chose_list[i]
+        #     elif individual.chose_list == lowest_freq:
+        #         freq_lst.append(i)
+
 
     def rullet_selection(self):
         all_score = 0
@@ -122,7 +149,7 @@ class Population:
     def Genetic_Algortihm(self, ):
         for i in range(self.number_of_iterations):
             """MUTACJA"""
-            self.mutate_population()
+            self.mutate_population(i)
             """SELEKCJA"""
             self.print_pop()
             self.rullet_selection()
@@ -132,8 +159,6 @@ class Population:
             self.check_best()
             """To simulation"""
             self.best_solutions_lst.append(self.best_solution.score)
-
-
 
         print(''*10, f"BEST SOLUTION GETS {self.best_solution.score} points!", ''*10)
 
