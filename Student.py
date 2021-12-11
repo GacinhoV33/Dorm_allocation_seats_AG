@@ -48,7 +48,6 @@ class Student:
         self.is_special = is_special
         self.actual_room = None
 
-
     def calc_achievements(self):
         score = 0
         if 4.5 < self.gpa <= 5:
@@ -122,5 +121,4 @@ class Student:
 
 if __name__ == "__main__":
     student = Student(first_name='Krzysiek', last_name='Babicki', distance=100, year_of_studies=3,
-                      standard_of_room=1, income=4000, friends_in_room=['Filip', 'Olaf'], gpa=4.5, PESEL=1234, sex='M')
-    print(student)
+                      standard_of_room=1, income=4000, friends_in_room=['Filip', 'Olaf'], gpa=4.5, PESEL=str(1234), sex='M')

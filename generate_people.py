@@ -300,14 +300,14 @@ def write_to_excel(name: str, data: list):
         sheet.write(i+1, 11, str(student.is_special))
 
     WorkBook.save(f"Data/{name}.xls")
-    print("-----DONE-----")
+    print("-----WRITING TO EXCEL DONE-----")
 
 
-t = time.time()
-ppl = generate_random_people(100)
-"""Writing data to excel"""
-write_to_excel("Test_december19", ppl)
-# ppl = read_from_excel("Data/Test_december5.xls")
-print(len(ppl))
-at = time.time()
-print(f"It took {float(at - t)} seconds.")
+if __name__ == "__main__":
+    t = time.time()
+    ppl = generate_random_people(100)
+    """Writing data to excel"""
+    write_to_excel("Test_december19", ppl)
+    print(len(ppl))
+    at = time.time()
+    print(f"It took {float(at - t)} seconds.")

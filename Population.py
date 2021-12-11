@@ -61,13 +61,12 @@ class Population:
 
     def crossing(self, individual1: Individual, individual2: Individual):
         r = randint(0, self.number_of_students - 1)
-        # print(r)
         individual1.arr_bin[r:], individual2.arr_bin[r:] = individual2.arr_bin[r:], individual1.arr_bin[r:]
         individual1.actualize_Individual(), individual2.actualize_Individual()
 
     def cross_population(self):
         """ We generate random int to chose in what way we should take individuals to crossing"""
-        if randint(0, 1) % 2 == 0:
+        if randint(0, 2) % 2 == 0:
             """ 1 OPTION"""
             for i in range(self.number_of_individuals//2):
                 self.crossing(self.Individual_lst[2*i], self.Individual_lst[2*i+1])
@@ -77,8 +76,6 @@ class Population:
                 self.crossing(self.Individual_lst[i], self.Individual_lst[-i-1])
 
     def mutate_population(self, it: int):
-        # for i, individual in enumerate(self.Individual_lst, 0):
-            # self.mutation_swap(individual, i)
         list(map(self.mutation_swap, self.Individual_lst, [i for i in range(len(self.Individual_lst))]))
         if it > 5:
             list(map(self.mutation_add_non_included, self.Individual_lst))
@@ -111,18 +108,6 @@ class Population:
             individual.actualize_Individual(flag_act=False)
             print("MUTATION Add non")
 
-
-        # freq_lst = list()
-        # lowest_freq = 1000
-        # for i in range(individual.length):
-        #     if individual.chose_list[i] < lowest_freq:
-        #         freq_lst = list()
-        #         freq_lst.append(i)
-        #         lowest_freq = individual.chose_list[i]
-        #     elif individual.chose_list == lowest_freq:
-        #         freq_lst.append(i)
-
-
     def rullet_selection(self):
         all_score = 0
         for individiual in self.Individual_lst:
@@ -136,8 +121,8 @@ class Population:
             rullet.append(individiual.rullet_percent+y)
             y += individiual.rullet_percent
 
-        r = [random() for _ in range(10)]
-        for j in range(10):
+        r = [random() for _ in range(self.number_of_individuals)]
+        for j in range(self.number_of_individuals):
             for i, individiual in enumerate(self.Individual_lst):
                     if rullet[i] < r[j] < rullet[i+1]:
                         generated_ind.append(deepcopy(individiual))
@@ -151,7 +136,7 @@ class Population:
             """MUTACJA"""
             self.mutate_population(i)
             """SELEKCJA"""
-            self.print_pop()
+            # self.print_pop()
             self.rullet_selection()
             """KRZYŻOWANIE"""
             #TODO think about slot place
@@ -161,11 +146,23 @@ class Population:
             self.best_solutions_lst.append(self.best_solution.score)
 
         print(''*10, f"BEST SOLUTION GETS {self.best_solution.score} points!", ''*10)
+        self.print_freq()
+        self.print_pop()
 
     def check_best(self):
         for individual in self.Individual_lst:
             if individual.score > self.best_solution.score:
                 self.best_solution = individual
+
+    def print_freq(self):
+        print("-"*20, "FREQUENCY", "-"*20)
+        for j, individual in enumerate(self.Individual_lst):
+            freq = 0
+            for i in individual.chose_list:
+                if i == 0:
+                    freq += 1
+            print(f"Individual number {j}: {freq} students weren't include in solution which is {freq/individual.length * 100}%. ")
+            print("-" * 50)
 
     def print_pop(self, ):
         first_line = "       "  # 7 x space

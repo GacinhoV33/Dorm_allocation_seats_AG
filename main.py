@@ -30,7 +30,7 @@ if __name__ == "__main__":
     """ETAP 1 - Stworzenie Akademika"""
     Dorm_TEST = Dorm("Test_dorm", n_floors=5, n_rooms=4,  ppl=ppl)
     """ ETAP 2 - Stworzenie pierwszej populacji """
-    test_population = Population(10, 100, ppl, Dorm_TEST, 40)
+    test_population = Population(30, 100, ppl, Dorm_TEST, 40)
     """ ETAP 3 - Przypisanie pokoji do instancji klasy Student"""
     """TEST INDIVIDUAL"""
     for individual in test_population.Individual_lst:
