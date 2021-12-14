@@ -89,7 +89,7 @@ class Population:
             individual.arr_bin[-r:] = beginning
             individual.actualize_Individual(False)
             individual.n_of_mutations += 1
-            print(f"IT MUTATE XD KMWTW KADLUCZKA ATAKUJE Individuala {test}")
+            # print(f"IT MUTATE XD KMWTW KADLUCZKA ATAKUJE Individuala {test}")
 
     def mutation_add_non_included(self, individual, p: float=0.09):
         """Mutation takes student with the highest frequence and replace it with the student with low frequence"""
@@ -106,7 +106,7 @@ class Population:
                     individual.arr_bin[freq_max_lst[0][i]] = 0
 
             individual.actualize_Individual(flag_act=False)
-            print("MUTATION Add non")
+            # print("MUTATION Add non")
 
     def rullet_selection(self):
         all_score = 0
@@ -148,6 +148,8 @@ class Population:
         print(''*10, f"BEST SOLUTION GETS {self.best_solution.score} points!", ''*10)
         self.print_freq()
         self.print_pop()
+        for individual in self.Individual_lst:
+            individual.show_room_diversity()
 
     def check_best(self):
         for individual in self.Individual_lst:
@@ -162,6 +164,7 @@ class Population:
                 if i == 0:
                     freq += 1
             print(f"Individual number {j}: {freq} students weren't include in solution which is {freq/individual.length * 100}%. ")
+            print(f"Rooms totally: {len(individual.rooms)} - Rooms included: {len(individual.room_register.keys())}")
             print("-" * 50)
 
     def print_pop(self, ):

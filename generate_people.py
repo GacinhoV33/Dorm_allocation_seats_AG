@@ -7,9 +7,9 @@ import time
 import xlrd
 import xlwt
 import xlsxwriter
+from xlutils import copy
 
 from Student import Student
-
 Male_first_names = ("Aaron", "Adam", "Adrian", "Adolf", "Albert", "Artur", "Alfred", "Aleksander", "Arkadiusz",
                     "Bartłomiej", "Bartosz", "Beniamin", "Błażej", "Bogdan", "Bogusław", "Bryan",
                     "Cezary", "Czesław",
@@ -85,6 +85,16 @@ Female_last_names = ("Nowak", "Kowalska", "Wiśniewska", "Wójcik", "Kowalczyk",
                      "Stępień", "Dudek", "Górska", "Nowicka", "Pawlak", "Witkowska"
 
                      )
+
+
+def check_best_in_excel(best_score: float, path: str):
+    Workbook = xlrd.open_workbook(path)
+    sheet = Workbook.sheet_by_index(0)
+    best_score_excel = sheet.cell_value(1, 14)
+    if best_score > best_score_excel:
+        Workbook = copy.copy(Workbook)
+        Workbook.get_sheet(0).write(1, 14, best_score)
+        Workbook.save(f'{path}')
 
 
 def generate_random_people(n:int = 100) -> list:
@@ -307,7 +317,9 @@ if __name__ == "__main__":
     t = time.time()
     ppl = generate_random_people(100)
     """Writing data to excel"""
-    write_to_excel("Test_december19", ppl)
+    write_to_excel("Main1", ppl)
+
     print(len(ppl))
     at = time.time()
     print(f"It took {float(at - t)} seconds.")
+    check_best_in_excel(150, "Data/Test_december19.xls")

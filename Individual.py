@@ -14,8 +14,9 @@ class Individual:
         self.dorm = dorm
         self.length = length
         self.score = None
-
+        
         """To simulation"""
+        self.room_register = {}
         self.rullet_percent = 0
         self.chose_list = np.array([0 for _ in range(length)])
         self.n_of_mutations = 0
@@ -32,7 +33,15 @@ class Individual:
         self.calc_score()
         self.score_lst.append(self.score)
 
+    def actualize_rooms(self):
+        # for student_n_room in self.arr_bin:
+        #     if student_n_room != 0:
+                # self.dorm.find_room_by_number()
+        pass
+
     def actualize_Individual(self, flag_act=True):
+        #TODO - Actualize state of rooms through simulation. After every single iteration rooms should be actualize to
+        #TODO - effectively calc punishment
         self.reset_rooms()
         self.set_rooms()
         self.calc_score()
@@ -65,7 +74,34 @@ class Individual:
             if set(x) != 1:
                 total_punish += 5
 
+        """PUNISH FOR TOO MANY PPL IN THE SAME ROOM"""
+        self.room_register = {}
+        for n_room in self.arr_bin:
+            if int(n_room) != 0:
+                if str(int(n_room)) in self.room_register.keys():
+                    self.room_register[str(int(n_room))] += 1
+                else:
+                    self.room_register[str(int(n_room))] = 1
+        for room_n in self.dorm.room_numbers:
+            if str(room_n) in self.room_register.keys():
+                if self.room_register[str(room_n)] > self.dorm.find_room_by_number(room_n).capacity:
+                    total_punish += 5 #if there is a room with bigger n of people than capacity -> punish
+            else:
+                total_punish += 10 # if there is no even one person in room make bigger punish
+
         return total_punish
+
+    def show_room_diversity(self):
+        self.room_register = {}
+        for n_room in self.arr_bin:
+            if int(n_room) != 0:
+                if str(int(n_room)) in self.room_register.keys():
+                    self.room_register[str(int(n_room))] += 1
+                else:
+                    self.room_register[str(int(n_room))] = 1
+        print("-"*30)
+        for key, value in self.room_register.items():
+            print(f"Room {key} : {value}. Capacity: {self.dorm.find_room_by_number(int(key)).capacity}")
 
     def set_rooms(self):
         """ FUNCTION IS RESPONSIBLE FOR ASSIGNING ROOMS TO STUDENTS AFTER INITIALIZING"""

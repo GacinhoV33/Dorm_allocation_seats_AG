@@ -50,6 +50,7 @@ class Dorm:
         self.n_floors = n_floors
         self.ppl = ppl
         self.create_rooms()
+        self.room_numbers = set([room.number for room in self.all_rooms])
 
     def find_room_by_number(self, number: int) -> Room:
         """Function find instance of class Room assigned to its number."""
