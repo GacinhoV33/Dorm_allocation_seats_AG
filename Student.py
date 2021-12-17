@@ -40,6 +40,7 @@ class Student:
         self.standard_of_room = standard_of_room
         self.PESEL = PESEL
         self.income = income
+
         # if self.year_of_studies == 1 and gpa is not None:
             # raise ImportWarning("Invalid data imported. There's no gpa when year == 1")
         self.gpa = gpa
@@ -48,16 +49,18 @@ class Student:
         self.is_special = is_special
         self.actual_room = None
 
+        self.score = self.calc_achievements()
+
     def calc_achievements(self):
         score = 0
         if 4.5 < self.gpa <= 5:
-            score += 5
+            score += 10
         elif 4 < self.gpa <= 4.5:
-            score += 4
+            score += 6
         elif 3.5 < self.gpa <= 4:
-            score += 3
+            score += 4
         elif 3 < self.gpa <= 3.5:
-            score += 2
+            score += 1
         elif 0 <= self.gpa <= 3:
             score += 0
         else:
@@ -66,28 +69,26 @@ class Student:
         if self.income > 4000:
             score += 1
         elif 3500 <= self.income < 4000:
-            score += 2
-        elif 3000 <= self.income < 3500:
-            score += 3
-        elif 2500 <= self.income < 3000:
             score += 4
+        elif 3000 <= self.income < 3500:
+            score += 6
+        elif 2500 <= self.income < 3000:
+            score += 7
         elif 0 <= self.income < 2500:
-            score += 5
+            score += 10
         else:
             raise ValueError("Wrong Income Value. Should be not less than 0.")
 
-        if 0 <= self.distance <= 100:
+        if 50 <= self.distance <= 100:
             score += 1
         elif 100 < self.distance <= 200:
-            score += 2
-        elif 100 < self.distance <= 300:
-            score += 3
-        elif 100 < self.distance <= 400:
             score += 4
+        elif 200 < self.distance <= 300:
+            score += 8
+        elif 300 < self.distance <= 400:
+            score += 10
         elif self.distance > 400:
-            score += 5
-        else:
-            raise ValueError("Wrong distance. ")
+            score += 12
         return score
 
     def calc_satisfaction(self):

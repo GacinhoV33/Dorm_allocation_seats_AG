@@ -28,8 +28,6 @@ class Room:
         self.floor = floor
 
     def add_locator(self, locator: Student):
-        # if len(self.members) >= self.capacity:
-        # return ValueError("Too many people in room") -> add only if we don't want punish for overplacing people in room
         if isinstance(locator, Student):
             self.members.append(locator)
 
@@ -85,11 +83,13 @@ class Dorm:
             [f'Floor Number: 'f'{room.floor}\n '
              f'     Door number: {room.number}\n '
              f'     Standard: {room.standard}\n '
+             f'     Capacity: {room.capacity}\n'
              f'     Locators: {[memb for memb in room.members]}\n '
              f'     ----------------\n' if str(room.number)[1:] == "00"
              else
              f'     Door number: {room.number}\n '
              f'     Standard: {room.standard}\n '
+             f'     Capacity: {room.capacity}\n'
              f'     Locators: {[memb for memb in room.members]}\n '
              '      ----------------\n'
              for room in self.all_rooms]))

@@ -9,7 +9,9 @@ from copy import deepcopy
 
 
 class Population:
-    def __init__(self, number_of_individuals: int, number_of_students: int, ppl: list, dorm: Dorm, number_of_iterations: int=20):
+    def __init__(self, number_of_individuals: int, number_of_students: int, ppl: list, dorm: Dorm,
+                 number_of_iterations: int=20, mutation_non_included_probability: float=0.1,
+                 mutation_swap_probability: float=0.1):
         """GENERATE INDIVIDUALS"""
         self.Individual_lst = list()
         self.number_of_students = number_of_students
@@ -25,13 +27,15 @@ class Population:
         self.number_of_iterations = number_of_iterations
         self.best_solution = None
         self.best_solutions_lst = list()
+        self.mutaion_non_included_probability = mutation_non_included_probability
+        self.mutation_swap_probability = mutation_swap_probability
 
         self.init_Individuals()
 
     def init_Individuals(self):
         for i in range(self.number_of_individuals):
             self.Individual_lst.append(
-                Individual(self.number_of_students, deepcopy(self.Rooms), self.dorm, deepcopy(self.ppl))
+                Individual(self.number_of_students, deepcopy(self.dorm), deepcopy(self.ppl))
             )
         for individual in self.Individual_lst:
             individual.initialize_Individual()
@@ -76,28 +80,27 @@ class Population:
                 self.crossing(self.Individual_lst[i], self.Individual_lst[-i-1])
 
     def mutate_population(self, it: int):
-        list(map(self.mutation_swap, self.Individual_lst, [i for i in range(len(self.Individual_lst))]))
+        list(map(self.mutation_swap, self.Individual_lst))
         if it > 5:
             list(map(self.mutation_add_non_included, self.Individual_lst))
 
-    def mutation_swap(self,  individual, test, p: float=0.1):
+    def mutation_swap(self,  individual):
         r = randint(1, (self.number_of_students - 1)//2)
-        if random() < p:
+        if random() < self.mutation_swap_probability:
             beginning = individual.arr_bin[:r]
             end = individual.arr_bin[-r:]
             individual.arr_bin[:r] = end
             individual.arr_bin[-r:] = beginning
             individual.actualize_Individual(False)
             individual.n_of_mutations += 1
-            # print(f"IT MUTATE XD KMWTW KADLUCZKA ATAKUJE Individuala {test}")
 
-    def mutation_add_non_included(self, individual, p: float=0.09):
+    def mutation_add_non_included(self, individual):
         """Mutation takes student with the highest frequence and replace it with the student with low frequence"""
         """ STEPS: FIND STUDENT WITH HIGHEST FREQUENCY
                    FIND STUDENT WITH LOWEST FREQUENCY
                    REPLACE THEM  
         """
-        if random() <= p:
+        if random() <= self.mutaion_non_included_probability:
             freq_low_lst = np.where(individual.chose_list == np.min(individual.chose_list))
             freq_max_lst = np.where(individual.chose_list == np.max(individual.chose_list))
             for i in range(min(len(freq_max_lst), len(freq_low_lst))):
@@ -145,11 +148,16 @@ class Population:
             """To simulation"""
             self.best_solutions_lst.append(self.best_solution.score)
 
+        for individual in self.Individual_lst:
+            individual.show_room_diversity()
+            individual.end_cleaning()
+
+        print(self.Individual_lst[0].dorm)
+
         print(''*10, f"BEST SOLUTION GETS {self.best_solution.score} points!", ''*10)
         self.print_freq()
         self.print_pop()
-        for individual in self.Individual_lst:
-            individual.show_room_diversity()
+
 
     def check_best(self):
         for individual in self.Individual_lst:
@@ -164,7 +172,7 @@ class Population:
                 if i == 0:
                     freq += 1
             print(f"Individual number {j}: {freq} students weren't include in solution which is {freq/individual.length * 100}%. ")
-            print(f"Rooms totally: {len(individual.rooms)} - Rooms included: {len(individual.room_register.keys())}")
+            print(f"Rooms totally: {len(individual.dorm.all_rooms)} - Rooms included: {len(individual.room_register.keys())}")
             print("-" * 50)
 
     def print_pop(self, ):
@@ -195,3 +203,4 @@ class Population:
         for i in range(self.number_of_individuals):
             score += f'     {self.Individual_lst[i].score}      |'
         print(score, "\n\n")
+

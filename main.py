@@ -32,12 +32,12 @@ if __name__ == "__main__":
     """ETAP 1 - Stworzenie Akademika"""
     Dorm_TEST = Dorm("Test_dorm", n_floors=5, n_rooms=4,  ppl=ppl)
     """ ETAP 2 - Stworzenie pierwszej populacji """
-    test_population = Population(30, 100, ppl, Dorm_TEST, 40)
+    test_population = Population(11, 100, ppl, Dorm_TEST, 40)
     # check_best_in_excel(test_population.best_solution.score, path_excel) #TODO
     """ ETAP 3 - Przypisanie pokoji do instancji klasy Student"""
     """TEST INDIVIDUAL"""
-    for individual in test_population.Individual_lst:
-        individual.check_correctness()
+    # for individual in test_population.Individual_lst:
+    #     individual.check_correctness()
 
     # test_population.print_pop()
     # test_population.cross_population()
@@ -48,9 +48,9 @@ if __name__ == "__main__":
     print(f"Simulation took {end - st} seconds.")
     # print(test_population.Individual_lst[0].chose_list)
     # print(test_population.Individual_lst[9].n_of_mutations)
-    show_best_score(test_population.best_solutions_lst)
-    show_score_individual(test_population.Individual_lst[0].score_lst)
-    show_frequency_Individual(test_population.Individual_lst[4].chose_list)
+    # show_best_score(test_population.best_solutions_lst)
+    # show_score_individual(test_population.Individual_lst[0].score_lst)
+    # show_frequency_Individual(test_population.Individual_lst[4].chose_list)
     check_best_in_excel(test_population.best_solution.score, 'Data/Test_december19.xls')
     # test_population.mutation_swap(test_population.Individual_lst[0], 1)
     # print(test_population.best_solution.score)

@@ -7,10 +7,10 @@ import numpy as np
 
 
 class Individual:
-    def __init__(self, length: int, rooms: list, dorm: Dorm, ppl: list):
+    def __init__(self, length: int, dorm: Dorm, ppl: list):
         self.ppl = ppl
         self.arr_bin = np.zeros((length, 1))
-        self.rooms = rooms
+        # self.rooms = rooms
         self.dorm = dorm
         self.length = length
         self.score = None
@@ -24,7 +24,7 @@ class Individual:
 
     def initialize_Individual(self):
         c = 0
-        for room in self.rooms:
+        for room in self.dorm.all_rooms:
             for _ in range(room.capacity):
                 self.arr_bin[c] = room.number
                 c += 1
@@ -66,7 +66,7 @@ class Individual:
         total_punish = 0
         """ PUNISH GIRLS AND BOYS IN THE SAME ROOM"""
 
-        for room in self.rooms:
+        for room in self.dorm.all_rooms:
             locators = room.members
             x = list()
             for locator in locators:
@@ -108,14 +108,15 @@ class Individual:
         """ MAY BE USED ALSO AFTER CROSSING, MUTATING ETC."""
         for i in range(len(self.ppl)):
             if self.arr_bin[i] != 0:
-                room = self.dorm.find_room_by_number(self.arr_bin[i])
+                room = self.dorm.find_room_by_number(int(self.arr_bin[i]))
                 self.ppl[i].actual_room = room
                 room.add_locator(self.ppl[i])
 
     def reset_rooms(self):
-        """ #TODO"""
         for i in range(len(self.ppl)):
             self.ppl[i].actual_room = None
+        for room in self.dorm.all_rooms:
+            room.members = []
 
     def check_correctness(self,):
         """ TEST 1 - Length of array (it may change after crossing)"""
@@ -123,7 +124,7 @@ class Individual:
             raise ValueError("Wrong operation on Individual. Shape of array is not correct.")
 
         """ TEST 2 - Amount of place granted for specific room (it may be too big after crossing)"""
-        for room in self.rooms:
+        for room in self.dorm.all_rooms:
             c = 0
             for i in self.arr_bin:
                 if int(room.number) == int(i):
@@ -142,8 +143,25 @@ class Individual:
             if self.arr_bin[i] != 0:
                 self.chose_list[i] += 1
 
+    def end_cleaning(self):
+        """This function is responsible for kicking out people from multi-rooms and putting them to rooms with free spots"""
+        #TODO take care about changing places in arr_bin and calc_score one more time
+        students_to_replace = list()
+        for room in self.dorm.all_rooms:
+            if room.capacity < len(room.members):
+                room.members.sort(key=lambda x: x.score, reverse=True)
+                students_to_replace.extend(room.members[:room.capacity])
+                room.members = room.members[room.capacity:]
+
+        for room in self.dorm.all_rooms:
+            while room.capacity > len(room.members) and students_to_replace:
+                room.members.append(students_to_replace.pop())
+
     def __repr__(self):
         return self.arr_bin
+
+    def __ge__(self, other):
+        return self.score >= other.score
 
     def __str__(self):
         return str(self.arr_bin)

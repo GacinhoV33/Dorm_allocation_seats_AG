@@ -24,9 +24,9 @@ POSSIBLE SOLUTIONS:
 STATUS: NOT DONE
 ------------------------------------------------------------------------------
 
-PROBLEM 3: ALGORITHM DON'T WORK FOR ODD NUMBERS OF INDIVIDUALS
+PROBLEM 3: IMPLEMENT BIGGER DIVERSITY OF SOLUTIONS
 
-POSSIBLE SOLUTIONS:
+POSSIBLE SOLUTIONS: ADD MORE MUTATION
 
 STATUS: NOT DONE
 ------------------------------------------------------------------------------
