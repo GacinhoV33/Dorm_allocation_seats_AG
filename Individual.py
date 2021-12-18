@@ -10,7 +10,6 @@ class Individual:
     def __init__(self, length: int, dorm: Dorm, ppl: list):
         self.ppl = ppl
         self.arr_bin = np.zeros((length, 1))
-        # self.rooms = rooms
         self.dorm = dorm
         self.length = length
         self.score = None
@@ -21,6 +20,7 @@ class Individual:
         self.chose_list = np.array([0 for _ in range(length)])
         self.n_of_mutations = 0
         self.score_lst = list()
+        self.mutation_lst = list()
 
     def initialize_Individual(self):
         c = 0
@@ -33,18 +33,14 @@ class Individual:
         self.calc_score()
         self.score_lst.append(self.score)
 
-    def actualize_rooms(self):
-        # for student_n_room in self.arr_bin:
-        #     if student_n_room != 0:
-                # self.dorm.find_room_by_number()
-        pass
-
-    def actualize_Individual(self, flag_act=True):
+    def actualize_Individual(self, flag_act=True, it=0, mutation_type: int = 0):
         #TODO - Actualize state of rooms through simulation. After every single iteration rooms should be actualize to
         #TODO - effectively calc punishment
         self.reset_rooms()
         self.set_rooms()
         self.calc_score()
+        if mutation_type != 0:
+            self.mutation_lst.append([it, mutation_type])
         if flag_act:
             self.check_diversity()
             self.score_lst.append(self.score)
@@ -150,12 +146,20 @@ class Individual:
         for room in self.dorm.all_rooms:
             if room.capacity < len(room.members):
                 room.members.sort(key=lambda x: x.score, reverse=True)
-                students_to_replace.extend(room.members[:room.capacity])
-                room.members = room.members[room.capacity:]
+                students_to_replace.extend(room.members[room.capacity:])
+                for member in room.members[room.capacity:]:
+                    member.actual_room = None
+                    self.arr_bin[member.i] = 0
+
+                room.members = room.members[:room.capacity]
 
         for room in self.dorm.all_rooms:
             while room.capacity > len(room.members) and students_to_replace:
-                room.members.append(students_to_replace.pop())
+                popped_member = students_to_replace.pop()
+                room.members.append(popped_member)
+                popped_member.actual_room = room
+                self.arr_bin[popped_member.i] = room.number
+        self.actualize_Individual()
 
     def __repr__(self):
         return self.arr_bin

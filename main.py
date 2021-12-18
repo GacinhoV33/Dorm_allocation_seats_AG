@@ -6,6 +6,7 @@ from Dorm import Dorm
 from generate_people import read_from_excel, check_best_in_excel
 from Population import Population
 from time import time
+
 """ 'P' is reserved for whole kind of probabilities"""
 
 
@@ -32,7 +33,7 @@ if __name__ == "__main__":
     """ETAP 1 - Stworzenie Akademika"""
     Dorm_TEST = Dorm("Test_dorm", n_floors=5, n_rooms=4,  ppl=ppl)
     """ ETAP 2 - Stworzenie pierwszej populacji """
-    test_population = Population(11, 100, ppl, Dorm_TEST, 40)
+    test_population = Population(10, 100, ppl, Dorm_TEST, 200)
     # check_best_in_excel(test_population.best_solution.score, path_excel) #TODO
     """ ETAP 3 - Przypisanie pokoji do instancji klasy Student"""
     """TEST INDIVIDUAL"""
@@ -43,13 +44,14 @@ if __name__ == "__main__":
     # test_population.cross_population()
     # test_population.print_pop()
     st = time()
-    test_population.Genetic_Algortihm()
+    test_population.Genetic_Algorithm()
     end = time()
     print(f"Simulation took {end - st} seconds.")
+    print(test_population.Individual_lst[0].mutation_lst)
     # print(test_population.Individual_lst[0].chose_list)
     # print(test_population.Individual_lst[9].n_of_mutations)
-    # show_best_score(test_population.best_solutions_lst)
-    # show_score_individual(test_population.Individual_lst[0].score_lst)
+    show_best_score(test_population.best_solutions_lst)
+    show_score_individual(test_population.Individual_lst[0].score_lst, test_population.Individual_lst[0].mutation_lst)
     # show_frequency_Individual(test_population.Individual_lst[4].chose_list)
     check_best_in_excel(test_population.best_solution.score, 'Data/Test_december19.xls')
     # test_population.mutation_swap(test_population.Individual_lst[0], 1)

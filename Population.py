@@ -1,11 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import pyautogui
 import numpy as np
 from random import randint, random
 from Dorm import Dorm
 from Individual import Individual
 from copy import deepcopy
+
+MUTATION_NON = 1
+MUTATION_SWAP = 2
 
 
 class Population:
@@ -21,7 +25,6 @@ class Population:
         self.dorm = dorm
 
         """INITIALIZING STRUCTURES"""
-        self.Rooms = self.dorm.all_rooms
 
         """To simulation"""
         self.number_of_iterations = number_of_iterations
@@ -80,21 +83,21 @@ class Population:
                 self.crossing(self.Individual_lst[i], self.Individual_lst[-i-1])
 
     def mutate_population(self, it: int):
-        list(map(self.mutation_swap, self.Individual_lst))
+        list(map(self.mutation_swap, self.Individual_lst, [it for _ in range(self.number_of_individuals)]))
         if it > 5:
-            list(map(self.mutation_add_non_included, self.Individual_lst))
+            list(map(self.mutation_add_non_included, self.Individual_lst, [it for _ in range(self.number_of_individuals)]))
 
-    def mutation_swap(self,  individual):
+    def mutation_swap(self,  individual, it: int = 0):
         r = randint(1, (self.number_of_students - 1)//2)
         if random() < self.mutation_swap_probability:
             beginning = individual.arr_bin[:r]
             end = individual.arr_bin[-r:]
             individual.arr_bin[:r] = end
             individual.arr_bin[-r:] = beginning
-            individual.actualize_Individual(False)
+            individual.actualize_Individual(False, it, mutation_type=MUTATION_SWAP)
             individual.n_of_mutations += 1
 
-    def mutation_add_non_included(self, individual):
+    def mutation_add_non_included(self, individual, actual_iteration):
         """Mutation takes student with the highest frequence and replace it with the student with low frequence"""
         """ STEPS: FIND STUDENT WITH HIGHEST FREQUENCY
                    FIND STUDENT WITH LOWEST FREQUENCY
@@ -108,7 +111,7 @@ class Population:
                     individual.arr_bin[freq_low_lst[0][i]] = individual.arr_bin[freq_max_lst[0][i]]
                     individual.arr_bin[freq_max_lst[0][i]] = 0
 
-            individual.actualize_Individual(flag_act=False)
+            individual.actualize_Individual(flag_act=False, it=actual_iteration, mutation_type=MUTATION_NON)
             # print("MUTATION Add non")
 
     def rullet_selection(self):
@@ -132,14 +135,19 @@ class Population:
 
         self.Individual_lst = generated_ind
 
-         # TODO SOME ERROR WITH PRINTING
+    def ShowProgress(self, current_iteration):
+        """Uncomment to clear terminal after every iteration"""
+        # pyautogui.click(x=996, y=907)
+        # pyautogui.hotkey('command', 'l')
+        percent = current_iteration/self.number_of_iterations
+        print(f"Simulation in progress: \n[{int(percent*100)*'-'}{(100-int(percent*100))*' '}] {int(percent*100)}% \n")
+        print(f'Iteration: {current_iteration}/{self.number_of_iterations}')
 
-    def Genetic_Algortihm(self, ):
+    def Genetic_Algorithm(self, ):
         for i in range(self.number_of_iterations):
             """MUTACJA"""
             self.mutate_population(i)
             """SELEKCJA"""
-            # self.print_pop()
             self.rullet_selection()
             """KRZYŻOWANIE"""
             #TODO think about slot place
@@ -147,17 +155,19 @@ class Population:
             self.check_best()
             """To simulation"""
             self.best_solutions_lst.append(self.best_solution.score)
+            self.ShowProgress(i)
 
         for individual in self.Individual_lst:
-            individual.show_room_diversity()
+            # individual.show_room_diversity()
             individual.end_cleaning()
+            individual.calc_score()
 
+        self.check_best()
         print(self.Individual_lst[0].dorm)
 
         print(''*10, f"BEST SOLUTION GETS {self.best_solution.score} points!", ''*10)
-        self.print_freq()
+        # self.print_freq()
         self.print_pop()
-
 
     def check_best(self):
         for individual in self.Individual_lst:

@@ -256,7 +256,7 @@ def read_from_excel(path: str) -> list:
         people.append(Student(str(data[0][i]), str(data[1][i]),
                               float(data[3][i]), int(data[4][i]), int(data[5][i]),
                               float(data[7][i]), float(data[8][i]), str(data[6][i]),
-                              str(data[2][i]), list(), False
+                              str(data[2][i]), list(), False, i
                               )
                       )
     Pesels = sheet.col_values(colx=10, start_rowx=2)
