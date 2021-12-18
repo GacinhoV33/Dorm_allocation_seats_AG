@@ -15,7 +15,7 @@ MUTATION_SWAP = 2
 class Population:
     def __init__(self, number_of_individuals: int, number_of_students: int, ppl: list, dorm: Dorm,
                  number_of_iterations: int=20, mutation_non_included_probability: float=0.1,
-                 mutation_swap_probability: float=0.1):
+                 mutation_swap_probability: float=0.1, info_flag: bool=True):
         """GENERATE INDIVIDUALS"""
         self.Individual_lst = list()
         self.number_of_students = number_of_students
@@ -27,13 +27,18 @@ class Population:
         """INITIALIZING STRUCTURES"""
 
         """To simulation"""
+        self.info_flag = info_flag
         self.number_of_iterations = number_of_iterations
         self.best_solution = None
         self.best_solutions_lst = list()
+        self.best_solutions_iter = list()
         self.mutaion_non_included_probability = mutation_non_included_probability
         self.mutation_swap_probability = mutation_swap_probability
-
         self.init_Individuals()
+
+    def find_best_in_iter(self):
+        scores = [individual.score for individual in self.Individual_lst]
+        return max(scores)
 
     def init_Individuals(self):
         for i in range(self.number_of_individuals):
@@ -112,7 +117,7 @@ class Population:
                     individual.arr_bin[freq_max_lst[0][i]] = 0
 
             individual.actualize_Individual(flag_act=False, it=actual_iteration, mutation_type=MUTATION_NON)
-            # print("MUTATION Add non")
+
 
     def rullet_selection(self):
         all_score = 0
@@ -154,8 +159,10 @@ class Population:
             self.cross_population()
             self.check_best()
             """To simulation"""
-            self.best_solutions_lst.append(self.best_solution.score)
-            self.ShowProgress(i)
+            if self.info_flag:
+                self.best_solutions_lst.append(self.best_solution.score)
+                self.ShowProgress(i)
+                self.best_solutions_iter.append(self.find_best_in_iter())
 
         for individual in self.Individual_lst:
             # individual.show_room_diversity()

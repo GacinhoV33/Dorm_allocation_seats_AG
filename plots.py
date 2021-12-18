@@ -26,7 +26,7 @@ def show_score_individual(score_lst: list, mutation_lst: list):
         mutation_lst[i][1] = score_lst[mutation_lst[i][0]]
     n_of_iteration = len(score_lst)
     iterations = [i for i in range(n_of_iteration)]
-    plt.figure(num=1, figsize=[30, 15])
+    plt.figure(num=2, figsize=[30, 15])
     for i, mut in enumerate(['MUTATION_NON', 'MUTATION_SWAP']):
         plt.plot([point[0] for j, point in enumerate(mutation_lst) if cmap_[j] == mutations[i]],
                  [point[1] for j, point in enumerate(mutation_lst) if cmap_[j] == mutations[i]],
@@ -44,9 +44,21 @@ def show_frequency_Individual(frequency_lst: list):
     """Functions shows frequency of every student. #TODO"""
     n_of_iteration = len(frequency_lst)
     iterations = [i for i in range(n_of_iteration)]
-    plt.figure(num=1)
+    plt.figure(num=3)
     plt.xlabel("N of student")
     plt.ylabel("Frequency")
     plt.grid()
     plt.scatter(iterations, frequency_lst, c='g')
+    plt.show()
+
+
+def show_best_score_iter(best_solutions: list, n_of_individuals: int):
+    """ This function shows how best solution in whole population change through iterations"""
+    plt.figure(num=4, figsize=[20, 12])
+    plt.plot([i for i in range(len(best_solutions))], best_solutions, c='r', label="Highest Score in population in iteration")
+    plt.xlabel("Iterations")
+    plt.ylabel("Best score in whole generation")
+    plt.grid()
+    plt.title(f'{len(best_solutions)} Iterations. {n_of_individuals} Individuals.')
+    plt.legend()
     plt.show()
