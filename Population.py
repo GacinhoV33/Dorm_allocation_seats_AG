@@ -118,7 +118,6 @@ class Population:
 
             individual.actualize_Individual(flag_act=False, it=actual_iteration, mutation_type=MUTATION_NON)
 
-
     def rullet_selection(self):
         all_score = 0
         for individiual in self.Individual_lst:
@@ -166,7 +165,7 @@ class Population:
 
         for individual in self.Individual_lst:
             # individual.show_room_diversity()
-            individual.end_cleaning()
+            individual.end_cleaning() # Function responsible for making solution acceptable
             individual.calc_score()
 
         self.check_best()

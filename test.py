@@ -5,6 +5,7 @@ from Individual import Individual
 from Population import Population
 import random
 
+
 class TestDorm(unittest.TestCase):
     def test_room_amount(self):
         dorm = Dorm("TEST_DORM", 5, 100, generate_random_people())
