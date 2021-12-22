@@ -53,8 +53,6 @@ class TestPopulation(unittest.TestCase):
         self.assertNotEqual(pop.best_solution, None)
         self.assertEqual(len(pop.best_solutions_lst), 0)
 
-
-
     def test_amount_ppl_in_room(self):
         dorm = Dorm("TEST_DORM", n_floors=5, n_rooms=4, ppl=generate_random_people())
         pop = Population(20, len(dorm.ppl), dorm.ppl, dorm, 30)
@@ -66,7 +64,6 @@ class TestPopulation(unittest.TestCase):
                     is_correct = False
                     print("False")
         self.assertEqual(is_correct, True)
-
 
 
 if __name__ == "__main__":

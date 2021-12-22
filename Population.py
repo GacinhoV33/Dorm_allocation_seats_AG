@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import pyautogui
 import numpy as np
 from random import randint, random
 from Dorm import Dorm
 from Individual import Individual
 from copy import deepcopy
+from tqdm import tqdm
 
 MUTATION_NON = 1
 MUTATION_SWAP = 2
@@ -15,7 +15,8 @@ MUTATION_SWAP = 2
 class Population:
     def __init__(self, number_of_individuals: int, number_of_students: int, ppl: list, dorm: Dorm,
                  number_of_iterations: int=20, mutation_non_included_probability: float=0.1,
-                 mutation_swap_probability: float=0.1, info_flag: bool=True):
+                 mutation_swap_probability: float=0.1, info_flag: bool=True,
+                 mutation_swap_flag: bool=True, mutation_non_included_flag:bool=True):
         """GENERATE INDIVIDUALS"""
         self.Individual_lst = list()
         self.number_of_students = number_of_students
@@ -35,6 +36,8 @@ class Population:
         self.mutaion_non_included_probability = mutation_non_included_probability
         self.mutation_swap_probability = mutation_swap_probability
         self.init_Individuals()
+        self.mutation_swap_flag = mutation_swap_flag
+        self.mutation_non_included_flag = mutation_non_included_flag
 
     def find_best_in_iter(self):
         scores = [individual.score for individual in self.Individual_lst]
@@ -88,8 +91,9 @@ class Population:
                 self.crossing(self.Individual_lst[i], self.Individual_lst[-i-1])
 
     def mutate_population(self, it: int):
-        list(map(self.mutation_swap, self.Individual_lst, [it for _ in range(self.number_of_individuals)]))
-        if it > 5:
+        if self.mutation_swap_flag:
+            list(map(self.mutation_swap, self.Individual_lst, [it for _ in range(self.number_of_individuals)]))
+        if it > self.number_of_iterations//4 and self.mutation_non_included_flag:
             list(map(self.mutation_add_non_included, self.Individual_lst, [it for _ in range(self.number_of_individuals)]))
 
     def mutation_swap(self,  individual, it: int = 0):
@@ -148,7 +152,7 @@ class Population:
         print(f'Iteration: {current_iteration}/{self.number_of_iterations}')
 
     def Genetic_Algorithm(self, ):
-        for i in range(self.number_of_iterations):
+        for i in tqdm(range(self.number_of_iterations), desc='Simulation in progress: '):
             """MUTACJA"""
             self.mutate_population(i)
             """SELEKCJA"""
@@ -160,7 +164,7 @@ class Population:
             """To simulation"""
             if self.info_flag:
                 self.best_solutions_lst.append(self.best_solution.score)
-                self.ShowProgress(i)
+                # self.ShowProgress(i)
                 self.best_solutions_iter.append(self.find_best_in_iter())
 
         for individual in self.Individual_lst:

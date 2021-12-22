@@ -131,7 +131,6 @@ class Individual:
         """ TEST 3 - GIRLS NOT IN ROOMS WITH BOYS """
 
     def check_diversity(self):
-        #TODO
         """This function is responsible for checking whether every single Student were tried to fit and also how diverse
         algorithm works
         """
@@ -141,7 +140,6 @@ class Individual:
 
     def end_cleaning(self):
         """This function is responsible for kicking out people from multi-rooms and putting them to rooms with free spots"""
-        #TODO take care about changing places in arr_bin and calc_score one more time
         students_to_replace = list()
         for room in self.dorm.all_rooms:
             if room.capacity < len(room.members):

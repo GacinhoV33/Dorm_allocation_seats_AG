@@ -34,15 +34,7 @@ if __name__ == "__main__":
     Dorm_TEST = Dorm("Test_dorm", n_floors=10, n_rooms=8,  ppl=ppl)
     """ ETAP 2 - Stworzenie pierwszej populacji """
     test_population = Population(50, 200, ppl, Dorm_TEST, 150)
-    # check_best_in_excel(test_population.best_solution.score, path_excel) #TODO
-    """ ETAP 3 - Przypisanie pokoji do instancji klasy Student"""
-    """TEST INDIVIDUAL"""
-    # for individual in test_population.Individual_lst:
-    #     individual.check_correctness()
 
-    # test_population.print_pop()
-    # test_population.cross_population()
-    # test_population.print_pop()
     st = time()
     test_population.Genetic_Algorithm()
     end = time()
@@ -56,11 +48,5 @@ if __name__ == "__main__":
     show_best_score_iter(test_population.best_solutions_iter, test_population.number_of_individuals)
     check_best_in_excel(test_population.best_solution.score, 'Data/Test_december19.xls')
 
-    # test_population.mutation_swap(test_population.Individual_lst[0], 1)
-    # print(test_population.best_solution.score)
-    # test_population.print_pop()
-    # test_population.rullet_selection()
-    # print(test_population.best_solution.score)
-    # test_population.Genetic_Algortihm()
 
 
