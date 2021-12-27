@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from random import randint, random
+from random import randint, random, shuffle
 from Dorm import Dorm
 from Individual import Individual
 from copy import deepcopy
@@ -16,7 +16,8 @@ class Population:
     def __init__(self, number_of_individuals: int, number_of_students: int, ppl: list, dorm: Dorm,
                  number_of_iterations: int=20, mutation_non_included_probability: float=0.1,
                  mutation_swap_probability: float=0.1, info_flag: bool=True,
-                 mutation_swap_flag: bool=True, mutation_non_included_flag:bool=True):
+                 mutation_swap_flag: bool=True, mutation_non_included_flag:bool=True,
+                 rullet_selection_flag: bool=True, tournament_selection_flag=True):
         """GENERATE INDIVIDUALS"""
         self.Individual_lst = list()
         self.number_of_students = number_of_students
@@ -38,6 +39,8 @@ class Population:
         self.init_Individuals()
         self.mutation_swap_flag = mutation_swap_flag
         self.mutation_non_included_flag = mutation_non_included_flag
+        self.rullet_selection_flag = rullet_selection_flag
+        self.tournament_selection_flag = tournament_selection_flag
 
     def find_best_in_iter(self):
         scores = [individual.score for individual in self.Individual_lst]
@@ -143,6 +146,37 @@ class Population:
 
         self.Individual_lst = generated_ind
 
+    def tournament_selection(self):
+        """Tournament selection -> Every Individual 'fights' with his opponents. The one with bigger score stays and
+        replicate, the other lose and is dropped out"""
+
+        """Generating tow different sets of individuals and shuffle them"""
+        r = randint(0, self.number_of_individuals // 2)
+        first_group = [i for i in range(r, r+self.number_of_individuals//2)]
+        second_group = [i for i in range(0, r)] + [j for j in range(r+self.number_of_individuals//2, self.number_of_individuals)]
+        shuffle(first_group)
+        shuffle(second_group)
+        new_individuals = list()
+        for first, second in zip(first_group, second_group):
+            if self.Individual_lst[first].score > self.Individual_lst[second].score:
+                """Replicate first and kick out second"""
+                for _ in range(2):
+                    new_individuals.append(deepcopy(self.Individual_lst[first]))
+
+            elif self.Individual_lst[first].score < self.Individual_lst[second].score:
+                """Replicate second and kick out first"""
+                for _ in range(2):
+                    new_individuals.append(deepcopy(self.Individual_lst[second]))
+
+            else:
+                """Nothing happen"""
+                new_individuals.append(deepcopy(self.Individual_lst[first]))
+                new_individuals.append(deepcopy(self.Individual_lst[second]))
+        if len(new_individuals) != self.number_of_individuals:
+            print("Error with individuals")
+
+        self.Individual_lst = new_individuals
+
     def ShowProgress(self, current_iteration):
         """Uncomment to clear terminal after every iteration"""
         # pyautogui.click(x=996, y=907)
@@ -156,7 +190,11 @@ class Population:
             """MUTACJA"""
             self.mutate_population(i)
             """SELEKCJA"""
-            self.rullet_selection()
+            # if self.rullet_selection_flag:
+            #     self.rullet_selection()
+            if self.tournament_selection_flag:
+                self.tournament_selection()
+
             """KRZYŻOWANIE"""
             #TODO think about slot place
             self.cross_population()
@@ -223,4 +261,5 @@ class Population:
         for i in range(self.number_of_individuals):
             score += f'     {self.Individual_lst[i].score}      |'
         print(score, "\n\n")
+
 

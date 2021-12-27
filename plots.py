@@ -3,6 +3,13 @@
 
 from matplotlib import pyplot as plt
 
+#TODO
+# 1 Punishment through iterations (for specific individual)
+# 2 Punishment through iterations with actual score (for specific individual)
+# 3 Comparison the tournament selection with rullet
+# 4 Comparison with and without mutations
+# 5
+
 
 def show_best_score(bst_score: list):
     """Function shows best score from population through time of iterations"""

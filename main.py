@@ -7,12 +7,8 @@ from generate_people import read_from_excel, check_best_in_excel, generate_rando
 from Population import Population
 from time import time
 
-""" 'P' is reserved for whole kind of probabilities"""
-
-
 """
 PRECONDITIONS:
-
 
 N - Number of people willing live in dorm (400)
 
@@ -21,19 +17,17 @@ D_2 - Total number of places in dorm (only two-man rooms)
 D_3 - Total number of places in dorm (only three-man rooms)
 D_2 + D_3 = D (Algorithm should try find proportional amount of boys ang girls)
 
-GIRLS CANNOT LIVE WITH BOYS 
-
 """
 
 if __name__ == "__main__":
     """ETAP 0 - stworzenie niezbędnych struktur i danych"""
-    # ppl = generate_random_people(500)
+    ppl = generate_random_people(500)
     path_excel = "Data/Test_december19.xls"
-    ppl = read_from_excel(path_excel)
+    # ppl = read_from_excel(path_excel)
     """ETAP 1 - Stworzenie Akademika"""
     Dorm_TEST = Dorm("Test_dorm", n_floors=10, n_rooms=8,  ppl=ppl)
     """ ETAP 2 - Stworzenie pierwszej populacji """
-    test_population = Population(50, 200, ppl, Dorm_TEST, 150)
+    test_population = Population(50, 500, ppl, Dorm_TEST, 150)
 
     st = time()
     test_population.Genetic_Algorithm()
