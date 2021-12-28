@@ -3,6 +3,8 @@
 
 import screeninfo
 
+BigB_X = 180
+BigB_Y = 50
 monitor_width = screeninfo.get_monitors()[0].width
 monitor_height = screeninfo.get_monitors()[0].height
 

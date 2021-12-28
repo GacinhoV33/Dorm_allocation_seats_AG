@@ -21,13 +21,31 @@ D_2 + D_3 = D (Algorithm should try find proportional amount of boys ang girls)
 
 """
 
+
+def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, n_of_individuals: int=50):
+    if path:
+        path_excel = "Data/Test_december19.xls"
+        ppl = read_from_excel(path_excel)
+    elif n_of_people:
+        ppl = generate_random_people(n_of_people)
+    else:
+        raise ImportError("Running simulation without parameters")
+    Simulation_Dorm = Dorm("Test_dorm", n_floors=5, n_rooms=6,  ppl=ppl)
+    Simulation_Population = Population(n_of_individuals, len(ppl), ppl, Simulation_Dorm, iteration)
+
+    st = time()
+    Simulation_Population.Genetic_Algorithm()
+    end = time()
+    print(f"Simulation took {end - st} seconds.")
+
+
 if __name__ == "__main__":
     """ETAP 0 - stworzenie niezbędnych struktur i danych"""
     ppl = generate_random_people(500)
     path_excel = "Data/Test_december19.xls"
     # ppl = read_from_excel(path_excel)
     """ETAP 1 - Stworzenie Akademika"""
-    Dorm_TEST = Dorm("Test_dorm", n_floors=10, n_rooms=8,  ppl=ppl)
+    Dorm_TEST = Dorm("Test_dorm", n_floors=5, n_rooms=6,  ppl=ppl)
     """ ETAP 2 - Stworzenie pierwszej populacji """
     test_population = Population(50, 500, ppl, Dorm_TEST, 150)
 
