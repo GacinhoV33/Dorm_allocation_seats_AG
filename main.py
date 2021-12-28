@@ -1,46 +1,61 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-""" IMPORT FILES"""
-from plots import show_best_score, show_score_individual, show_frequency_Individual, show_best_score_iter
-from Dorm import Dorm
-from generate_people import read_from_excel, check_best_in_excel, generate_random_people
-from Population import Population
-from time import time
+import run
+from tkinter import *
+from settings import X_Size, Y_Size, screen_pos_x, screen_pos_y
+from tkinter_custom_button import TkinterCustomButton
+from tkinter import filedialog
+from PIL import ImageTk, Image
+csv_path = str()
 
-"""
-PRECONDITIONS:
 
-N - Number of people willing live in dorm (400)
+def Openfile():
+    #TODO get root and put in initialdir
+    global csv_path
+    csv_path = filedialog.askopenfilename(initialdir="/", title="Select a file",
+                                                   filetypes=(("xls files", "*.xls"), ("all files", "*.*")))
 
-D - Total number of places in dorm (100)
-D_2 - Total number of places in dorm (only two-man rooms)
-D_3 - Total number of places in dorm (only three-man rooms)
-D_2 + D_3 = D (Algorithm should try find proportional amount of boys ang girls)
 
-"""
+def main_screen():
+    Root = Tk()
+    Root.title("Genetic Algorithm - Dorm Allocation")
+    Root.geometry(f'{X_Size}x{Y_Size}+{screen_pos_x}+{screen_pos_y}')
+
+    """ Code responsible for logo"""
+    Root.wm_attributes('-transparentcolor', '#ab23ff')
+    logo_img = PhotoImage(file='images/books.png')
+    Root.tk.call('wm', 'iconphoto', Root._w, logo_img)
+
+    """ Code responsible for background"""
+    background_img = ImageTk.PhotoImage(
+        (Image.open("images/background.jpg")).resize((X_Size, Y_Size), Image.ANTIALIAS)
+    )
+    bg_label = Label(Root, image=background_img)
+    bg_label.place(x=0, y=0)
+    """Shows the name: Genetic Algorithm"""
+
+    """ Shows the flag which light green when ready, red when not ready"""
+
+    """START Button -> When clicked, it run simulation"""
+
+    """REPORT Button -> When Simulation is done, it generate and shows report about simulation and dorm"""
+
+    """Help Button -> When clicked it opens new window with description how to use program"""
+
+    """Choose file with data -> When clicked the browsers opens and user can choose file with data"""
+    ChoseButton = TkinterCustomButton(text="Open File", corner_radius=50, command=Openfile)
+    ChoseButton.place(x=X_Size//8, y=Y_Size//2)
+    """ Generate dataset Button -> When clicked it opens new window with parameters of new dataset """
+
+    """ EXIT Button -> When clicked, it closes application"""
+
+    # test_button = TkinterCustomButton(text="Only for test", )
+    # test_button.place(x=50, y=50)
+
+    Root.mainloop()
+
+
+def main():
+    main_screen()
+
 
 if __name__ == "__main__":
-    """ETAP 0 - stworzenie niezbędnych struktur i danych"""
-    ppl = generate_random_people(500)
-    path_excel = "Data/Test_december19.xls"
-    # ppl = read_from_excel(path_excel)
-    """ETAP 1 - Stworzenie Akademika"""
-    Dorm_TEST = Dorm("Test_dorm", n_floors=10, n_rooms=8,  ppl=ppl)
-    """ ETAP 2 - Stworzenie pierwszej populacji """
-    test_population = Population(50, 500, ppl, Dorm_TEST, 150)
-
-    st = time()
-    test_population.Genetic_Algorithm()
-    end = time()
-    print(f"Simulation took {end - st} seconds.")
-    print(test_population.Individual_lst[0].mutation_lst)
-    # print(test_population.Individual_lst[0].chose_list)
-    # print(test_population.Individual_lst[9].n_of_mutations)
-    show_best_score(test_population.best_solutions_lst)
-    show_score_individual(test_population.Individual_lst[0].score_lst, test_population.Individual_lst[0].mutation_lst)
-    # show_frequency_Individual(test_population.Individual_lst[4].chose_list)
-    show_best_score_iter(test_population.best_solutions_iter, test_population.number_of_individuals)
-    check_best_in_excel(test_population.best_solution.score, 'Data/Test_december19.xls')
-
-
-
+    main()
