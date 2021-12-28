@@ -15,9 +15,10 @@ MUTATION_SWAP = 2
 class Population:
     def __init__(self, number_of_individuals: int, number_of_students: int, ppl: list, dorm: Dorm,
                  number_of_iterations: int=20, mutation_non_included_probability: float=0.1,
-                 mutation_swap_probability: float=0.1, info_flag: bool=True,
+                 mutation_swap_probability: float=0.1,
                  mutation_swap_flag: bool=True, mutation_non_included_flag:bool=True,
-                 rullet_selection_flag: bool=True, tournament_selection_flag=True):
+                 rullet_selection_flag: bool=True, tournament_selection_flag=True,
+                 info_flag: bool=True):
         """GENERATE INDIVIDUALS"""
         self.Individual_lst = list()
         self.number_of_students = number_of_students

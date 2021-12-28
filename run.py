@@ -22,7 +22,9 @@ D_2 + D_3 = D (Algorithm should try find proportional amount of boys ang girls)
 """
 
 
-def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, n_of_individuals: int=50):
+def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, n_of_individuals: int=50, mutation_non_included_probability: float=0.1,
+                     mutation_swap_probability: float=0.1, mutation_swap_flag: bool=True, mutation_non_included_flag:bool=True,
+                 rullet_selection_flag: bool=True, tournament_selection_flag=True, info_flag:bool=True):
     if path:
         path_excel = "Data/Test_december19.xls"
         ppl = read_from_excel(path_excel)
@@ -31,7 +33,14 @@ def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, 
     else:
         raise ImportError("Running simulation without parameters")
     Simulation_Dorm = Dorm("Test_dorm", n_floors=5, n_rooms=6,  ppl=ppl)
-    Simulation_Population = Population(n_of_individuals, len(ppl), ppl, Simulation_Dorm, iteration)
+    Simulation_Population = Population(number_of_individuals=n_of_individuals, number_of_students=len(ppl),
+                                       ppl=ppl, dorm=Simulation_Dorm, number_of_iterations=iteration,
+                                       mutation_non_included_probability=mutation_non_included_probability,
+                                       mutation_swap_probability=mutation_swap_probability,
+                                       mutation_swap_flag=mutation_swap_flag, mutation_non_included_flag=mutation_non_included_flag,
+                                       rullet_selection_flag=rullet_selection_flag, tournament_selection_flag=tournament_selection_flag,
+                                       info_flag=info_flag
+                                       )
 
     st = time()
     Simulation_Population.Genetic_Algorithm()

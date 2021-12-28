@@ -4,13 +4,62 @@ from settings import X_Size, Y_Size, screen_pos_x, screen_pos_y, BigB_X, BigB_Y
 from tkinter_custom_button import TkinterCustomButton
 from tkinter import filedialog
 from PIL import ImageTk, Image
-csv_path = str()
 
-"""Variables used in GUI"""
+#TODO
+# dorms buttons with hints
+# is_ready button with 3 colors
+# status of simulation showed on screen
+# Generate Dataset window
+# Generate Report after simulation
+
+"""Global Variables to simulation"""
+csv_path = None
+n_of_people = 200
+number_of_individuals: int = 0
+number_of_students: int = 0
+dorm = None
+number_of_iterations: int = 20
+mutation_non_included_probability: float=0.1
+mutation_swap_probability: float=0.1
+mutation_swap_flag: bool=True
+mutation_non_included_flag:bool=True
+rullet_selection_flag: bool=True
+tournament_selection_flag=True
 
 
-def Generate_Report(Root):
-    Root.update()
+def SaveEverything(root, MutSwapFlag: int, MutAddNonFlag: int, MutSwapProb: float, MutAddNonProb: float,
+                   Selection: str, N_iterations: int, N_individuals: int):
+    print(MutSwapFlag, MutAddNonFlag, MutAddNonProb, MutSwapProb, Selection, N_iterations, N_individuals)
+    global number_of_individuals, dorm, number_of_iterations, mutation_non_included_probability #TODO Dorm options
+    global mutation_swap_probability, mutation_swap_flag, mutation_non_included_flag, rullet_selection_flag
+    global tournament_selection_flag, csv_path
+    number_of_individuals = N_individuals
+    number_of_iterations = N_iterations
+    mutation_non_included_flag = bool(MutAddNonFlag)
+    mutation_swap_flag = bool(MutSwapFlag)
+    mutation_swap_probability = 0.01 * MutSwapProb
+    mutation_non_included_probability = 0.01 * MutAddNonProb
+    if Selection == "Rullet":
+        rullet_selection_flag = True
+        tournament_selection_flag = False
+    else:
+        rullet_selection_flag = False
+        tournament_selection_flag = True
+
+
+def start_working():
+    if csv_path:
+        start_simulation(csv_path, None, number_of_iterations, number_of_individuals,
+                         mutation_non_included_probability, mutation_swap_probability, mutation_swap_flag,
+                         mutation_non_included_flag, rullet_selection_flag, tournament_selection_flag, True)
+    else:
+        start_simulation(None, n_of_people, number_of_iterations, number_of_individuals,
+                         mutation_non_included_probability, mutation_swap_probability, mutation_swap_flag,
+                         mutation_non_included_flag, rullet_selection_flag, tournament_selection_flag, True)
+
+
+def Generate_Report():
+    pass
 
 
 def Help_User():
@@ -68,12 +117,12 @@ def main_screen():
 
     """START Button -> When clicked, it run simulation"""
     StartButton = TkinterCustomButton(text="START", corner_radius=10,
-                command=lambda: start_simulation("Data/Test_december19.xls", None, 100, 50),
+                command=start_working,
                 bg_color="#142434", width=BigB_X, height=BigB_Y)
     StartButton.place(x=X_Size//2.43, y=Y_Size//5)
     """REPORT Button -> When Simulation is done, it generate and shows report about simulation and dorm"""
     GenerateReportButton = TkinterCustomButton(text="Generate Report", corner_radius=10, width=BigB_X, height=BigB_Y,
-                                               command=lambda: Generate_Report(Root), bg_color="#425b9a")
+                                               command= Generate_Report, bg_color="#425b9a")
     GenerateReportButton.place(x=X_Size//10, y=Y_Size//2)
 
     """Help Button -> When clicked it opens new window with description how to use program"""
@@ -88,17 +137,51 @@ def main_screen():
     GenerateButton.place(x=X_Size//10, y=Y_Size//3)
 
     """Parameters of Simulation"""
-    MutationSwapButton = Checkbutton(Root, text="Swap Mutation", variable=Mutation_Swap_Flag)
+    MutationSwapButton = Checkbutton(Root, text="Swap Mutation", font=("Calibri", 12), variable=Mutation_Swap_Flag, bg="#425b9a", width=int(X_Size/70))
     MutationSwapButton.place(x=X_Size//1.2, y=Y_Size//2)
 
-    MutationAddNonButton = Checkbutton(Root, text="AddNon Mutation", variable=Mutation_AddNon_Flag)
-    MutationAddNonButton.place(x=X_Size // 1.2, y=Y_Size // 1.8)
+    SwapMutationScale = Scale(Root, from_=0, to=10, state=ACTIVE, orient=HORIZONTAL, label=19*' '+ 'SWAP (%)', resolution=0.25,
+                              troughcolor="#6580c3", bg="#425b9a", length=X_Size//7.5)
+    SwapMutationScale.place(x=X_Size // 1.2, y=Y_Size // 1.8)
 
+    MutationAddNonButton = Checkbutton(Root, text="AddNon Mutation",font=("Calibri", 12), variable=Mutation_AddNon_Flag, bg="#425b9a", width=int(X_Size/70))
+    MutationAddNonButton.place(x=X_Size // 1.2, y=Y_Size // 1.52)
+
+    AddNonMutationScale = Scale(Root, from_=0, to=10, state=ACTIVE, orient=HORIZONTAL, label=18*' '+'Add Non (%)',
+                              resolution=0.25,
+                              troughcolor="#6580c3", bg="#425b9a", length=X_Size // 7.5)
+    AddNonMutationScale.place(x=X_Size // 1.2, y=Y_Size // 1.41)
+
+    main_Canv.create_text(X_Size//1.11, Y_Size//2.39, text="Number of iterations", font=('Helvetica', 14), fill='#FFBBDD')
+    IterationsEntry = Entry(Root, fg='#081117', width=int(X_Size / 60), font=("Calibri", 12))
+    IterationsEntry.insert(0, '100')
+    IterationsEntry.place(x=X_Size//1.2, y=Y_Size//2.3)
+
+    main_Canv.create_text(X_Size // 1.11, Y_Size // 2.9, text="Number of Individuals", font=('Helvetica', 14),
+                          fill='#FFBBDD')
+    IndividualsEntry = Entry(Root, fg='#081117', width=int(X_Size / 60), font=("Calibri", 12))
+    IndividualsEntry.insert(0, '50')
+    IndividualsEntry.place(x=X_Size // 1.2, y=Y_Size // 2.7)
+
+    MODES = [
+        ("Tournament Selection", "Tournament"),
+        ("Rullet Selection", "Rullet"),
+    ]
+    Selection = StringVar()
+    Selection.set("Rullet Selection")
+    for i, (text, mode) in enumerate(MODES):
+        Radiobutton(Root, text=text, variable=Selection, value=mode, width=int(X_Size//60),
+                    font=("Calibri", 12), bg="#425b9a").place(x=X_Size//1.55, y=Y_Size//2+i*(Y_Size//20))
     """ EXIT Button -> When clicked, it closes application"""
     ExitButton = TkinterCustomButton(text="EXIT", corner_radius=3, fg_color="#FF0000", bg_color="#081117", command=lambda: Exit_app(Root))
     ExitButton.place(x=X_Size//1.11, y=Y_Size//1.08)
 
-    Root.after(1000, Root.update())
+    """ SAVE button"""
+    SaveButton = TkinterCustomButton(text="Save", corner_radius=5, command=lambda: SaveEverything(Root, Mutation_Swap_Flag.get(), Mutation_AddNon_Flag.get(), SwapMutationScale.get(), AddNonMutationScale.get(), Selection.get(), int(IterationsEntry.get()), int(IndividualsEntry.get())))
+    SaveButton.place(x=X_Size//1.2, y=Y_Size//10)
+
+
+    # Root.after(1, Update_all_variables, Root, Mutation_Swap_Flag.get())
     Root.mainloop()
 
 
