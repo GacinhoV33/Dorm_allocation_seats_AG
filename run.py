@@ -24,7 +24,7 @@ D_2 + D_3 = D (Algorithm should try find proportional amount of boys ang girls)
 
 def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, n_of_individuals: int=50, mutation_non_included_probability: float=0.1,
                      mutation_swap_probability: float=0.1, mutation_swap_flag: bool=True, mutation_non_included_flag:bool=True,
-                 rullet_selection_flag: bool=True, tournament_selection_flag=True, info_flag:bool=True):
+                 rullet_selection_flag: bool=True, tournament_selection_flag=False, rank_selection_flag:bool=False, info_flag:bool=True):
     if path:
         path_excel = "Data/Test_december19.xls"
         ppl = read_from_excel(path_excel)
@@ -39,7 +39,7 @@ def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, 
                                        mutation_swap_probability=mutation_swap_probability,
                                        mutation_swap_flag=mutation_swap_flag, mutation_non_included_flag=mutation_non_included_flag,
                                        rullet_selection_flag=rullet_selection_flag, tournament_selection_flag=tournament_selection_flag,
-                                       info_flag=info_flag
+                                       rank_selection_flag=rank_selection_flag, info_flag=info_flag
                                        )
 
     st = time()

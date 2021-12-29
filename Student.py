@@ -122,5 +122,6 @@ class Student:
 
 
 if __name__ == "__main__":
-    student = Student(first_name='Krzysiek', last_name='Babicki', distance=100, year_of_studies=3,
-                      standard_of_room=1, income=4000, friends_in_room=['Filip', 'Olaf'], gpa=4.5, PESEL=str(1234), sex='M')
+    # student = Student(first_name='Krzysiek', last_name='Babicki', distance=100, year_of_studies=3,
+    #                   standard_of_room=1, income=4000, friends_in_room=['Filip', 'Olaf'], gpa=4.5, PESEL=str(1234), sex='M')
+    print(5 // 2)

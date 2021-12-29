@@ -17,7 +17,7 @@ class Population:
                  number_of_iterations: int=20, mutation_non_included_probability: float=0.1,
                  mutation_swap_probability: float=0.1,
                  mutation_swap_flag: bool=True, mutation_non_included_flag:bool=True,
-                 rullet_selection_flag: bool=True, tournament_selection_flag=True,
+                 rullet_selection_flag: bool=True, tournament_selection_flag=False, rank_selection_flag:bool=False,
                  info_flag: bool=True):
         """GENERATE INDIVIDUALS"""
         self.Individual_lst = list()
@@ -42,6 +42,7 @@ class Population:
         self.mutation_non_included_flag = mutation_non_included_flag
         self.rullet_selection_flag = rullet_selection_flag
         self.tournament_selection_flag = tournament_selection_flag
+        self.rank_selection_flag = rank_selection_flag
 
     def find_best_in_iter(self):
         scores = [individual.score for individual in self.Individual_lst]
@@ -57,7 +58,7 @@ class Population:
             individual.set_rooms()
             if self.best_solution:
                 if individual.score:
-                    if individual.score > self.best_solution.score: #TODO change eq and compare objects
+                    if individual.score > self.best_solution.score:
                         self.best_solution = individual
                 else:
                     if individual.calc_score() > self.best_solution.score:
@@ -147,7 +148,7 @@ class Population:
 
         self.Individual_lst = generated_ind
 
-    def tournament_selection(self):
+    def tournament_selection(self, ):
         """Tournament selection -> Every Individual 'fights' with his opponents. The one with bigger score stays and
         replicate, the other lose and is dropped out"""
 
@@ -178,28 +179,43 @@ class Population:
 
         self.Individual_lst = new_individuals
 
+    def rank_selection(self):
+        all_scr = 0
+        for ind in self.Individual_lst:
+            all_scr += ind.score
+
+        lst_of_copies = list()
+        for ind in self.Individual_lst:
+            for i in range(int((ind.score/all_scr * self.number_of_individuals))):
+                lst_of_copies.append(deepcopy(ind))
+
+        if len(lst_of_copies) < self.number_of_individuals:
+            for _ in range(self.number_of_individuals-len(lst_of_copies)):
+                lst_of_copies.append(deepcopy(self.Individual_lst[randint(0, self.number_of_individuals-1)]))
+
+        self.Individual_lst = lst_of_copies
+
+
     def ShowProgress(self, current_iteration):
         """Uncomment to clear terminal after every iteration"""
-        # pyautogui.click(x=996, y=907)
-        # pyautogui.hotkey('command', 'l')
         percent = current_iteration/self.number_of_iterations
         print(f"Simulation in progress: \n[{int(percent*100)*'-'}{(100-int(percent*100))*' '}] {int(percent*100)}% \n")
         print(f'Iteration: {current_iteration}/{self.number_of_iterations}')
 
     def Genetic_Algorithm(self, ):
         for i in tqdm(range(self.number_of_iterations), desc='Simulation in progress: '):
-            """MUTACJA"""
-            self.mutate_population(i)
+
             """SELEKCJA"""
-            # if self.rullet_selection_flag:
-            #     self.rullet_selection()
             if self.tournament_selection_flag:
                 self.tournament_selection()
-            if self.rullet_selection_flag:
+            elif self.rullet_selection_flag:
                 self.rullet_selection()
+            elif self.rank_selection_flag:
+                self.rank_selection()
             """KRZYŻOWANIE"""
-            #TODO think about slot place
             self.cross_population()
+            """MUTACJA"""
+            self.mutate_population(i)
             self.check_best()
             """To simulation"""
             if self.info_flag:

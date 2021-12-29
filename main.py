@@ -29,7 +29,8 @@ mutation_swap_probability: float=0.1
 mutation_swap_flag: bool=True
 mutation_non_included_flag:bool=True
 rullet_selection_flag: bool=True
-tournament_selection_flag=True
+tournament_selection_flag=False
+rank_selection_flag = False
 
 
 def SaveEverything(root, MutSwapFlag: int, MutAddNonFlag: int, MutSwapProb: float, MutAddNonProb: float,
@@ -37,7 +38,7 @@ def SaveEverything(root, MutSwapFlag: int, MutAddNonFlag: int, MutSwapProb: floa
     print(MutSwapFlag, MutAddNonFlag, MutAddNonProb, MutSwapProb, Selection, N_iterations, N_individuals)
     global number_of_individuals, dorm, number_of_iterations, mutation_non_included_probability #TODO Dorm options
     global mutation_swap_probability, mutation_swap_flag, mutation_non_included_flag, rullet_selection_flag
-    global tournament_selection_flag, csv_path
+    global tournament_selection_flag, csv_path, rank_selection_flag
     number_of_individuals = N_individuals
     number_of_iterations = N_iterations
     mutation_non_included_flag = bool(MutAddNonFlag)
@@ -47,9 +48,15 @@ def SaveEverything(root, MutSwapFlag: int, MutAddNonFlag: int, MutSwapProb: floa
     if Selection == "Rullet":
         rullet_selection_flag = True
         tournament_selection_flag = False
-    else:
+        rank_selection_flag = False
+    elif Selection == "Tournament":
         rullet_selection_flag = False
         tournament_selection_flag = True
+        rank_selection_flag = False
+    elif Selection == "Rank":
+        rullet_selection_flag = False
+        tournament_selection_flag = False
+        rank_selection_flag = True
 
 
 def start_working():
@@ -192,6 +199,7 @@ def main_screen():
     MODES = [
         ("Tournament Selection", "Tournament"),
         ("Rullet Selection", "Rullet"),
+        ("Rank Selection", "Rank")
     ]
     Selection = StringVar()
     Selection.set("Rullet Selection")
