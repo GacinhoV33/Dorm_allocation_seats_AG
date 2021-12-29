@@ -4,13 +4,18 @@ from settings import X_Size, Y_Size, screen_pos_x, screen_pos_y, BigB_X, BigB_Y
 from tkinter_custom_button import TkinterCustomButton
 from tkinter import filedialog
 from PIL import ImageTk, Image
+import CreateToolTip
+from report import PDF
+from tkinter.messagebox import showwarning
+import subprocess
+
 
 #TODO
-# dorms buttons with hints
-# is_ready button with 3 colors
-# status of simulation showed on screen
-# Generate Dataset window
-# Generate Report after simulation
+# dorms buttons with hints - almost done,
+# is_ready button with 3 colors - not done
+# status of simulation showed on screen - not done
+# Generate Dataset window - half done -> Dorms
+# Generate Report after simulation - half done -> People setted
 
 """Global Variables to simulation"""
 csv_path = None
@@ -51,14 +56,17 @@ def start_working():
     if csv_path:
         start_simulation(csv_path, None, number_of_iterations, number_of_individuals,
                          mutation_non_included_probability, mutation_swap_probability, mutation_swap_flag,
-                         mutation_non_included_flag, rullet_selection_flag, tournament_selection_flag, True)
+                         mutation_non_included_flag, rullet_selection_flag, tournament_selection_flag, False)
     else:
         start_simulation(None, n_of_people, number_of_iterations, number_of_individuals,
                          mutation_non_included_probability, mutation_swap_probability, mutation_swap_flag,
-                         mutation_non_included_flag, rullet_selection_flag, tournament_selection_flag, True)
+                         mutation_non_included_flag, rullet_selection_flag, tournament_selection_flag, False)
 
 
 def Generate_Report():
+    doc = PDF() #TODO add data here
+    doc.generate()
+    #TODO open it
     pass
 
 
@@ -76,7 +84,21 @@ def Exit_app(root):
 def Generate_DataSet():
     GenRoot = Toplevel()
     GenRoot.title("Generate DataSet for simulation")
-    #TODO
+    GenRoot.geometry(f"{X_Size//4}x{Y_Size//2}")
+
+    NpeopleLabel = Label(GenRoot, text="Number of Students:")
+    NpeopleLabel.place(x=X_Size//70, y=Y_Size//20)
+    NpeopleEntry = Entry(GenRoot)
+    NpeopleEntry.insert(0, '100')
+    NpeopleEntry.place(x=X_Size//9, y=Y_Size//20)
+
+    NplaceLabel = Label(GenRoot, text="Number of free place:")
+    NplaceLabel.place(x=X_Size//70, y=Y_Size//11)
+    NplaceEntry = Entry(GenRoot)
+    NplaceEntry.insert(0, '200')
+    NplaceEntry.place(x=X_Size // 9, y=Y_Size // 11)
+
+    """DORM settings"""
 
     GenRoot.mainloop()
 
@@ -120,6 +142,7 @@ def main_screen():
                 command=start_working,
                 bg_color="#142434", width=BigB_X, height=BigB_Y)
     StartButton.place(x=X_Size//2.43, y=Y_Size//5)
+    CreateToolTip.CreateToolTip(StartButton, text="Click this button to start simulation.\nRemember to ensure that all parameters were inserted correctly and you clicked Save button")
     """REPORT Button -> When Simulation is done, it generate and shows report about simulation and dorm"""
     GenerateReportButton = TkinterCustomButton(text="Generate Report", corner_radius=10, width=BigB_X, height=BigB_Y,
                                                command= Generate_Report, bg_color="#425b9a")
@@ -139,6 +162,7 @@ def main_screen():
     """Parameters of Simulation"""
     MutationSwapButton = Checkbutton(Root, text="Swap Mutation", font=("Calibri", 12), variable=Mutation_Swap_Flag, bg="#425b9a", width=int(X_Size/70))
     MutationSwapButton.place(x=X_Size//1.2, y=Y_Size//2)
+    CreateToolTip.CreateToolTip(MutationSwapButton, text="MutationSwap takes the begging and end of binary solution and swap them.")
 
     SwapMutationScale = Scale(Root, from_=0, to=10, state=ACTIVE, orient=HORIZONTAL, label=19*' '+ 'SWAP (%)', resolution=0.25,
                               troughcolor="#6580c3", bg="#425b9a", length=X_Size//7.5)
@@ -146,6 +170,7 @@ def main_screen():
 
     MutationAddNonButton = Checkbutton(Root, text="AddNon Mutation",font=("Calibri", 12), variable=Mutation_AddNon_Flag, bg="#425b9a", width=int(X_Size/70))
     MutationAddNonButton.place(x=X_Size // 1.2, y=Y_Size // 1.52)
+    CreateToolTip.CreateToolTip(MutationAddNonButton, text="MutationAddNon takes students that were not included in solution yet \nand swap them with students with the smallest achievments in the binary solution")
 
     AddNonMutationScale = Scale(Root, from_=0, to=10, state=ACTIVE, orient=HORIZONTAL, label=18*' '+'Add Non (%)',
                               resolution=0.25,
@@ -156,13 +181,14 @@ def main_screen():
     IterationsEntry = Entry(Root, fg='#081117', width=int(X_Size / 60), font=("Calibri", 12))
     IterationsEntry.insert(0, '100')
     IterationsEntry.place(x=X_Size//1.2, y=Y_Size//2.3)
+    CreateToolTip.CreateToolTip(IterationsEntry, "Insert number of iterations. Sometimes big number of iterations doesn't change anything.")
 
     main_Canv.create_text(X_Size // 1.11, Y_Size // 2.9, text="Number of Individuals", font=('Helvetica', 14),
                           fill='#FFBBDD')
     IndividualsEntry = Entry(Root, fg='#081117', width=int(X_Size / 60), font=("Calibri", 12))
     IndividualsEntry.insert(0, '50')
     IndividualsEntry.place(x=X_Size // 1.2, y=Y_Size // 2.7)
-
+    CreateToolTip.CreateToolTip(IndividualsEntry, text="Insert number of Individuals there.\nToo small number of Individuals may cause in small score")
     MODES = [
         ("Tournament Selection", "Tournament"),
         ("Rullet Selection", "Rullet"),
@@ -172,16 +198,17 @@ def main_screen():
     for i, (text, mode) in enumerate(MODES):
         Radiobutton(Root, text=text, variable=Selection, value=mode, width=int(X_Size//60),
                     font=("Calibri", 12), bg="#425b9a").place(x=X_Size//1.55, y=Y_Size//2+i*(Y_Size//20))
+
     """ EXIT Button -> When clicked, it closes application"""
     ExitButton = TkinterCustomButton(text="EXIT", corner_radius=3, fg_color="#FF0000", bg_color="#081117", command=lambda: Exit_app(Root))
     ExitButton.place(x=X_Size//1.11, y=Y_Size//1.08)
+    CreateToolTip.CreateToolTip(ExitButton, text="Click this button to quit")
 
     """ SAVE button"""
     SaveButton = TkinterCustomButton(text="Save", corner_radius=5, command=lambda: SaveEverything(Root, Mutation_Swap_Flag.get(), Mutation_AddNon_Flag.get(), SwapMutationScale.get(), AddNonMutationScale.get(), Selection.get(), int(IterationsEntry.get()), int(IndividualsEntry.get())))
     SaveButton.place(x=X_Size//1.2, y=Y_Size//10)
+    CreateToolTip.CreateToolTip(SaveButton, text="Click this button to actualize parameters of simulation")
 
-
-    # Root.after(1, Update_all_variables, Root, Mutation_Swap_Flag.get())
     Root.mainloop()
 
 

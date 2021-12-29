@@ -195,7 +195,8 @@ class Population:
             #     self.rullet_selection()
             if self.tournament_selection_flag:
                 self.tournament_selection()
-
+            if self.rullet_selection_flag:
+                self.rullet_selection()
             """KRZYŻOWANIE"""
             #TODO think about slot place
             self.cross_population()
