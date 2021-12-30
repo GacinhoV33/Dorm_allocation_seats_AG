@@ -8,7 +8,7 @@ import CreateToolTip
 from report import PDF
 from tkinter.messagebox import showwarning
 import subprocess
-
+import os
 
 #TODO
 # dorms buttons with hints - almost done,
@@ -111,9 +111,8 @@ def Generate_DataSet():
 
 
 def Openfile():
-    #TODO get root and put in initialdir
     global csv_path
-    csv_path = filedialog.askopenfilename(initialdir="/", title="Select a file",
+    csv_path = filedialog.askopenfilename(initialdir=f"{os.getcwd()}", title="Select a file",
                                                    filetypes=(("xls files", "*.xls"), ("all files", "*.*")))
 
 
@@ -134,8 +133,6 @@ def main_screen():
     main_Canv = Canvas(Root, width=X_Size, height=Y_Size)
     main_Canv.create_image(0, 0, image=background_img, anchor='nw')
     main_Canv.pack(fill='both', expand=True)
-    """ Logo of AGH"""
-
 
     """Shows the name: Genetic Algorithm"""
     main_Canv.create_text(X_Size//2.05, Y_Size//10, text="Genetic Algorithm", font=('Helvetica', 30), fill='#FFFFFF') #TODO Set good color

@@ -11,39 +11,39 @@ from xlutils import copy
 
 from Student import Student
 Male_first_names = ("Aaron", "Adam", "Adrian", "Adolf", "Albert", "Artur", "Alfred", "Aleksander", "Arkadiusz",
-                    "Bartłomiej", "Bartosz", "Beniamin", "Błażej", "Bogdan", "Bogusław", "Bryan",
-                    "Cezary", "Czesław",
+                    "Bartlomiej", "Bartosz", "Beniamin", "Blazej", "Bogdan", "Boguslaw", "Bryan",
+                    "Cezary", "Czeslaw",
                     "Daniel", "Damian", "Dawid", "Darek", "Dominik",
                     "Edward", "Ernest", "Eryk", "Eustachy",
                     "Filip", "Florian", "Felix", "Franciszek",
                     "Gabriel", "Gracjan", "Grzegorz",
                     "Henryk", "Hubert",
                     "Ignacy", "Igor", "Ireneusz",
-                    "Jacek", "Jakub", "Janusz", "Jarosław", "Jan", "Jędrzej", "Józef", "Julian",
+                    "Jacek", "Jakub", "Janusz", "Jaroslaw", "Jan", "Jedrzej", "Jozef", "Julian",
                     "Kacper", "Kajetan", "Klaudiusz", "Kamil", "Karol", "Kornel", "Konrad", "Krystian", "Krzysztof",
                     "Kazimierz",
                     "Leonard", "Ludwik",
-                    "Łukasz",
-                    "Maciej", "Maksymilian", "Marcel", "Marek", "Marian", "Mateusz", "Mariusz", "Mikołaj", "Mirosław",
+                    "lukasz",
+                    "Maciej", "Maksymilian", "Marcel", "Marek", "Marian", "Mateusz", "Mariusz", "Mikolaj", "Miroslaw",
                     "Max", "Marcin",
                     "Nikodem", "Norbert",
                     "Oliwier", "Oskar",
-                    "Patryk", "Paweł", "Piotr", "Przemysław",
-                    "Radosław", "Rafał", "Ryszard", "Roman", "Robert", "Remigiusz",
-                    "Samuel", "Sebastian", "Szymon", "Stanisław",
+                    "Patryk", "Pawel", "Piotr", "Przemyslaw",
+                    "Radoslaw", "Rafal", "Ryszard", "Roman", "Robert", "Remigiusz",
+                    "Samuel", "Sebastian", "Szymon", "Stanislaw",
                     "Tadeusz", "Tytus", "Tomasz",
-                    "Wacław", "Wiktor", "Witold", "Władysław", "Wojciech",
-                    "Zdzisław", "Zbigniew", "Zygmunt"
+                    "Waclaw", "Wiktor", "Witold", "Wladyslaw", "Wojciech",
+                    "Zdzislaw", "Zbigniew", "Zygmunt"
                     )
 
 Female_first_names = (
     "Ada", "Adrianna", "Agata", "Agnieszka", "Aleksandra", "Alicja", "Amanda", "Amelia", "Anastazja", "Aneta",
     "Angelika",
     "Aniela", "Anita", "Anna", "Asia",
-    "Barbara", "Beata", "Bożena", "Bogusława", "Bianka", "Bernadetta",
+    "Barbara", "Beata", "Bozena", "Boguslawa", "Bianka", "Bernadetta",
     "Celina",
     "Dagmara", "Daria", "Dominika", "Diana", "Dorota", "Danuta",
-    "Edyta", "Elżbieta", "Emilia", "Ewelina", "Ewa", "Eliza",
+    "Edyta", "Elzbieta", "Emilia", "Ewelina", "Ewa", "Eliza",
     "Franciszka", "Faustyna",
     "Gabriela", "Genowefa", "Greta",
     "Halina", "Hanna", "Helena", "Honorata",
@@ -51,7 +51,7 @@ Female_first_names = (
     "Jadwiga", "Jagoda", "Janina", "Jola", "Julia", "Justyna", "Jowita",
     "Kaja", "Kamila", "Karina", "Karolina", "Kinga", "Katarzyna", "Kornelia", "Klaudia",
     "Lara", "Laura", "Luiza",
-    "Łucja",
+    "lucja",
     "Magda", "Magdalena", "Maja", "Marcelina", "Mariola", "Marysia", "Marlena", "Marta", "Marzena", "Matylda",
     "Michalina",
     "Milena", "Monika",
@@ -59,32 +59,106 @@ Female_first_names = (
     "Ola", "Oliwia", "Olga",
     "Patrycja", "Pamela", "Paulina",
     "Roksana", "Rozalia", "Renata",
-    "Sandra", "Sara", "Sylwia", "Stefania", "Stanisława",
+    "Sandra", "Sara", "Sylwia", "Stefania", "Stanislawa",
     "Teresa",
     "Vanessa",
-    "Wanda", "Weronika", "Wiktoria", "Wioletta", "Władysława",
+    "Wanda", "Weronika", "Wiktoria", "Wioletta", "Wladyslawa",
     "Zofia", "Zuzanna"
 )
 
-Male_last_names = ("Nowak", "Kowalski", "Wiśniewski", "Wójcik", "Kowalczyk", "Kamiński", "Lewandowski", "Zieliński",
-                   "Szymański", "Woźniak", "Kozłowski", "Jankowski", "Mazur", "Wojciechowski",
-                   "Kwiatkowski", "Krawczyk", "Kaczmarek", "Piotrowski", "Grabowski", "Zając", "Pawłowski", "Michalski",
-                   "Król", "Nowakowski", "Wieczorek", "Wróbel", "Jabłoński", "Dudek",
-                   "Adamczyk", "Majewski", "Nowicki", "Olszewski", "Stępień", "Jaworski", "Malinowski", "Pawlak",
-                   "Górski", "Witkowski", "Walczak", "Sikora", "Butkowski", "Baran", "Michalak", "Szewczyk",
+Male_last_names = ("Nowak", "Kowalski", "Wisniewski", "Wojcik", "Kowalczyk", "Kaminski", "Lewandowski", "Zielinski",
+                   "Szymanski", "Wozniak", "Kozlowski", "Jankowski", "Mazur", "Wojciechowski",
+                   "Kwiatkowski", "Krawczyk", "Kaczmarek", "Piotrowski", "Grabowski", "Zajac", "Pawlowski", "Michalski",
+                   "Krol", "Nowakowski", "Wieczorek", "Wrobel", "Jablonski", "Dudek",
+                   "Adamczyk", "Majewski", "Nowicki", "Olszewski", "Stepien", "Jaworski", "Malinowski", "Pawlak",
+                   "Gorski", "Witkowski", "Walczak", "Sikora", "Butkowski", "Baran", "Michalak", "Szewczyk",
                    "Ostrowski",
-                   "Tomaszewski", "Pietrzak", "Duda", "Zalewski", "Wróblewski"
+                   "Tomaszewski", "Pietrzak", "Duda", "Zalewski", "Wroblewski"
                    )
 
-Female_last_names = ("Nowak", "Kowalska", "Wiśniewska", "Wójcik", "Kowalczyk", "Kamińska", "Lewandowska", "Zielińska",
-                     "Szymańska", "Dąbrowska", "Woźniak", "Kozłowska", "Jankowska", "Mazur", "Kwiatkowska",
+Female_last_names = ("Nowak", "Kowalska", "Wisniewska", "Wojcik", "Kowalczyk", "Kaminska", "Lewandowska", "Zielinska",
+                     "Szymanska", "Dabrowska", "Wozniak", "Kozlowska", "Jankowska", "Mazur", "Kwiatkowska",
                      "Wojciechowska",
-                     "Krawczyk", "Kaczmarek", "Piotrowska", "Grabowska", "Pawłowska", "Michalska", "Zając", "Król",
+                     "Krawczyk", "Kaczmarek", "Piotrowska", "Grabowska", "Pawlowska", "Michalska", "Zajac", "Krol",
                      "Wieczorek",
-                     "Jabłońska", "Wróbel", "Nowakowska", "Majewska", "Olszewska", "Adamczyk", "Jaworska", "Malinowska",
-                     "Stępień", "Dudek", "Górska", "Nowicka", "Pawlak", "Witkowska"
-
+                     "Jablonska", "Wrobel", "Nowakowska", "Majewska", "Olszewska", "Adamczyk", "Jaworska", "Malinowska",
+                     "Stepien", "Dudek", "Gorska", "Nowicka", "Pawlak", "Witkowska"
                      )
+# 
+# Male_first_names = ("Aaron", "Adam", "Adrian", "Adolf", "Albert", "Artur", "Alfred", "Aleksander", "Arkadiusz",
+#                     "Bartłomiej", "Bartosz", "Beniamin", "Błażej", "Bogdan", "Bogusław", "Bryan",
+#                     "Cezary", "Czesław",
+#                     "Daniel", "Damian", "Dawid", "Darek", "Dominik",
+#                     "Edward", "Ernest", "Eryk", "Eustachy",
+#                     "Filip", "Florian", "Felix", "Franciszek",
+#                     "Gabriel", "Gracjan", "Grzegorz",
+#                     "Henryk", "Hubert",
+#                     "Ignacy", "Igor", "Ireneusz",
+#                     "Jacek", "Jakub", "Janusz", "Jarosław", "Jan", "Jędrzej", "Józef", "Julian",
+#                     "Kacper", "Kajetan", "Klaudiusz", "Kamil", "Karol", "Kornel", "Konrad", "Krystian", "Krzysztof",
+#                     "Kazimierz",
+#                     "Leonard", "Ludwik",
+#                     "Łukasz",
+#                     "Maciej", "Maksymilian", "Marcel", "Marek", "Marian", "Mateusz", "Mariusz", "Mikołaj", "Mirosław",
+#                     "Max", "Marcin",
+#                     "Nikodem", "Norbert",
+#                     "Oliwier", "Oskar",
+#                     "Patryk", "Paweł", "Piotr", "Przemysław",
+#                     "Radosław", "Rafał", "Ryszard", "Roman", "Robert", "Remigiusz",
+#                     "Samuel", "Sebastian", "Szymon", "Stanisław",
+#                     "Tadeusz", "Tytus", "Tomasz",
+#                     "Wacław", "Wiktor", "Witold", "Władysław", "Wojciech",
+#                     "Zdzisław", "Zbigniew", "Zygmunt"
+#                     )
+# 
+# Female_first_names = (
+#     "Ada", "Adrianna", "Agata", "Agnieszka", "Aleksandra", "Alicja", "Amanda", "Amelia", "Anastazja", "Aneta",
+#     "Angelika",
+#     "Aniela", "Anita", "Anna", "Asia",
+#     "Barbara", "Beata", "Bożena", "Bogusława", "Bianka", "Bernadetta",
+#     "Celina",
+#     "Dagmara", "Daria", "Dominika", "Diana", "Dorota", "Danuta",
+#     "Edyta", "Elżbieta", "Emilia", "Ewelina", "Ewa", "Eliza",
+#     "Franciszka", "Faustyna",
+#     "Gabriela", "Genowefa", "Greta",
+#     "Halina", "Hanna", "Helena", "Honorata",
+#     "Ida", "Iga", "Ilona", "Irena", "Irmina", "Iwona", "Iza", "Izabela",
+#     "Jadwiga", "Jagoda", "Janina", "Jola", "Julia", "Justyna", "Jowita",
+#     "Kaja", "Kamila", "Karina", "Karolina", "Kinga", "Katarzyna", "Kornelia", "Klaudia",
+#     "Lara", "Laura", "Luiza",
+#     "Łucja",
+#     "Magda", "Magdalena", "Maja", "Marcelina", "Mariola", "Marysia", "Marlena", "Marta", "Marzena", "Matylda",
+#     "Michalina",
+#     "Milena", "Monika",
+#     "Nadia", "Natalia", "Natasza", "Nikola", "Nina",
+#     "Ola", "Oliwia", "Olga",
+#     "Patrycja", "Pamela", "Paulina",
+#     "Roksana", "Rozalia", "Renata",
+#     "Sandra", "Sara", "Sylwia", "Stefania", "Stanisława",
+#     "Teresa",
+#     "Vanessa",
+#     "Wanda", "Weronika", "Wiktoria", "Wioletta", "Władysława",
+#     "Zofia", "Zuzanna"
+# )
+# 
+# Male_last_names = ("Nowak", "Kowalski", "Wiśniewski", "Wójcik", "Kowalczyk", "Kamiński", "Lewandowski", "Zieliński",
+#                    "Szymański", "Woźniak", "Kozłowski", "Jankowski", "Mazur", "Wojciechowski",
+#                    "Kwiatkowski", "Krawczyk", "Kaczmarek", "Piotrowski", "Grabowski", "Zając", "Pawłowski", "Michalski",
+#                    "Król", "Nowakowski", "Wieczorek", "Wróbel", "Jabłoński", "Dudek",
+#                    "Adamczyk", "Majewski", "Nowicki", "Olszewski", "Stępień", "Jaworski", "Malinowski", "Pawlak",
+#                    "Górski", "Witkowski", "Walczak", "Sikora", "Butkowski", "Baran", "Michalak", "Szewczyk",
+#                    "Ostrowski",
+#                    "Tomaszewski", "Pietrzak", "Duda", "Zalewski", "Wróblewski"
+#                    )
+# 
+# Female_last_names = ("Nowak", "Kowalska", "Wiśniewska", "Wójcik", "Kowalczyk", "Kamińska", "Lewandowska", "Zielińska",
+#                      "Szymańska", "Dąbrowska", "Woźniak", "Kozłowska", "Jankowska", "Mazur", "Kwiatkowska",
+#                      "Wojciechowska",
+#                      "Krawczyk", "Kaczmarek", "Piotrowska", "Grabowska", "Pawłowska", "Michalska", "Zając", "Król",
+#                      "Wieczorek",
+#                      "Jabłońska", "Wróbel", "Nowakowska", "Majewska", "Olszewska", "Adamczyk", "Jaworska", "Malinowska",
+#                      "Stępień", "Dudek", "Górska", "Nowicka", "Pawlak", "Witkowska"
+#                      )
 
 
 def check_best_in_excel(best_score: float, path: str):

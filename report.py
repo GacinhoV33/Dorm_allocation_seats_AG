@@ -4,6 +4,7 @@
 from fpdf import FPDF
 from datetime import date
 import time
+from generate_people import generate_random_people
 
 
 class PDF(FPDF):
@@ -15,6 +16,7 @@ class PDF(FPDF):
         self.dorm_name = 'Filutek'
         self.n_of_3room = 20
         self.n_of_2room = 20
+        self.ppl = generate_random_people(100)
 
     def header(self):
         # Logo
@@ -47,7 +49,6 @@ class PDF(FPDF):
 
         """Simulation"""
         self.cell(200, h=10, ln=1)
-        self.cell(200, h=10, ln=1)
         self.set_font('Arial', 'B', 20)
         self.cell(w=200, h=10, align='C', txt='Simulation', ln=1)
         self.set_font('Arial', '', 14)
@@ -59,6 +60,20 @@ class PDF(FPDF):
     def second_page(self):
         """People who gets room"""
         self.add_page()
+        self.set_font('Arial', 'BI', 16)
+        self.cell(w=200, h=10, ln=1, align='C', txt="Results")
+        self.set_font('Arial', '', 14)
+        help_flag = 0
+        for i, person in enumerate(self.ppl):
+            if i % 22 == 0:
+                if help_flag == 1:
+                    self.cell(200, h=10, ln=1)
+                else:
+                    help_flag += 1
+                self.cell(200, h=10, ln=1)
+
+            self.cell(w=200, h=10, txt=f'{person.first_name} {person.last_name}', ln=1)
+
         #TODO pętla for przechodząca po każdym i pokazująca czy się dostał
 
     def save(self):
@@ -68,8 +83,6 @@ class PDF(FPDF):
         self.first_page()
         self.second_page()
         self.save()
-
-
 
 
 def generate_report():
