@@ -327,12 +327,20 @@ def read_from_excel(path: str) -> list:
         data.append(sheet.col_values(colx=i, start_rowx=2))
 
     for i in range(len(data[0])):
-        people.append(Student(str(data[0][i]), str(data[1][i]),
-                              float(data[3][i]), int(data[4][i]), int(data[5][i]),
-                              float(data[7][i]), float(data[8][i]), str(data[6][i]),
-                              str(data[2][i]), list(), False, i
-                              )
-                      )
+        if data[10][i] == "None":
+            people.append(Student(str(data[0][i]), str(data[1][i]),
+                                  float(data[3][i]), int(data[4][i]), int(data[5][i]),
+                                  float(data[7][i]), float(data[8][i]), str(data[6][i]),
+                                  str(data[2][i]), list(), False, None, i
+                                  )
+                          )
+        else:
+            people.append(Student(str(data[0][i]), str(data[1][i]),
+                                  float(data[3][i]), int(data[4][i]), int(data[5][i]),
+                                  float(data[7][i]), float(data[8][i]), str(data[6][i]),
+                                  str(data[2][i]), list(), False, data[10][i], i
+                                  )
+                          )
     Pesels = sheet.col_values(colx=10, start_rowx=2)
     for i, person in enumerate(people):
         if len(Pesels[i]) > 0:
@@ -380,10 +388,13 @@ def write_to_excel(name: str, data: list):
         sheet.write(i+1, 8, str(round(student.gpa, 4)))
         fr_str = " ".join([str(friend.PESEL) for friend in student.friends_in_room])
         sheet.write(i+1, 9, str(fr_str))
-        sheet.write(i+1, 10, str(student.actual_room))
+        if student.actual_room:
+            sheet.write(i+1, 10, str(student.actual_room.number))
+        else:
+            sheet.write(i+1, 10, str(student.actual_room))
         sheet.write(i+1, 11, str(student.is_special))
 
-    WorkBook.save(f"Data/{name}.xls")
+    WorkBook.save(name)
     print("-----WRITING TO EXCEL DONE-----")
 
 

@@ -30,7 +30,7 @@ Funkcja natrafiając na taką osobę będzie dodawać bonusowe punkty
 #Chromosom
 class Student:
     def __init__(self, first_name: str, last_name: str, distance: float, year_of_studies: int,
-                 standard_of_room: int, income: float, gpa: float,  PESEL: str, sex: str, friends_in_room: list = list(), is_special=False, i:int=0):
+                 standard_of_room: int, income: float, gpa: float,  PESEL: str, sex: str, friends_in_room: list = list(), is_special=False, actual_room=None, i:int=0):
         self.first_name = first_name
         self.last_name = last_name
         self.sex = sex
@@ -47,7 +47,7 @@ class Student:
         self.friends_in_room = friends_in_room
         """ Gen"""
         self.is_special = is_special
-        self.actual_room = None
+        self.actual_room = actual_room
 
         self.i = i
         self.score = self.calc_achievements()

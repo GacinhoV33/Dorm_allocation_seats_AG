@@ -4,11 +4,11 @@
 from fpdf import FPDF
 from datetime import date
 import time
-from generate_people import generate_random_people
+from generate_people import generate_random_people, read_from_excel
 
 
 class PDF(FPDF):
-    def __init__(self):
+    def __init__(self, ppl: list):
         super().__init__()
         self.file_path = f'Reports/{date.today()} {time.strftime("%H%M")}.pdf'
         self.n_of_students = 200
@@ -16,7 +16,7 @@ class PDF(FPDF):
         self.dorm_name = 'Filutek'
         self.n_of_3room = 20
         self.n_of_2room = 20
-        self.ppl = generate_random_people(100)
+        self.ppl = ppl
 
     def header(self):
         # Logo
@@ -63,8 +63,12 @@ class PDF(FPDF):
         self.set_font('Arial', 'BI', 16)
         self.cell(w=200, h=10, ln=1, align='C', txt="Results")
         self.set_font('Arial', '', 14)
+
         help_flag = 0
         for i, person in enumerate(self.ppl):
+            self.set_font('Arial', '', 14)
+            self.set_text_color(10, 10, 10)
+
             if i % 22 == 0:
                 if help_flag == 1:
                     self.cell(200, h=10, ln=1)
@@ -72,7 +76,42 @@ class PDF(FPDF):
                     help_flag += 1
                 self.cell(200, h=10, ln=1)
 
-            self.cell(w=200, h=10, txt=f'{person.first_name} {person.last_name}', ln=1)
+            self.cell(70, 10, f'{person.first_name} {person.last_name}')
+            self.set_font('Arial', 'I', 14)
+            self.cell(30, 10, 'Status: ')
+            if person.actual_room is None:
+                self.set_text_color(255, 0, 0)
+                self.cell(40, 10, txt=f"\t Negative", ln=1)
+            else:
+                self.set_text_color(0, 255, 0)
+                self.cell(40, 10, txt=f"\t Positive: Room: {person.actual_room}", ln=1)
+    # def second_page(self):
+    #     """People who gets room"""
+    #     self.add_page()
+    #     self.set_font('Arial', 'BI', 16)
+    #     self.cell(w=200, h=10, ln=1, align='C', txt="Results")
+    #     self.set_font('Arial', '', 14)
+    #
+    #     help_flag = 0
+    #     for i, person in enumerate(self.ppl):
+    #         self.set_font('Arial', '', 14)
+    #         self.set_text_color(10, 10, 10)
+    #
+    #         if i % 22 == 0:
+    #             if help_flag == 1:
+    #                 self.cell(200, h=10, ln=1)
+    #             else:
+    #                 help_flag += 1
+    #             self.cell(200, h=10, ln=1)
+    #
+    #         self.cell(w=200, h=10, txt=f'{person.first_name} {person.last_name}')
+    #         self.set_font('Arial', 'I', 14)
+    #         if person.actual_room is None:
+    #             self.set_text_color(255, 0, 0)
+    #             self.cell(w=400, h=10, txt=f"\t Negative", ln=1, align='C')
+    #         else:
+    #             self.set_text_color(0, 255, 0)
+    #             self.cell(w=400, h=10, txt=f"\t Positive: Room:{person.actual_room.number}", ln=1)
 
         #TODO pętla for przechodząca po każdym i pokazująca czy się dostał
 
@@ -90,7 +129,9 @@ def generate_report():
     doc.add_page()
     doc.output(f'Reports/{date.today()} {time.strftime("%H:%M")}')
 
-doc = PDF()
+
+ppl = read_from_excel('Solutions/2021-12-30 2251.xls')
+doc = PDF(ppl)
 doc.generate()
 
 

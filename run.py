@@ -8,7 +8,7 @@ from Dorm import Dorm
 from generate_people import read_from_excel, check_best_in_excel, generate_random_people
 from Population import Population
 from time import time
-
+from random import randint
 """
 PRECONDITIONS:
 
@@ -24,7 +24,7 @@ D_2 + D_3 = D (Algorithm should try find proportional amount of boys ang girls)
 
 def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, n_of_individuals: int=50, mutation_non_included_probability: float=0.1,
                      mutation_swap_probability: float=0.1, mutation_swap_flag: bool=True, mutation_non_included_flag:bool=True,
-                 rullet_selection_flag: bool=True, tournament_selection_flag=False, rank_selection_flag:bool=False, info_flag:bool=True):
+                 rullet_selection_flag: bool=True, tournament_selection_flag=False, rank_selection_flag:bool=False, DormType: int=1, info_flag:bool=True):
     if path:
         path_excel = "Data/Test_december19.xls"
         ppl = read_from_excel(path_excel)
@@ -32,7 +32,15 @@ def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, 
         ppl = generate_random_people(n_of_people)
     else:
         raise ImportError("Running simulation without parameters")
-    Simulation_Dorm = Dorm("Test_dorm", n_floors=5, n_rooms=6,  ppl=ppl)
+
+    if DormType == 1:
+        Simulation_Dorm = Dorm("Olimp", n_floors=8, n_rooms=6,  ppl=ppl)
+    elif DormType == 2:
+        Simulation_Dorm = Dorm("Filutek", n_floors=8, n_rooms=5, ppl=ppl)
+    elif DormType == 3:
+        Simulation_Dorm = Dorm("Filutek", n_floors=14, n_rooms=10, ppl=ppl)
+    elif DormType == 4:
+        Simulation_Dorm = Dorm("Random_Dorm", n_floors=randint(3, 10), n_rooms=randint(3, 12), ppl=ppl)
     Simulation_Population = Population(number_of_individuals=n_of_individuals, number_of_students=len(ppl),
                                        ppl=ppl, dorm=Simulation_Dorm, number_of_iterations=iteration,
                                        mutation_non_included_probability=mutation_non_included_probability,
@@ -42,6 +50,8 @@ def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, 
                                        rank_selection_flag=rank_selection_flag, info_flag=info_flag
                                        )
 
+
+
     st = time()
     Simulation_Population.Genetic_Algorithm()
     end = time()
@@ -50,13 +60,13 @@ def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, 
 
 if __name__ == "__main__":
     """ETAP 0 - stworzenie niezbędnych struktur i danych"""
-    ppl = generate_random_people(500)
+    ppl = generate_random_people(150)
     path_excel = "Data/Test_december19.xls"
     # ppl = read_from_excel(path_excel)
     """ETAP 1 - Stworzenie Akademika"""
     Dorm_TEST = Dorm("Test_dorm", n_floors=5, n_rooms=6,  ppl=ppl)
     """ ETAP 2 - Stworzenie pierwszej populacji """
-    test_population = Population(50, 500, ppl, Dorm_TEST, 150)
+    test_population = Population(50, 150, ppl, Dorm_TEST, 50)
 
     st = time()
     test_population.Genetic_Algorithm()

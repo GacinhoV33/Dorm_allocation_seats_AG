@@ -7,7 +7,9 @@ from Dorm import Dorm
 from Individual import Individual
 from copy import deepcopy
 from tqdm import tqdm
-
+from generate_people import write_to_excel
+from datetime import date
+import time
 MUTATION_NON = 1
 MUTATION_SWAP = 2
 
@@ -37,12 +39,15 @@ class Population:
         self.best_solutions_iter = list()
         self.mutaion_non_included_probability = mutation_non_included_probability
         self.mutation_swap_probability = mutation_swap_probability
-        self.init_Individuals()
+
         self.mutation_swap_flag = mutation_swap_flag
         self.mutation_non_included_flag = mutation_non_included_flag
         self.rullet_selection_flag = rullet_selection_flag
         self.tournament_selection_flag = tournament_selection_flag
         self.rank_selection_flag = rank_selection_flag
+        self.init_Individuals()
+        """ After Simulation"""
+
 
     def find_best_in_iter(self):
         scores = [individual.score for individual in self.Individual_lst]
@@ -195,7 +200,6 @@ class Population:
 
         self.Individual_lst = lst_of_copies
 
-
     def ShowProgress(self, current_iteration):
         """Uncomment to clear terminal after every iteration"""
         percent = current_iteration/self.number_of_iterations
@@ -232,8 +236,13 @@ class Population:
         print(self.Individual_lst[0].dorm)
 
         print(''*10, f"BEST SOLUTION GETS {self.best_solution.score} points!", ''*10)
+        self.write_best_solution()
         # self.print_freq()
         self.print_pop()
+
+    def write_best_solution(self):
+        name = f'Solutions/{date.today()} {time.strftime("%H%M")}.xls'
+        write_to_excel(name, self.best_solution.ppl)
 
     def check_best(self):
         for individual in self.Individual_lst:

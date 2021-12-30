@@ -11,18 +11,18 @@ import subprocess
 import os
 
 #TODO
-# dorms buttons with hints - almost done,
+# dorms buttons with hints - done
 # is_ready button with 3 colors - not done
 # status of simulation showed on screen - not done
 # Generate Dataset window - half done -> Dorms
 # Generate Report after simulation - half done -> People setted
-
+# Add hints to Selections
 """Global Variables to simulation"""
 csv_path = None
 n_of_people = 200
 number_of_individuals: int = 0
 number_of_students: int = 0
-dorm = None
+dorm_flag = 1
 number_of_iterations: int = 20
 mutation_non_included_probability: float=0.1
 mutation_swap_probability: float=0.1
@@ -32,11 +32,10 @@ rullet_selection_flag: bool=True
 tournament_selection_flag=False
 rank_selection_flag = False
 
-
 def SaveEverything(root, MutSwapFlag: int, MutAddNonFlag: int, MutSwapProb: float, MutAddNonProb: float,
-                   Selection: str, N_iterations: int, N_individuals: int):
+                   Selection: str, N_iterations: int, N_individuals: int, dorm_type: int):
     print(MutSwapFlag, MutAddNonFlag, MutAddNonProb, MutSwapProb, Selection, N_iterations, N_individuals)
-    global number_of_individuals, dorm, number_of_iterations, mutation_non_included_probability #TODO Dorm options
+    global number_of_individuals, dorm_flag, number_of_iterations, mutation_non_included_probability #TODO Dorm options
     global mutation_swap_probability, mutation_swap_flag, mutation_non_included_flag, rullet_selection_flag
     global tournament_selection_flag, csv_path, rank_selection_flag
     number_of_individuals = N_individuals
@@ -45,6 +44,7 @@ def SaveEverything(root, MutSwapFlag: int, MutAddNonFlag: int, MutSwapProb: floa
     mutation_swap_flag = bool(MutSwapFlag)
     mutation_swap_probability = 0.01 * MutSwapProb
     mutation_non_included_probability = 0.01 * MutAddNonProb
+    dorm_flag = dorm_type
     if Selection == "Rullet":
         rullet_selection_flag = True
         tournament_selection_flag = False
@@ -63,11 +63,13 @@ def start_working():
     if csv_path:
         start_simulation(csv_path, None, number_of_iterations, number_of_individuals,
                          mutation_non_included_probability, mutation_swap_probability, mutation_swap_flag,
-                         mutation_non_included_flag, rullet_selection_flag, tournament_selection_flag, False)
+                         mutation_non_included_flag, rullet_selection_flag, tournament_selection_flag, rank_selection_flag,
+                         dorm_flag, False)
     else:
         start_simulation(None, n_of_people, number_of_iterations, number_of_individuals,
                          mutation_non_included_probability, mutation_swap_probability, mutation_swap_flag,
-                         mutation_non_included_flag, rullet_selection_flag, tournament_selection_flag, False)
+                         mutation_non_included_flag, rullet_selection_flag, tournament_selection_flag, rank_selection_flag,
+                         dorm_flag, False)
 
 
 def Generate_Report():
@@ -96,13 +98,13 @@ def Generate_DataSet():
     NpeopleLabel = Label(GenRoot, text="Number of Students:")
     NpeopleLabel.place(x=X_Size//70, y=Y_Size//20)
     NpeopleEntry = Entry(GenRoot)
-    NpeopleEntry.insert(0, '100')
+    NpeopleEntry.insert(0, '200')
     NpeopleEntry.place(x=X_Size//9, y=Y_Size//20)
 
     NplaceLabel = Label(GenRoot, text="Number of free place:")
     NplaceLabel.place(x=X_Size//70, y=Y_Size//11)
     NplaceEntry = Entry(GenRoot)
-    NplaceEntry.insert(0, '200')
+    NplaceEntry.insert(0, '100')
     NplaceEntry.place(x=X_Size // 9, y=Y_Size // 11)
 
     """DORM settings"""
@@ -173,13 +175,13 @@ def main_screen():
     SwapMutationScale.place(x=X_Size // 1.2, y=Y_Size // 1.8)
 
     MutationAddNonButton = Checkbutton(Root, text="AddNon Mutation",font=("Calibri", 12), variable=Mutation_AddNon_Flag, bg="#425b9a", width=int(X_Size/70))
-    MutationAddNonButton.place(x=X_Size // 1.2, y=Y_Size // 1.52)
+    MutationAddNonButton.place(x=X_Size // 1.2, y=Y_Size // 1.49)
     CreateToolTip.CreateToolTip(MutationAddNonButton, text="MutationAddNon takes students that were not included in solution yet \nand swap them with students with the smallest achievments in the binary solution")
 
     AddNonMutationScale = Scale(Root, from_=0, to=10, state=ACTIVE, orient=HORIZONTAL, label=18*' '+'Add Non (%)',
                               resolution=0.25,
                               troughcolor="#6580c3", bg="#425b9a", length=X_Size // 7.5)
-    AddNonMutationScale.place(x=X_Size // 1.2, y=Y_Size // 1.41)
+    AddNonMutationScale.place(x=X_Size // 1.2, y=Y_Size // 1.37)
 
     main_Canv.create_text(X_Size//1.11, Y_Size//2.39, text="Number of iterations", font=('Helvetica', 14), fill='#FFBBDD')
     IterationsEntry = Entry(Root, fg='#081117', width=int(X_Size / 60), font=("Calibri", 12))
@@ -193,24 +195,47 @@ def main_screen():
     IndividualsEntry.insert(0, '50')
     IndividualsEntry.place(x=X_Size // 1.2, y=Y_Size // 2.7)
     CreateToolTip.CreateToolTip(IndividualsEntry, text="Insert number of Individuals there.\nToo small number of Individuals may cause in small score")
+
+    """Selection radiobuttons"""
     MODES = [
         ("Tournament Selection", "Tournament"),
         ("Rullet Selection", "Rullet"),
         ("Rank Selection", "Rank")
     ]
     Selection = StringVar()
-    Selection.set("Rullet Selection")
+    Selection.set("Rullet")
     for i, (text, mode) in enumerate(MODES):
         Radiobutton(Root, text=text, variable=Selection, value=mode, width=int(X_Size//60),
-                    font=("Calibri", 12), bg="#425b9a").place(x=X_Size//1.55, y=Y_Size//2+i*(Y_Size//20))
+                    font=("Calibri", 12), bg="#425b9a").place(x=X_Size//1.55, y=Y_Size//2.9 +i*(Y_Size//20))
+
+    """Dorm radiobuttons"""
+    MODES_Dorm = [
+        ("Dorm 1", 1),
+        ("Dorm 2", 2),
+        ("Dorm 3", 3),
+        ("Other", 4)
+    ]
+    DormType = IntVar()
+    DormType.set(1)
+    Dorm_description = ["Olimp - 120 free places, 8 floors, 6 rooms on floor",
+                        "Filutek - 100 free places, 5 floors, 8 rooms on floor",
+                        "Babilon - 350 free places, 14 floors, 10 rooms on floor",
+                        "Dorm created in 'Generate Dataset' option "]
+    for i, (text, mode) in enumerate(MODES_Dorm):
+        x = Radiobutton(Root, text=text, variable=DormType, value=mode, width=int(X_Size // 60),
+                    font=("Calibri", 12), bg="#756cab")
+        x.place(x=X_Size // 1.55, y=Y_Size // 2 + i * (Y_Size // 20))
+        CreateToolTip.CreateToolTip(x, text=Dorm_description[i])
 
     """ EXIT Button -> When clicked, it closes application"""
-    ExitButton = TkinterCustomButton(text="EXIT", corner_radius=3, fg_color="#FF0000", bg_color="#081117", command=lambda: Exit_app(Root))
+    ExitButton = TkinterCustomButton(text="EXIT", corner_radius=3, fg_color="#FF0000", bg_color="#295528", command=lambda: Exit_app(Root))
     ExitButton.place(x=X_Size//1.11, y=Y_Size//1.08)
     CreateToolTip.CreateToolTip(ExitButton, text="Click this button to quit")
 
     """ SAVE button"""
-    SaveButton = TkinterCustomButton(text="Save", corner_radius=5, command=lambda: SaveEverything(Root, Mutation_Swap_Flag.get(), Mutation_AddNon_Flag.get(), SwapMutationScale.get(), AddNonMutationScale.get(), Selection.get(), int(IterationsEntry.get()), int(IndividualsEntry.get())))
+    SaveButton = TkinterCustomButton(text="Save", corner_radius=5,
+                                     command=lambda: SaveEverything(Root, Mutation_Swap_Flag.get(), Mutation_AddNon_Flag.get(), SwapMutationScale.get(), AddNonMutationScale.get(), Selection.get(), int(IterationsEntry.get()), int(IndividualsEntry.get()), int(DormType.get())),
+                                     bg_color="#aaaaFF")
     SaveButton.place(x=X_Size//1.2, y=Y_Size//10)
     CreateToolTip.CreateToolTip(SaveButton, text="Click this button to actualize parameters of simulation")
 
