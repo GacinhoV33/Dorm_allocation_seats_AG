@@ -69,6 +69,7 @@ def start_working(Root, SimText):
     SimText.config(text="Algorithm is working", font=('Helvetica', 30), bg='#ff9f3f', fg="#fffaef")
     SimText.place_configure(x=X_Size//2.86)
     Root.update()
+
     if csv_path:
         best_sol = start_simulation(csv_path, None, number_of_iterations, number_of_individuals,
                          mutation_non_included_probability, mutation_swap_probability, mutation_swap_flag,
@@ -85,16 +86,19 @@ def start_working(Root, SimText):
     best_solution = best_sol
 
 
-def Generate_Report():
+def Generate_Report(root, Simtext):
     global best_solution
+
     if best_solution:
-        doc = PDF(best_solution) #TODO add data here
+        doc = PDF(best_solution)
         doc.generate()
         time.sleep(1)
-        # os.system("open"+str(doc.file_path))
+        Simtext.config(text="Report generated successfully", fg="#ffffff", bg='#19a56f')
+        Simtext.place_configure(x=X_Size // 3.25, y=Y_Size // 1.25)
+        root.update()
+        os.system("start " + doc.file_path)
     else:
         messagebox.showerror(title="Error", message="There's no valid solution yet. Start simulation first.")
-    #TODO open after simulation
 
 
 def Help_User():
@@ -158,7 +162,7 @@ def main_screen():
     main_Canv.create_text(X_Size//2.05, Y_Size//10, text="Genetic Algorithm", font=('Helvetica', 30), fill='#FFFFFF') #TODO Set good color
 
     """ Shows the name: Simulation Parameters"""
-    main_Canv.create_text(X_Size//1.2, Y_Size//4, text="Simulation Parameters", font=('Helvetica', 22), fill='#12FF11') #TODO Set good color
+    main_Canv.create_text(X_Size//1.2, Y_Size//4, text="Simulation Parameters", font=('Times-Roman', 22), fill='#FDFFD9') #TODO Set good color
     """ Shows the flag which light green when ready, red when not ready"""
 
     SimText = Label(Root, text="Data not ready", font=('Helvetica', 30), fg='#ffdddc', bg='#FF2231')
@@ -171,7 +175,7 @@ def main_screen():
     CreateToolTip.CreateToolTip(StartButton, text="Click this button to start simulation.\nRemember to ensure that all parameters were inserted correctly and you clicked Save button")
     """REPORT Button -> When Simulation is done, it generate and shows report about simulation and dorm"""
     GenerateReportButton = TkinterCustomButton(text="Generate Report", corner_radius=10, width=BigB_X, height=BigB_Y,
-                                               command= Generate_Report, bg_color="#425b9a")
+                                               command=lambda: Generate_Report(Root, SimText), bg_color="#425b9a")
     GenerateReportButton.place(x=X_Size//10, y=Y_Size//2)
 
     """Help Button -> When clicked it opens new window with description how to use program"""

@@ -6,7 +6,6 @@ import time
 
 import xlrd
 import xlwt
-from xlutils import copy
 
 from Student import Student
 Male_first_names = ("Aaron", "Adam", "Adrian", "Adolf", "Albert", "Artur", "Alfred", "Aleksander", "Arkadiusz",
@@ -22,7 +21,7 @@ Male_first_names = ("Aaron", "Adam", "Adrian", "Adolf", "Albert", "Artur", "Alfr
                     "Kacper", "Kajetan", "Klaudiusz", "Kamil", "Karol", "Kornel", "Konrad", "Krystian", "Krzysztof",
                     "Kazimierz",
                     "Leonard", "Ludwik",
-                    "lukasz",
+                    "Lukasz",
                     "Maciej", "Maksymilian", "Marcel", "Marek", "Marian", "Mateusz", "Mariusz", "Mikolaj", "Miroslaw",
                     "Max", "Marcin",
                     "Nikodem", "Norbert",
@@ -50,7 +49,7 @@ Female_first_names = (
     "Jadwiga", "Jagoda", "Janina", "Jola", "Julia", "Justyna", "Jowita",
     "Kaja", "Kamila", "Karina", "Karolina", "Kinga", "Katarzyna", "Kornelia", "Klaudia",
     "Lara", "Laura", "Luiza",
-    "lucja",
+    "Lucja",
     "Magda", "Magdalena", "Maja", "Marcelina", "Mariola", "Marysia", "Marlena", "Marta", "Marzena", "Matylda",
     "Michalina",
     "Milena", "Monika",
@@ -160,16 +159,6 @@ Female_last_names = ("Nowak", "Kowalska", "Wisniewska", "Wojcik", "Kowalczyk", "
 #                      )
 
 
-def check_best_in_excel(best_score: float, path: str):
-    Workbook = xlrd.open_workbook(path)
-    sheet = Workbook.sheet_by_index(0)
-    best_score_excel = sheet.cell_value(1, 14)
-    if best_score > best_score_excel:
-        Workbook = copy.copy(Workbook)
-        Workbook.get_sheet(0).write(1, 14, best_score)
-        Workbook.save(f'{path}')
-
-
 def generate_random_people(n:int = 100) -> list:
     """ CREATING DATA """
     male_first_names, female_first_names = generate_first_name(n//2, n//2)
@@ -179,12 +168,8 @@ def generate_random_people(n:int = 100) -> list:
     standards = generate_standard(n)
     PESELs = generate_PESEL(n)
     incomes = generate_income(n)
-    """First year students shouldn't have a GPA """
+    #TOREPORT - zaznaczyc że studenci pierwszego roko otrzymują średnią z liceum
     gpas = generate_gpa(n)
-    # write_to_excel("First_test", [(male_first_names+female_first_names), (male_last_names+female_last_names),
-    #                 distances, y_of_study, standards, PESELs, incomes, gpas
-    # ])
-
     """ CREATING INSTANCES OF CLASS STUDENT"""
     people = list()
     for i in range(int(n / 2)):
@@ -196,7 +181,7 @@ def generate_random_people(n:int = 100) -> list:
             male_first_names[-i-1], male_last_names[-i-1],
             distances[-i-1], y_of_study[-i-1], standards[-i-1], incomes[-i-1], gpas[-i-1], PESELs[-i-1], sex='M')
         )
-    """TEST WHETHER FUNCTION WORKS PROPERLY #TODO"""
+    """TEST WHETHER FUNCTION WORKS PROPERLY"""
     people = generate_friends_in_room(len(people), people, 0.25)
     return people
 
@@ -236,19 +221,14 @@ def generate_last_name(males_number: int, females_number: int) -> tuple:
     return male_names, females_names
 
 
-def generate_distance(number_of_people: int, diversity: int = 0) -> list:
-    """ Diversity describes how randomly generated distances should be. Range 1-10
-        #TODO implement diversity
-    """
+def generate_distance(number_of_people: int) -> list:
     distances = list()
     for _ in range(number_of_people):
-        """#TODO check maximum range in Poland from Krakow to boards"""
         distances.append(random.randint(1, 1000))
     return distances
 
 
 def generate_year_of_study(number_of_people: int) -> list:
-    """#TODO Consult whether this function should create First Year student or not"""
     y_of_study = list()
     for _ in range(number_of_people):
         y_of_study.append(random.randint(1, 5))
@@ -256,7 +236,6 @@ def generate_year_of_study(number_of_people: int) -> list:
 
 
 def generate_standard(number_of_people: int) -> list:
-    """#TODO Consult amount of standards (right now 3) """
     standards = list()
     for _ in range(number_of_people):
         standards.append(random.randint(1, 3))
@@ -269,7 +248,6 @@ def generate_PESEL(number_of_people: int) -> list:
 
 
 def generate_income(number_of_people: int) -> list:
-    #TODO think about good criterium of score
     incomes = list()
     for _ in range(number_of_people):
         r = random.randint(1, 5)
@@ -290,20 +268,23 @@ def generate_income(number_of_people: int) -> list:
 
 def generate_friends_in_room(number_of_people: int, people: list, p: float) -> list:
     """parameter p is responsible for amount of people who wants friends in room"""
-    #TODO It may generete situation where one person was chosen more than twice and some information are lost, cause max friends limit is 2
     fr_lst = [[-1, -1] for _ in range(number_of_people)]
     for j in range(number_of_people):
         for i in range(2):
             """CHECKING PROBABILITY"""
             r = random.random()
             if r <= p and fr_lst[j][i] == -1:
-                f = random.randint(0, number_of_people-1)
+                Sex_flag = True
+                while Sex_flag:
+                    f = random.randint(0, number_of_people-1)
+                    if people[f].sex == people[j].sex and f != j:
+                        Sex_flag = False
                 fr_lst[j][i] = f
                 fr_lst[f][i] = j
     for i, person in enumerate(people):
         person.friends_in_room = list()
         for j in range(2):
-            if fr_lst[i][j] != -1:
+            if fr_lst[i][j] != -1 and fr_lst[i][j] is not None:
                 person.friends_in_room.append(people[fr_lst[i][j]])
 
     print(f'friends list: {fr_lst}')
@@ -323,35 +304,28 @@ def read_from_excel(path: str) -> list:
     people = list()
     data = list()
     for i in range(12):
-        data.append(sheet.col_values(colx=i, start_rowx=2))
+        data.append(sheet.col_values(colx=i, start_rowx=1))
 
     for i in range(len(data[0])):
-        if data[10][i] == "None":
-            people.append(Student(str(data[0][i]), str(data[1][i]),
-                                  float(data[3][i]), int(data[4][i]), int(data[5][i]),
-                                  float(data[7][i]), float(data[8][i]), str(data[6][i]),
-                                  str(data[2][i]), list(), False, None, i
-                                  )
-                          )
-        else:
-            people.append(Student(str(data[0][i]), str(data[1][i]),
-                                  float(data[3][i]), int(data[4][i]), int(data[5][i]),
-                                  float(data[7][i]), float(data[8][i]), str(data[6][i]),
-                                  str(data[2][i]), list(), False, int(data[10][i]), i
-                                  )
-                          )
-    Pesels = sheet.col_values(colx=10, start_rowx=2)
+
+        people.append(Student(str(data[0][i]), str(data[1][i]),
+                              float(data[3][i]), int(data[4][i]), int(data[5][i]),
+                              float(data[7][i]), float(data[8][i]), str(data[6][i]),
+                              str(data[2][i]), list(), False, None, i
+                              )
+                      )
+    Pesels = sheet.col_values(colx=9, start_rowx=1)
     for i, person in enumerate(people):
         if len(Pesels[i]) > 0:
-            for pesel in Pesels[i]:
-                person.friends_in_room.append(find_by_PESEL(people, str(pesel)))
+            for pesel in Pesels[i].split():
+                founded_person = find_by_PESEL(people, str(pesel))
+                if founded_person:
+                    person.friends_in_room.append(founded_person)
     return people
 
 
 def write_to_excel(name: str, data: list):
-    # WorkBook = xlsxwriter.Workbook(f'Data/{name}.xls')
     WorkBook = xlwt.Workbook(encoding="utf-8")
-    # sheet = WorkBook.add_worksheet()
     sheet = WorkBook.add_sheet("Python Sheet1")
     Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
     Names = ["First Name", "Last Name", "Sex", "Distance", "Year of Studies", "Room standard",
@@ -374,7 +348,6 @@ def write_to_excel(name: str, data: list):
             if friend is not None and friend.PESEL != "None":
                 fr_str_list.append(str(friend.PESEL))
         fr_str = " ".join(fr_str_list)
-        # fr_str = " ".join([str(friend.PESEL) for friend in student.friends_in_room])
         sheet.write(i+1, 9, str(fr_str))
         if student.actual_room:
             sheet.write(i+1, 10, str(student.actual_room.number))
@@ -388,11 +361,10 @@ def write_to_excel(name: str, data: list):
 
 if __name__ == "__main__":
     t = time.time()
-    ppl = generate_random_people(100)
+    # ppl = generate_random_people(100)
     """Writing data to excel"""
-    write_to_excel("Main1", ppl)
+    # write_to_excel("Main1", ppl)
     write_to_excel("Data/200ppl_test.xls", generate_random_people(200))
-    print(len(ppl))
-    at = time.time()
-    print(f"It took {float(at - t)} seconds.")
-    check_best_in_excel(150, "Data/Test_december19.xls")
+    # print(len(ppl))
+    # at = time.time()
+    # print(f"It took {float(at - t)} seconds.")

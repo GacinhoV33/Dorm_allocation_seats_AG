@@ -3,7 +3,6 @@
 from random import shuffle
 from Dorm import Dorm
 import numpy as np
-""""""
 
 
 class Individual:
@@ -13,8 +12,9 @@ class Individual:
         self.dorm = dorm
         self.length = length
         self.score = None
-        
         """To simulation"""
+        self.calc_rank()
+
         self.room_register = {}
         self.rullet_percent = 0
         self.chose_list = np.array([0 for _ in range(length)])
@@ -34,8 +34,6 @@ class Individual:
         self.score_lst.append(self.score)
 
     def actualize_Individual(self, flag_act=True, it=0, mutation_type: int = 0):
-        #TODO - Actualize state of rooms through simulation. After every single iteration rooms should be actualize to
-        #TODO - effectively calc punishment
         self.reset_rooms()
         self.set_rooms()
         self.calc_score()
@@ -58,17 +56,15 @@ class Individual:
         return self.score
 
     def calc_punishment(self):
-
         total_punish = 0
         """ PUNISH GIRLS AND BOYS IN THE SAME ROOM"""
-
         for room in self.dorm.all_rooms:
             locators = room.members
             x = list()
             for locator in locators:
                 x.append(locator.sex)
-            if set(x) != 1:
-                total_punish += 5
+            if len(set(x)) != 1:
+                total_punish += 35
 
         """PUNISH FOR TOO MANY PPL IN THE SAME ROOM"""
         self.room_register = {}
@@ -139,8 +135,6 @@ class Individual:
             if room.capacity != c:
                 raise ValueError("Too many rooms granted for students.")
 
-        """ TEST 3 - GIRLS NOT IN ROOMS WITH BOYS """
-
     def check_diversity(self):
         """This function is responsible for checking whether every single Student were tried to fit and also how diverse
         algorithm works
@@ -185,5 +179,5 @@ class Individual:
 
 
 if __name__ == "__main__":
-    lst = np.array([1, 3, 8, 0, 0, 1, 0, 2])
-    shuffle(lst)
+    pass
+

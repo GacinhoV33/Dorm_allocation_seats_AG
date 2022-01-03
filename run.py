@@ -5,7 +5,7 @@
 """ IMPORT FILES"""
 from plots import show_best_score, show_score_individual, show_frequency_Individual, show_best_score_iter
 from Dorm import Dorm
-from generate_people import read_from_excel, check_best_in_excel, generate_random_people
+from generate_people import read_from_excel, generate_random_people
 from Population import Population
 from time import time
 from random import randint
@@ -79,7 +79,6 @@ if __name__ == "__main__":
     show_score_individual(test_population.Individual_lst[0].score_lst, test_population.Individual_lst[0].mutation_lst)
     show_frequency_Individual(test_population.Individual_lst[4].chose_list)
     show_best_score_iter(test_population.best_solutions_iter, test_population.number_of_individuals)
-    # check_best_in_excel(test_population.best_solution.score, 'Data/Test_december19.xls')
 
 
 

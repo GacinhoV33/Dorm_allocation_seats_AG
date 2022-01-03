@@ -1,21 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from random import randint
 from Student import Student
 
-""" Capacity is always 2 or 3"""
-# TODO CREATE MEANINGFUL DORM DATASET
-
 """
-DORM - 5 floors : from 1 to 5
-TOTAL NUMBER OF ROOMS - 100
 STANDARD - 1, 2, 3 where 3 is the best
 ROOMS - 2 or 3 people
-
-1 floor -> 2 x 3 people  &  2 x 2 people      Number: from 1 to 4 (101 ... 104)
-...
-5 floor -> 2 x 3 people  &  2 x 2 people      Number: from 1 to 4 (501 ... 504)
 """
 
 

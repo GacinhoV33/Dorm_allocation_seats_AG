@@ -1,36 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-""" ZALOZENIA ODNOŚNIE PARAMETRÓW STUDENTA """
-"""
-year_of_studies -> przedział (1-5)
-
-friends_in_room -> lista PESELI osób z którymi chce mieszkać 
-
-PESEL -> PAMIĘTAC ŻE TO STRING 
 
 
-#TODO LATER 
-WAZNE: 
-Zgodnie z ideą przydzialu istnieja osoby ktorym szczegolnie nalezy sie miejsce do akademika:
-MUSZA MIEC ZAGWARANTOWANE:
-- ososby niepelnosprawne 
-- osoby z innych panstw
-odpowiedzialne za to będzie pole klasy Student -> is_special 
-Funkcja satysfakcji natrafiajac na takie osoby bedzie przydzielac olbrzymią liczbe punktów
-
-NIE MUSZA ALE DOBRZE BY BYLO:
-- studenci pierwszego roku 
-
-Funkcja natrafiając na taką osobę będzie dodawać bonusowe punkty
-
-
-"""
-
-
-#Chromosom
+"""Chromosom"""
 class Student:
     def __init__(self, first_name: str, last_name: str, distance: float, year_of_studies: int,
-                 standard_of_room: int, income: float, gpa: float,  PESEL: str, sex: str, friends_in_room: list = list(), is_special=False, actual_room=None, i:int=0):
+                 standard_of_room: int, income: float, gpa: float,  PESEL: str, sex: str,
+                 friends_in_room: list = list(), is_special=False, actual_room=None, i:int=0):
         self.first_name = first_name
         self.last_name = last_name
         self.sex = sex
@@ -94,7 +70,6 @@ class Student:
     def calc_satisfaction(self):
         """ JEŚLI ZNAJOMI W POKOJU DODAJ PUNKTY"""
         """ JEŚLI OTRZYMANO WYBRANY STANDARD DODAJ PUNKTY"""
-        """ WYMYŚLI JAKIEŚ WYMAGANIE BO BIEDA""" #TODO
         score = 0
         if self.actual_room:
             if self.friends_in_room:
@@ -102,7 +77,7 @@ class Student:
                     if friend:
                         if friend.actual_room:
                             if friend.actual_room.number == self.actual_room.number:
-                                score += 15
+                                score += 30
             if self.standard_of_room == self.actual_room.standard:
                 score += 10
         return score
@@ -122,5 +97,3 @@ class Student:
 
 if __name__ == "__main__":
     pass
-    # student = Student(first_name='Krzysiek', last_name='Babicki', distance=100, year_of_studies=3,
-    #                   standard_of_room=1, income=4000, friends_in_room=['Filip', 'Olaf'], gpa=4.5, PESEL=str(1234), sex='M')

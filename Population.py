@@ -106,6 +106,7 @@ class Population:
             list(map(self.mutation_add_non_included, self.Individual_lst, [it for _ in range(self.number_of_individuals)]))
 
     def mutation_swap(self,  individual, it: int = 0):
+        """Mutation randomly chose student and replace him with another """
         r = randint(1, (self.number_of_students - 1)//2)
         if random() < self.mutation_swap_probability:
             beginning = individual.arr_bin[:r]
@@ -117,7 +118,8 @@ class Population:
 
     def mutation_add_non_included(self, individual, actual_iteration):
         """Mutation takes student with the highest frequence and replace it with the student with low frequence"""
-        """ STEPS: FIND STUDENT WITH HIGHEST FREQUENCY
+        """ 
+            STEPS: FIND STUDENT WITH HIGHEST FREQUENCY
                    FIND STUDENT WITH LOWEST FREQUENCY
                    REPLACE THEM  
         """
@@ -157,7 +159,9 @@ class Population:
         replicate, the other lose and is dropped out"""
 
         """Generating tow different sets of individuals and shuffle them"""
+
         r = randint(0, self.number_of_individuals // 2)
+
         first_group = [i for i in range(r, r+self.number_of_individuals//2)]
         second_group = [i for i in range(0, r)] + [j for j in range(r+self.number_of_individuals//2, self.number_of_individuals)]
         shuffle(first_group)
@@ -178,8 +182,9 @@ class Population:
                 """Nothing happen"""
                 new_individuals.append(deepcopy(self.Individual_lst[first]))
                 new_individuals.append(deepcopy(self.Individual_lst[second]))
-        if len(new_individuals) != self.number_of_individuals:
-            print("Error with individuals")
+
+        if self.number_of_individuals % 2 != 0: # added to prevent error when dividing into two groups
+            new_individuals.append(self.Individual_lst[randint(0, self.number_of_individuals-1)])
 
         self.Individual_lst = new_individuals
 
@@ -199,11 +204,14 @@ class Population:
 
         self.Individual_lst = lst_of_copies
 
-    def ShowProgress(self, current_iteration):
+    def ShowProgress(self, current_iteration, label=None):
         """Uncomment to clear terminal after every iteration"""
         percent = current_iteration/self.number_of_iterations
         print(f"Simulation in progress: \n[{int(percent*100)*'-'}{(100-int(percent*100))*' '}] {int(percent*100)}% \n")
         print(f'Iteration: {current_iteration}/{self.number_of_iterations}')
+        if label:
+            pass
+            #TODO showing how much left
 
     def Genetic_Algorithm(self, ):
         for i in tqdm(range(self.number_of_iterations), desc='Simulation in progress: '):
@@ -226,12 +234,10 @@ class Population:
                 self.best_solutions_iter.append(self.find_best_in_iter())
 
         for individual in self.Individual_lst:
-            # individual.show_room_diversity()
             individual.end_cleaning() # Function responsible for making solution acceptable
             individual.calc_score()
 
         self.check_best()
-        self.best_solution.calc_rank()
         print(self.Individual_lst[0].dorm)
         if self.info_flag:
             self.best_solutions_lst.append(self.best_solution.score)

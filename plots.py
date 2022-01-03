@@ -67,7 +67,6 @@ def show_best_score_iter(best_solutions: list, n_of_individuals: int):
     plt.plot([i for i in range(len(best_solutions))], best_solutions, c='r', label="Highest Score in population in iteration")
     plt.xlabel("Iterations")
     plt.ylabel("Best score in whole generation")
-    plt.title("Best solution which exist in specific iteration")
     plt.grid()
     plt.title(f'{len(best_solutions)} Iterations. {n_of_individuals} Individuals.')
     plt.legend()
