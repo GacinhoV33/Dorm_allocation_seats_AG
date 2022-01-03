@@ -48,7 +48,6 @@ class Population:
         self.init_Individuals()
         """ After Simulation"""
 
-
     def find_best_in_iter(self):
         scores = [individual.score for individual in self.Individual_lst]
         return max(scores)
@@ -224,7 +223,6 @@ class Population:
             """To simulation"""
             if self.info_flag:
                 self.best_solutions_lst.append(self.best_solution.score)
-                # self.ShowProgress(i)
                 self.best_solutions_iter.append(self.find_best_in_iter())
 
         for individual in self.Individual_lst:
@@ -236,8 +234,8 @@ class Population:
         print(self.Individual_lst[0].dorm)
 
         print(''*10, f"BEST SOLUTION GETS {self.best_solution.score} points!", ''*10)
+        print(self.best_solution.dorm)
         self.write_best_solution()
-        # self.print_freq()
         self.print_pop()
 
     def write_best_solution(self):
@@ -284,7 +282,7 @@ class Population:
                         one_line += f'     {int(self.Individual_lst[j].arr_bin[i])}         |'
 
             print(one_line)
-        score = f"Score|"
+        score = f"Score| "
         for i in range(self.number_of_individuals):
             score += f'     {self.Individual_lst[i].score}      |'
         print(score, "\n\n")

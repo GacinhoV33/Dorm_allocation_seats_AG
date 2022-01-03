@@ -8,7 +8,7 @@ from generate_people import generate_random_people, read_from_excel
 
 
 class PDF(FPDF):
-    def __init__(self, ppl: list):
+    def __init__(self, best_solution):
         super().__init__()
         self.file_path = f'Reports/{date.today()} {time.strftime("%H%M")}.pdf'
         self.n_of_students = 200
@@ -16,7 +16,7 @@ class PDF(FPDF):
         self.dorm_name = 'Filutek'
         self.n_of_3room = 20
         self.n_of_2room = 20
-        self.ppl = ppl
+        self.ppl = best_solution.ppl
 
     def header(self):
         # Logo
@@ -131,8 +131,8 @@ def generate_report():
 
 
 ppl = read_from_excel('Solutions/2021-12-30 2251.xls')
-doc = PDF(ppl)
-doc.generate()
+# doc = PDF(ppl)
+# doc.generate()
 
 
 # print(time.strftime("%H:%M"))

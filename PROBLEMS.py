@@ -2,17 +2,14 @@
 # -*- coding: utf-8 -*-
 
 """
-PROBLEM 1: TOO MANY ROOMS AFTER CROSSING, MUTATION
+PROBLEM 1: At the end of simulation, end_cleaning() don't work well. The are still some rooms with too much people.
 
-POSSIBLE SOLUTIONS:
+POSSIBLE SOLUTIONS: Repair end_cleaning() function.
 
-1. After all iterations replace multi-rooms with rooms that were not included
-2. After every iteration replace multi-rooms with rooms that were not included
-3. Add Mutation responsible for eliminate multi-rooms
-4. Set high punish for multi-room
+extra: Add Mutation responsible for eliminate multi-rooms or adding rooms that were not included
+?: Set high punish for multi-room
 
 STATUS: WORK IN PROGRESS
-4th solution implemented
 ------------------------------------------------------------------------------
 
 PROBLEM 2: TOO LONG EXECUTING TIME
@@ -24,10 +21,10 @@ POSSIBLE SOLUTIONS:
 STATUS: NOT DONE
 ------------------------------------------------------------------------------
 
-PROBLEM 3: IMPLEMENT BIGGER DIVERSITY OF SOLUTIONS
+PROBLEM 3: Saving to Excel
 
-POSSIBLE SOLUTIONS: ADD MORE MUTATION
-
+Error: fr_str = " ".join([str(friend.PESEL) for friend in student.friends_in_room])
+AttributeError: 'NoneType' object has no attribute 'PESEL'
 STATUS: NOT DONE
 ------------------------------------------------------------------------------
 """

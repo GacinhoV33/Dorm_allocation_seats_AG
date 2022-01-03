@@ -26,8 +26,7 @@ def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, 
                      mutation_swap_probability: float=0.1, mutation_swap_flag: bool=True, mutation_non_included_flag:bool=True,
                  rullet_selection_flag: bool=True, tournament_selection_flag=False, rank_selection_flag:bool=False, DormType: int=1, info_flag:bool=True):
     if path:
-        path_excel = "Data/Test_december19.xls"
-        ppl = read_from_excel(path_excel)
+        ppl = read_from_excel(path)
     elif n_of_people:
         ppl = generate_random_people(n_of_people)
     else:
@@ -49,13 +48,13 @@ def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, 
                                        rullet_selection_flag=rullet_selection_flag, tournament_selection_flag=tournament_selection_flag,
                                        rank_selection_flag=rank_selection_flag, info_flag=info_flag
                                        )
-
-
-
     st = time()
     Simulation_Population.Genetic_Algorithm()
     end = time()
     print(f"Simulation took {end - st} seconds.")
+    show_best_score_iter(Simulation_Population.best_solutions_iter, Simulation_Population.number_of_individuals)
+    show_best_score(Simulation_Population.best_solutions_lst)
+    return Simulation_Population.best_solution
 
 
 if __name__ == "__main__":
@@ -67,19 +66,20 @@ if __name__ == "__main__":
     Dorm_TEST = Dorm("Test_dorm", n_floors=5, n_rooms=6,  ppl=ppl)
     """ ETAP 2 - Stworzenie pierwszej populacji """
     test_population = Population(50, 150, ppl, Dorm_TEST, 50)
+    # start_simulation(path=None, n_of_people=150, iteration=30, n_of_individuals=25,mutation_non_included_probability=0.1,
+    #                  mutation_swap_probability=True, mutation_swap_flag=True, mutation_non_included_flag=True,
+    #                  rullet_selection_flag=True, tournament_selection_flag=False, rank_selection_flag=False, DormType=1,
+    #                  info_flag=True)
 
     st = time()
     test_population.Genetic_Algorithm()
     end = time()
     print(f"Simulation took {end - st} seconds.")
-    print(test_population.Individual_lst[0].mutation_lst)
-    # print(test_population.Individual_lst[0].chose_list)
-    # print(test_population.Individual_lst[9].n_of_mutations)
     show_best_score(test_population.best_solutions_lst)
     show_score_individual(test_population.Individual_lst[0].score_lst, test_population.Individual_lst[0].mutation_lst)
-    # show_frequency_Individual(test_population.Individual_lst[4].chose_list)
+    show_frequency_Individual(test_population.Individual_lst[4].chose_list)
     show_best_score_iter(test_population.best_solutions_iter, test_population.number_of_individuals)
-    check_best_in_excel(test_population.best_solution.score, 'Data/Test_december19.xls')
+    # check_best_in_excel(test_population.best_solution.score, 'Data/Test_december19.xls')
 
 
 

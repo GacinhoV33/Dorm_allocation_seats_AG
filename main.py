@@ -6,9 +6,9 @@ from tkinter import filedialog
 from PIL import ImageTk, Image
 import CreateToolTip
 from report import PDF
-from tkinter.messagebox import showwarning
-import subprocess
+from tkinter import messagebox
 import os
+import time
 
 #TODO
 # dorms buttons with hints - done
@@ -31,9 +31,11 @@ mutation_non_included_flag:bool=True
 rullet_selection_flag: bool=True
 tournament_selection_flag=False
 rank_selection_flag = False
+best_solution = None
+
 
 def SaveEverything(root, MutSwapFlag: int, MutAddNonFlag: int, MutSwapProb: float, MutAddNonProb: float,
-                   Selection: str, N_iterations: int, N_individuals: int, dorm_type: int):
+                   Selection: str, N_iterations: int, N_individuals: int, dorm_type: int, Simtext):
     print(MutSwapFlag, MutAddNonFlag, MutAddNonProb, MutSwapProb, Selection, N_iterations, N_individuals)
     global number_of_individuals, dorm_flag, number_of_iterations, mutation_non_included_probability #TODO Dorm options
     global mutation_swap_probability, mutation_swap_flag, mutation_non_included_flag, rullet_selection_flag
@@ -45,6 +47,9 @@ def SaveEverything(root, MutSwapFlag: int, MutAddNonFlag: int, MutSwapProb: floa
     mutation_swap_probability = 0.01 * MutSwapProb
     mutation_non_included_probability = 0.01 * MutAddNonProb
     dorm_flag = dorm_type
+    Simtext.config(text="Data ready", fg="#ffffff", bg='#19a56f')
+    Simtext.place_configure(x=X_Size//2.54, y=Y_Size//1.25)
+    root.update()
     if Selection == "Rullet":
         rullet_selection_flag = True
         tournament_selection_flag = False
@@ -59,24 +64,38 @@ def SaveEverything(root, MutSwapFlag: int, MutAddNonFlag: int, MutSwapProb: floa
         rank_selection_flag = True
 
 
-def start_working():
+def start_working(Root, SimText):
+    global best_solution
+    SimText.config(text="Algorithm is working", font=('Helvetica', 30), bg='#ff9f3f', fg="#fffaef")
+    SimText.place_configure(x=X_Size//2.86)
+    Root.update()
     if csv_path:
-        start_simulation(csv_path, None, number_of_iterations, number_of_individuals,
+        best_sol = start_simulation(csv_path, None, number_of_iterations, number_of_individuals,
                          mutation_non_included_probability, mutation_swap_probability, mutation_swap_flag,
                          mutation_non_included_flag, rullet_selection_flag, tournament_selection_flag, rank_selection_flag,
-                         dorm_flag, False)
+                         dorm_flag, True)
     else:
-        start_simulation(None, n_of_people, number_of_iterations, number_of_individuals,
+        best_sol = start_simulation(None, n_of_people, number_of_iterations, number_of_individuals,
                          mutation_non_included_probability, mutation_swap_probability, mutation_swap_flag,
                          mutation_non_included_flag, rullet_selection_flag, tournament_selection_flag, rank_selection_flag,
-                         dorm_flag, False)
+                         dorm_flag, True)
+    SimText.config(text="Solution is ready", font=('Helvetica', 30), bg='#13f500', fg="#f6fffb")
+    SimText.place_configure(x=X_Size//2.78)
+    Root.update()
+    best_solution = best_sol
 
 
 def Generate_Report():
-    doc = PDF() #TODO add data here
-    doc.generate()
-    #TODO open it
-    pass
+    global best_solution
+    if best_solution:
+        doc = PDF(best_solution) #TODO add data here
+        doc.generate()
+        time.sleep(1)
+        os.system("open"+str(doc.file_path))
+        # webbrowser.open(doc.file_path)
+    else:
+        messagebox.showerror(title="Error", message="There's no valid solution yet. Start simulation first.")
+    #TODO open after simulation
 
 
 def Help_User():
@@ -143,9 +162,11 @@ def main_screen():
     main_Canv.create_text(X_Size//1.2, Y_Size//4, text="Simulation Parameters", font=('Helvetica', 22), fill='#12FF11') #TODO Set good color
     """ Shows the flag which light green when ready, red when not ready"""
 
+    SimText = Label(Root, text="Data not ready", font=('Helvetica', 30), fg='#ffdddc', bg='#FF2231')
+    SimText.place(x=X_Size//2.63, y=Y_Size//1.25)
     """START Button -> When clicked, it run simulation"""
     StartButton = TkinterCustomButton(text="START", corner_radius=10,
-                command=start_working,
+                command=lambda: start_working(Root, SimText),
                 bg_color="#142434", width=BigB_X, height=BigB_Y)
     StartButton.place(x=X_Size//2.43, y=Y_Size//5)
     CreateToolTip.CreateToolTip(StartButton, text="Click this button to start simulation.\nRemember to ensure that all parameters were inserted correctly and you clicked Save button")
@@ -234,10 +255,11 @@ def main_screen():
 
     """ SAVE button"""
     SaveButton = TkinterCustomButton(text="Save", corner_radius=5,
-                                     command=lambda: SaveEverything(Root, Mutation_Swap_Flag.get(), Mutation_AddNon_Flag.get(), SwapMutationScale.get(), AddNonMutationScale.get(), Selection.get(), int(IterationsEntry.get()), int(IndividualsEntry.get()), int(DormType.get())),
+                                     command=lambda: SaveEverything(Root, Mutation_Swap_Flag.get(), Mutation_AddNon_Flag.get(), SwapMutationScale.get(), AddNonMutationScale.get(), Selection.get(), int(IterationsEntry.get()), int(IndividualsEntry.get()), int(DormType.get()), SimText),
                                      bg_color="#aaaaFF")
     SaveButton.place(x=X_Size//1.2, y=Y_Size//10)
     CreateToolTip.CreateToolTip(SaveButton, text="Click this button to actualize parameters of simulation")
+    """Simulation label"""
 
     Root.mainloop()
 

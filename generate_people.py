@@ -6,7 +6,6 @@ import time
 
 import xlrd
 import xlwt
-import xlsxwriter
 from xlutils import copy
 
 from Student import Student
@@ -338,7 +337,7 @@ def read_from_excel(path: str) -> list:
             people.append(Student(str(data[0][i]), str(data[1][i]),
                                   float(data[3][i]), int(data[4][i]), int(data[5][i]),
                                   float(data[7][i]), float(data[8][i]), str(data[6][i]),
-                                  str(data[2][i]), list(), False, data[10][i], i
+                                  str(data[2][i]), list(), False, int(data[10][i]), i
                                   )
                           )
     Pesels = sheet.col_values(colx=10, start_rowx=2)
@@ -350,7 +349,6 @@ def read_from_excel(path: str) -> list:
 
 
 def write_to_excel(name: str, data: list):
-    #TODO formats
     # WorkBook = xlsxwriter.Workbook(f'Data/{name}.xls')
     WorkBook = xlwt.Workbook(encoding="utf-8")
     # sheet = WorkBook.add_worksheet()
@@ -360,21 +358,6 @@ def write_to_excel(name: str, data: list):
              "PESEL", "Income", "GPA", "Friends in room", "Actual room", "Special"]
     for i, letter in enumerate(Letters):
         sheet.write(0, i, Names[i])
-
-    # for i, student in enumerate(data, 0):
-    #     sheet.write(f'{Letters[0]}{i+2}', f'{str(student.first_name)}')
-    #     sheet.write(f'{Letters[1]}{i+2}', str(student.last_name))
-    #     sheet.write(f'{Letters[2]}{i+2}', str(student.sex))
-    #     sheet.write(f'{Letters[3]}{i+2}', str(student.distance))
-    #     sheet.write(f'{Letters[4]}{i+2}', str(student.year_of_studies))
-    #     sheet.write(f'{Letters[5]}{i+2}', str(student.standard_of_room))
-    #     sheet.write(f'{Letters[6]}{i+2}', str(student.PESEL))
-    #     sheet.write(f'{Letters[7]}{i+2}', str(student.income))
-    #     sheet.write(f'{Letters[8]}{i+2}', str(round(student.gpa, 4)))
-    #     fr_str = " ".join([str(friend.PESEL) for friend in student.friends_in_room])
-    #     sheet.write(f'{Letters[9]}{i+2}', str(fr_str))
-    #     sheet.write(f'{Letters[10]}{i+2}', str(student.actual_room))
-    #     sheet.write(f'{Letters[11]}{i+2}', str(student.is_special))
 
     for i, student in enumerate(data, 0):
         sheet.write(i+1, 0, f'{str(student.first_name)}')
@@ -386,7 +369,12 @@ def write_to_excel(name: str, data: list):
         sheet.write(i+1, 6, str(student.PESEL))
         sheet.write(i+1, 7, str(student.income))
         sheet.write(i+1, 8, str(round(student.gpa, 4)))
-        fr_str = " ".join([str(friend.PESEL) for friend in student.friends_in_room])
+        fr_str_list = list()
+        for friend in student.friends_in_room:
+            if friend is not None and friend.PESEL != "None":
+                fr_str_list.append(str(friend.PESEL))
+        fr_str = " ".join(fr_str_list)
+        # fr_str = " ".join([str(friend.PESEL) for friend in student.friends_in_room])
         sheet.write(i+1, 9, str(fr_str))
         if student.actual_room:
             sheet.write(i+1, 10, str(student.actual_room.number))
@@ -403,7 +391,7 @@ if __name__ == "__main__":
     ppl = generate_random_people(100)
     """Writing data to excel"""
     write_to_excel("Main1", ppl)
-
+    write_to_excel("Data/200ppl_test.xls", generate_random_people(200))
     print(len(ppl))
     at = time.time()
     print(f"It took {float(at - t)} seconds.")

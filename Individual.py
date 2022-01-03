@@ -81,9 +81,9 @@ class Individual:
         for room_n in self.dorm.room_numbers:
             if str(room_n) in self.room_register.keys():
                 if self.room_register[str(room_n)] > self.dorm.find_room_by_number(room_n).capacity:
-                    total_punish += 5 #if there is a room with bigger n of people than capacity -> punish
+                    total_punish += 25 #if there is a room with bigger n of people than capacity -> punish
             else:
-                total_punish += 10 # if there is no even one person in room make bigger punish
+                total_punish += 20 # if there is no even one person in room make bigger punish
 
         return total_punish
 

@@ -103,9 +103,9 @@ class Student:
                     if friend:
                         if friend.actual_room:
                             if friend.actual_room.number == self.actual_room.number:
-                                score += 5
+                                score += 15
             if self.standard_of_room == self.actual_room.standard:
-                score += 5
+                score += 10
         return score
 
     def set_room(self, room):
@@ -122,6 +122,6 @@ class Student:
 
 
 if __name__ == "__main__":
+    pass
     # student = Student(first_name='Krzysiek', last_name='Babicki', distance=100, year_of_studies=3,
     #                   standard_of_room=1, income=4000, friends_in_room=['Filip', 'Olaf'], gpa=4.5, PESEL=str(1234), sex='M')
-    print(5 // 2)
