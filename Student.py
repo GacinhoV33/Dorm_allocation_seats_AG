@@ -41,8 +41,6 @@ class Student:
         self.PESEL = PESEL
         self.income = income
 
-        # if self.year_of_studies == 1 and gpa is not None:
-            # raise ImportWarning("Invalid data imported. There's no gpa when year == 1")
         self.gpa = gpa
         self.friends_in_room = friends_in_room
         """ Gen"""
@@ -51,6 +49,7 @@ class Student:
 
         self.i = i
         self.score = self.calc_achievements()
+        self.rank = None
 
     def calc_achievements(self):
         score = 0

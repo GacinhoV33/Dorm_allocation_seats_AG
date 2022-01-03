@@ -91,8 +91,7 @@ def Generate_Report():
         doc = PDF(best_solution) #TODO add data here
         doc.generate()
         time.sleep(1)
-        os.system("open"+str(doc.file_path))
-        # webbrowser.open(doc.file_path)
+        # os.system("open"+str(doc.file_path))
     else:
         messagebox.showerror(title="Error", message="There's no valid solution yet. Start simulation first.")
     #TODO open after simulation
@@ -101,7 +100,7 @@ def Generate_Report():
 def Help_User():
     HelpRoot = Toplevel()
     HelpRoot.title("Help for new users")
-    #TODO
+    #TODO HELP
     HelpRoot.mainloop()
 
 

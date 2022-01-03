@@ -87,6 +87,17 @@ class Individual:
 
         return total_punish
 
+    def calc_rank(self):
+        """This function calculate ranking of students and assign place in ranking for everyone"""
+        ranking = dict()
+        for person in self.ppl:
+            ranking[person.PESEL] = person.calc_achievements()
+        rank_sorted = sorted(ranking.items(), key=lambda x: x[1], reverse=True)
+        for place, (pesel, _) in enumerate(rank_sorted, 1):
+            for person in self.ppl:
+                if person.PESEL == pesel:
+                    person.rank = place
+
     def show_room_diversity(self):
         self.room_register = {}
         for n_room in self.arr_bin:

@@ -231,11 +231,14 @@ class Population:
             individual.calc_score()
 
         self.check_best()
+        self.best_solution.calc_rank()
         print(self.Individual_lst[0].dorm)
-
+        if self.info_flag:
+            self.best_solutions_lst.append(self.best_solution.score)
+            self.best_solutions_iter.append(self.find_best_in_iter())
         print(''*10, f"BEST SOLUTION GETS {self.best_solution.score} points!", ''*10)
-        print(self.best_solution.dorm)
         self.write_best_solution()
+
         self.print_pop()
 
     def write_best_solution(self):
