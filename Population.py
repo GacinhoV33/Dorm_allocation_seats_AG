@@ -55,7 +55,7 @@ class Population:
     def init_Individuals(self):
         for i in range(self.number_of_individuals):
             self.Individual_lst.append(
-                Individual(self.number_of_students, deepcopy(self.dorm), deepcopy(self.ppl))
+                Individual(self.number_of_students, deepcopy(self.dorm), deepcopy(self.ppl), self.rullet_selection_flag)
             )
         for individual in self.Individual_lst:
             individual.initialize_Individual()

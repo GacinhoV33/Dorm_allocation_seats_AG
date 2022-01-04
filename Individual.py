@@ -6,7 +6,7 @@ import numpy as np
 
 
 class Individual:
-    def __init__(self, length: int, dorm: Dorm, ppl: list):
+    def __init__(self, length: int, dorm: Dorm, ppl: list, flag_rullet: bool=False):
         self.ppl = ppl
         self.arr_bin = np.zeros((length, 1))
         self.dorm = dorm
@@ -21,6 +21,7 @@ class Individual:
         self.n_of_mutations = 0
         self.score_lst = list()
         self.mutation_lst = list()
+        self.flag_rullet = flag_rullet
 
     def initialize_Individual(self):
         c = 0
@@ -64,7 +65,10 @@ class Individual:
             for locator in locators:
                 x.append(locator.sex)
             if len(set(x)) != 1:
-                total_punish += 35
+                if self.flag_rullet:
+                    total_punish += 150
+                else:
+                    total_punish += 250
 
         """PUNISH FOR TOO MANY PPL IN THE SAME ROOM"""
         self.room_register = {}
@@ -80,7 +84,6 @@ class Individual:
                     total_punish += 25 #if there is a room with bigger n of people than capacity -> punish
             else:
                 total_punish += 20 # if there is no even one person in room make bigger punish
-
         return total_punish
 
     def calc_rank(self):
