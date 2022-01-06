@@ -3,10 +3,10 @@
 from random import shuffle
 from Dorm import Dorm
 import numpy as np
-
+from random import randint
 
 class Individual:
-    def __init__(self, length: int, dorm: Dorm, ppl: list, flag_rullet: bool=False):
+    def __init__(self, length: int, dorm: Dorm, ppl: list):
         self.ppl = ppl
         self.arr_bin = np.zeros((length, 1))
         self.dorm = dorm
@@ -21,7 +21,6 @@ class Individual:
         self.n_of_mutations = 0
         self.score_lst = list()
         self.mutation_lst = list()
-        self.flag_rullet = flag_rullet
 
     def initialize_Individual(self):
         c = 0
@@ -48,7 +47,7 @@ class Individual:
         """COST FUNCTION"""
         score = 0
         for student in self.ppl:
-            ach = student.calc_achievements()
+            ach = student.score # change
             sat = student.calc_satisfaction()
             score += (sat * ach)
 
@@ -65,10 +64,7 @@ class Individual:
             for locator in locators:
                 x.append(locator.sex)
             if len(set(x)) != 1:
-                if self.flag_rullet:
-                    total_punish += 150
-                else:
-                    total_punish += 250
+                total_punish += 150
 
         """PUNISH FOR TOO MANY PPL IN THE SAME ROOM"""
         self.room_register = {}
@@ -160,8 +156,20 @@ class Individual:
                 room.members = room.members[:room.capacity]
 
         for room in self.dorm.all_rooms:
-            while room.capacity > len(room.members) and students_to_replace:
-                popped_member = students_to_replace.pop()
+            sex = list(set([member.sex for member in room.members]))
+            if len(sex) == 0:
+                options = ['M', 'F']
+                sex = list(options[randint(0, 1)])
+            while room.capacity > len(room.members):
+                popped_member = None
+                if students_to_replace:
+                    popped_member = students_to_replace.pop()
+                else:
+                    sorted_lst = sorted(self.ppl, key=lambda x: x.score, reverse=True)
+                    for student in sorted_lst:
+                        if student.actual_room is None and student.sex in sex and popped_member is None:
+                            popped_member = student
+
                 room.members.append(popped_member)
                 popped_member.actual_room = room
                 self.arr_bin[popped_member.i] = room.number

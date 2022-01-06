@@ -96,4 +96,5 @@ class Student:
 
 
 if __name__ == "__main__":
-    pass
+    lst = []
+    print(len(set(lst)))

@@ -46,6 +46,7 @@ class Population:
         self.tournament_selection_flag = tournament_selection_flag
         self.rank_selection_flag = rank_selection_flag
         self.init_Individuals()
+        self.last_solution = None
         """ After Simulation"""
 
     def find_best_in_iter(self):
@@ -55,11 +56,11 @@ class Population:
     def init_Individuals(self):
         for i in range(self.number_of_individuals):
             self.Individual_lst.append(
-                Individual(self.number_of_students, deepcopy(self.dorm), deepcopy(self.ppl), self.rullet_selection_flag)
+                Individual(self.number_of_students, deepcopy(self.dorm), deepcopy(self.ppl))
             )
         for individual in self.Individual_lst:
             individual.initialize_Individual()
-            individual.set_rooms()
+            # individual.set_rooms() x2
             if self.best_solution:
                 if individual.score:
                     if individual.score > self.best_solution.score:
@@ -238,11 +239,13 @@ class Population:
             individual.calc_score()
 
         self.check_best()
-        print(self.Individual_lst[0].dorm)
+        self.best_solution.end_cleaning()
+        print(self.best_solution.dorm)
         if self.info_flag:
             self.best_solutions_lst.append(self.best_solution.score)
             self.best_solutions_iter.append(self.find_best_in_iter())
         print(''*10, f"BEST SOLUTION GETS {self.best_solution.score} points!", ''*10)
+
         self.write_best_solution()
 
         self.print_pop()
@@ -253,6 +256,7 @@ class Population:
 
     def check_best(self):
         for individual in self.Individual_lst:
+            individual.end_cleaning()
             if individual.score > self.best_solution.score:
                 self.best_solution = individual
 
