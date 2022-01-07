@@ -37,8 +37,8 @@ def SaveEverything(root, MutSwapFlag: int, MutAddNonFlag: int, MutSwapProb: floa
     global tournament_selection_flag, csv_path, rank_selection_flag
     number_of_individuals = N_individuals
     number_of_iterations = N_iterations
-    mutation_non_included_flag = bool(MutAddNonFlag)
-    mutation_swap_flag = bool(MutSwapFlag)
+    mutation_non_included_flag = int(MutAddNonFlag)
+    mutation_swap_flag = int(MutSwapFlag)
     mutation_swap_probability = 0.01 * MutSwapProb
     mutation_non_included_probability = 0.01 * MutAddNonProb
     dorm_flag = dorm_type
@@ -87,7 +87,7 @@ def Generate_Report(root, Simtext):
     if best_solution:
         doc = PDF(best_solution, number_of_iterations, number_of_individuals, rullet_selection_flag,
                   rank_selection_flag, tournament_selection_flag, mutation_non_included_flag, mutation_swap_flag,
-                  mutation_non_included_probability, mutation_swap_probability, comp_time) # data_name change
+                  mutation_non_included_probability, mutation_swap_probability, comp_time, dorm_flag) # data_name change
         doc.generate()
         time.sleep(1)
         Simtext.config(text="Report generated successfully", fg="#ffffff", bg='#19a56f')

@@ -39,7 +39,7 @@ def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, 
     elif DormType == 2:
         Simulation_Dorm = Dorm("Filutek", n_floors=8, n_rooms=5, ppl=ppl)
     elif DormType == 3:
-        Simulation_Dorm = Dorm("Filutek", n_floors=14, n_rooms=10, ppl=ppl)
+        Simulation_Dorm = Dorm("Babilon", n_floors=14, n_rooms=10, ppl=ppl)
     elif DormType == 4:
         Simulation_Dorm = Dorm("Random_Dorm", n_floors=randint(3, 10), n_rooms=randint(3, 12), ppl=ppl)
     Simulation_Population = Population(number_of_individuals=n_of_individuals, number_of_students=len(ppl),

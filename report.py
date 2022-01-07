@@ -8,12 +8,20 @@ import time
 
 class PDF(FPDF):
     def __init__(self, best_solution, iterations, individuals, rullet_flag, rank_flag, tour_flag,  mut_add_flag,
-                 mut_swap_flag, mut_add_prob, mut_swap_prob, computing_time):
+                 mut_swap_flag, mut_add_prob, mut_swap_prob, computing_time, dorm_type):
         super().__init__()
         self.file_path = f'Reports/{date.today()}{time.strftime("%H%M")}.pdf'
         self.n_of_students = 200
         self.n_of_place = 100
-        self.dorm_name = 'Filutek'
+        if dorm_type == 1:
+            self.dorm_name = "Olimp"
+        elif dorm_type == 2:
+            self.dorm_name = "Filutek"
+        elif dorm_type == 3:
+            self.dorm_name = "Bablion"
+        else:
+            self.dorm_name = "Test_dorm"
+
         self.n_of_3room = 20
         self.n_of_2room = 20
         self.best_solution = best_solution
@@ -115,11 +123,11 @@ class PDF(FPDF):
             self.cell(w=80, h=10, txt=' -None', ln=1)
 
         self.set_font('Arial', 'B', 14)
-        self.cell(w=40, h=10, txt=f'Computing Time: ')
+        self.cell(w=41, h=10, txt=f'Computing Time:')
         self.set_font('Arial', '', 14)
-        self.cell(w=62, h=10, txt=f'{int(self.computing_time)} seconds.', ln=1)
+        self.cell(w=63, h=10, txt=f'{int(self.computing_time)} seconds.', ln=1)
         self.set_font('Arial', 'B', 14)
-        self.cell(w=20, h=10, txt="Score:")
+        self.cell(w=17, h=10, txt="Score:")
         self.set_font('Arial', '', 14)
         self.set_text_color(10, 240, 10)
         self.cell(w=40, h=10, txt=f'{self.best_solution.score} points!', ln=1)

@@ -114,7 +114,7 @@ class Population:
             end = individual.arr_bin[-r:]
             individual.arr_bin[:r] = end
             individual.arr_bin[-r:] = beginning
-            individual.actualize_Individual(False, it, mutation_type=MUTATION_SWAP)
+            individual.actualize_Individual(True, it, mutation_type=MUTATION_SWAP)
             individual.n_of_mutations += 1
 
     def mutation_add_non_included(self, individual, actual_iteration):
@@ -132,7 +132,9 @@ class Population:
                     individual.arr_bin[freq_low_lst[0][i]] = individual.arr_bin[freq_max_lst[0][i]]
                     individual.arr_bin[freq_max_lst[0][i]] = 0
 
-            individual.actualize_Individual(flag_act=False, it=actual_iteration, mutation_type=MUTATION_NON)
+            individual.actualize_Individual(flag_act=True, it=actual_iteration, mutation_type=MUTATION_NON)
+            individual.n_of_mutations += 1
+
 
     def rullet_selection(self):
         all_score = 0
@@ -248,7 +250,7 @@ class Population:
 
         self.write_best_solution()
 
-        self.print_pop()
+        # self.print_pop()
 
     def write_best_solution(self):
         name = f'Solutions/{date.today()} {time.strftime("%H%M")}.xls'

@@ -99,6 +99,3 @@ class Dorm:
              f'     Locators: {[memb for memb in room.members]}\n '
              '      ----------------\n'
              for room in self.all_rooms]))
-
-dorm = Dorm("Dorm 1", 14, 10, [])
-x = 20
