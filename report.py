@@ -16,6 +16,7 @@ class PDF(FPDF):
         self.dorm_name = 'Filutek'
         self.n_of_3room = 20
         self.n_of_2room = 20
+        self.best_solution = best_solution
         self.ppl = best_solution.ppl
         self.iterations = iterations
         self.individuals = individuals
@@ -111,12 +112,18 @@ class PDF(FPDF):
             self.cell(w=80, h=10, txt=f' - Swap Mutation with probability {float(self.mut_add_prob) * 100}%', ln=1)
         if not self.mut_swap_flag and not self.mut_swap_flag:
             self.set_font('Arial', '', 14)
-            self.cell(w=80, h=10, txt=' -None')
+            self.cell(w=80, h=10, txt=' -None', ln=1)
 
         self.set_font('Arial', 'B', 14)
         self.cell(w=40, h=10, txt=f'Computing Time: ')
         self.set_font('Arial', '', 14)
-        self.cell(w=60, h=10, txt=f'{int(self.computing_time)} seconds.')
+        self.cell(w=62, h=10, txt=f'{int(self.computing_time)} seconds.', ln=1)
+        self.set_font('Arial', 'B', 14)
+        self.cell(w=20, h=10, txt="Score:")
+        self.set_font('Arial', '', 14)
+        self.set_text_color(10, 240, 10)
+        self.cell(w=40, h=10, txt=f'{self.best_solution.score} points!', ln=1)
+        self.set_text_color(10, 10, 10)
 
     def second_page(self):
         """People who gets room"""

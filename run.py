@@ -30,7 +30,7 @@ def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, 
         ppl = read_from_excel(path)
     elif n_of_people:
         ppl = generate_random_people(n_of_people)
-        write_to_excel(f'Data/{data_name}', ppl)
+        write_to_excel(f'Data/{data_name}.xls', ppl)
     else:
         raise ImportError("Running simulation without parameters")
 

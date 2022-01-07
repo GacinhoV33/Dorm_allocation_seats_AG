@@ -87,7 +87,7 @@ def Generate_Report(root, Simtext):
     if best_solution:
         doc = PDF(best_solution, number_of_iterations, number_of_individuals, rullet_selection_flag,
                   rank_selection_flag, tournament_selection_flag, mutation_non_included_flag, mutation_swap_flag,
-                  mutation_non_included_probability, mutation_swap_probability, comp_time, data_name)
+                  mutation_non_included_probability, mutation_swap_probability, comp_time) # data_name change
         doc.generate()
         time.sleep(1)
         Simtext.config(text="Report generated successfully", fg="#ffffff", bg='#19a56f')
