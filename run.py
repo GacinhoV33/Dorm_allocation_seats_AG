@@ -56,6 +56,7 @@ def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, 
     print(f"Simulation took {end - st} seconds.")
     show_best_score_iter(Simulation_Population.best_solutions_iter, Simulation_Population.number_of_individuals)
     show_best_score(Simulation_Population.best_solutions_lst)
+    show_score_individual(Simulation_Population.best_solution.score_lst, Simulation_Population.best_solution.mutation_lst)
     return Simulation_Population.best_solution, end - st
 
 
