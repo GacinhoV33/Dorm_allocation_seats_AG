@@ -184,7 +184,7 @@ class PDF(FPDF):
                                 self.set_text_color(0, 255, 0)
                                 self.cell(40//len(person.friends_in_room), 10, txt='V', align='C')
                             else:
-                                self.set_text_color(255, 255, 255)
+                                self.set_text_color(10, 10, 10)
                                 self.cell(40 // len(person.friends_in_room), 10, txt='O', align='C')
                         else:
                             self.set_text_color(255, 0, 0)
