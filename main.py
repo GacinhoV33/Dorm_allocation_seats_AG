@@ -10,13 +10,6 @@ from tkinter import messagebox
 import os
 import time
 
-#TODO
-# dorms buttons with hints - done
-# is_ready button with 3 colors - not done
-# status of simulation showed on screen - not done
-# Generate Dataset window - half done -> Dorms
-# Generate Report after simulation - half done -> People setted
-# Add hints to Selections
 """Global Variables to simulation"""
 csv_path = None
 n_of_people = 200
@@ -32,12 +25,14 @@ rullet_selection_flag: bool=True
 tournament_selection_flag=False
 rank_selection_flag = False
 best_solution = None
+comp_time = 0
+data_name = ''
 
 
 def SaveEverything(root, MutSwapFlag: int, MutAddNonFlag: int, MutSwapProb: float, MutAddNonProb: float,
                    Selection: str, N_iterations: int, N_individuals: int, dorm_type: int, Simtext):
     print(MutSwapFlag, MutAddNonFlag, MutAddNonProb, MutSwapProb, Selection, N_iterations, N_individuals)
-    global number_of_individuals, dorm_flag, number_of_iterations, mutation_non_included_probability #TODO Dorm options
+    global number_of_individuals, dorm_flag, number_of_iterations, mutation_non_included_probability
     global mutation_swap_probability, mutation_swap_flag, mutation_non_included_flag, rullet_selection_flag
     global tournament_selection_flag, csv_path, rank_selection_flag
     number_of_individuals = N_individuals
@@ -65,21 +60,21 @@ def SaveEverything(root, MutSwapFlag: int, MutAddNonFlag: int, MutSwapProb: floa
 
 
 def start_working(Root, SimText):
-    global best_solution
+    global best_solution, comp_time
     SimText.config(text="Algorithm is working", font=('Helvetica', 30), bg='#ff9f3f', fg="#fffaef")
     SimText.place_configure(x=X_Size//2.86)
     Root.update()
 
     if csv_path:
-        best_sol = start_simulation(csv_path, None, number_of_iterations, number_of_individuals,
+        best_sol, comp_time = start_simulation(csv_path, None, number_of_iterations, number_of_individuals,
                          mutation_non_included_probability, mutation_swap_probability, mutation_swap_flag,
                          mutation_non_included_flag, rullet_selection_flag, tournament_selection_flag, rank_selection_flag,
-                         dorm_flag, True)
+                         dorm_flag, True, data_name)
     else:
-        best_sol = start_simulation(None, n_of_people, number_of_iterations, number_of_individuals,
+        best_sol, comp_time = start_simulation(None, n_of_people, number_of_iterations, number_of_individuals,
                          mutation_non_included_probability, mutation_swap_probability, mutation_swap_flag,
                          mutation_non_included_flag, rullet_selection_flag, tournament_selection_flag, rank_selection_flag,
-                         dorm_flag, True)
+                         dorm_flag, True, data_name)
     SimText.config(text="Solution is ready", font=('Helvetica', 30), bg='#13f500', fg="#f6fffb")
     SimText.place_configure(x=X_Size//2.78)
     Root.update()
@@ -90,7 +85,9 @@ def Generate_Report(root, Simtext):
     global best_solution
 
     if best_solution:
-        doc = PDF(best_solution)
+        doc = PDF(best_solution, number_of_iterations, number_of_individuals, rullet_selection_flag,
+                  rank_selection_flag, tournament_selection_flag, mutation_non_included_flag, mutation_swap_flag,
+                  mutation_non_included_probability, mutation_swap_probability, comp_time, data_name)
         doc.generate()
         time.sleep(1)
         Simtext.config(text="Report generated successfully", fg="#ffffff", bg='#19a56f')
@@ -113,24 +110,30 @@ def Exit_app(root):
 
 
 def Generate_DataSet():
+    def save_name(name,ppl, root):
+        global data_name, n_of_people, csv_path
+        n_of_people = int(ppl.get())
+        data_name = name
+        csv_path = None
+        root.destroy()
     GenRoot = Toplevel()
     GenRoot.title("Generate DataSet for simulation")
-    GenRoot.geometry(f"{X_Size//4}x{Y_Size//2}")
+    GenRoot.geometry(f"{X_Size//4}x{Y_Size//4}")
 
-    NpeopleLabel = Label(GenRoot, text="Number of Students:")
+    NpeopleLabel = Label(GenRoot, text="Number of Students: ")
     NpeopleLabel.place(x=X_Size//70, y=Y_Size//20)
     NpeopleEntry = Entry(GenRoot)
     NpeopleEntry.insert(0, '200')
     NpeopleEntry.place(x=X_Size//9, y=Y_Size//20)
 
-    NplaceLabel = Label(GenRoot, text="Number of free place:")
-    NplaceLabel.place(x=X_Size//70, y=Y_Size//11)
-    NplaceEntry = Entry(GenRoot)
-    NplaceEntry.insert(0, '100')
-    NplaceEntry.place(x=X_Size // 9, y=Y_Size // 11)
+    NameSetLabel = Label(GenRoot, text="Name of set: ")
+    NameSetLabel.place(x=X_Size//70, y=Y_Size//11)
+    NameSetEntry = Entry(GenRoot)
+    NameSetEntry.insert(0, 'Name')
+    NameSetEntry.place(x=X_Size // 9, y=Y_Size // 11)
 
-    """DORM settings"""
-
+    SaveDataButton = Button(GenRoot, text="Save", command=lambda: save_name(NameSetEntry.get(), NpeopleEntry, GenRoot))
+    SaveDataButton.place(x=X_Size//6.5, y=int(Y_Size//8))
     GenRoot.mainloop()
 
 
@@ -159,10 +162,11 @@ def main_screen():
     main_Canv.pack(fill='both', expand=True)
 
     """Shows the name: Genetic Algorithm"""
-    main_Canv.create_text(X_Size//2.05, Y_Size//10, text="Genetic Algorithm", font=('Helvetica', 30), fill='#FFFFFF') #TODO Set good color
+    main_Canv.create_text(X_Size//2.05, Y_Size//10, text="Genetic Algorithm", font=('Helvetica', 30), fill='#FFFFFF')
 
     """ Shows the name: Simulation Parameters"""
-    main_Canv.create_text(X_Size//1.2, Y_Size//4, text="Simulation Parameters", font=('Times-Roman', 22), fill='#FDFFD9') #TODO Set good color
+    main_Canv.create_text(X_Size//1.23, Y_Size//3.3, text="Simulation Parameters", font=('Times-Roman', 22, 'bold'),
+                           fill='#ff4b2a')
     """ Shows the flag which light green when ready, red when not ready"""
 
     SimText = Label(Root, text="Data not ready", font=('Helvetica', 30), fg='#ffdddc', bg='#FF2231')
@@ -176,18 +180,18 @@ def main_screen():
     """REPORT Button -> When Simulation is done, it generate and shows report about simulation and dorm"""
     GenerateReportButton = TkinterCustomButton(text="Generate Report", corner_radius=10, width=BigB_X, height=BigB_Y,
                                                command=lambda: Generate_Report(Root, SimText), bg_color="#425b9a")
-    GenerateReportButton.place(x=X_Size//10, y=Y_Size//2)
+    GenerateReportButton.place(x=X_Size//7.5, y=Y_Size//1.95)
 
     """Help Button -> When clicked it opens new window with description how to use program"""
-    HelpButton = TkinterCustomButton(text="Help", corner_radius=10, width=BigB_X, height=BigB_Y, command=Help_User, bg_color="#4f6aaf")
-    HelpButton.place(x=X_Size//10, y=Y_Size//2.39)
+    # HelpButton = TkinterCustomButton(text="Help", corner_radius=10, width=BigB_X, height=BigB_Y, command=Help_User, bg_color="#4f6aaf")
+    # HelpButton.place(x=X_Size//10, y=Y_Size//2.39)
     """Choose file with data -> When clicked the browsers opens and user can choose file with data"""
     ChoseButton = TkinterCustomButton(text="Open File", corner_radius=8, command=Openfile, width=BigB_X, height=BigB_Y, bg_color="#6580c3")
-    ChoseButton.place(x=X_Size//10, y=Y_Size//4)
+    ChoseButton.place(x=X_Size//7.5, y=Y_Size//2.8)
     """ Generate dataset Button -> When clicked it opens new window with parameters of new dataset """
     GenerateButton = TkinterCustomButton(text="Generate Dataset", corner_radius=8, command=Generate_DataSet,
                                          height=BigB_Y, width=BigB_X,bg_color="#6580c3")
-    GenerateButton.place(x=X_Size//10, y=Y_Size//3)
+    GenerateButton.place(x=X_Size//7.5, y=Y_Size//2.3)
 
     """Parameters of Simulation"""
     MutationSwapButton = Checkbutton(Root, text="Swap Mutation", font=("Calibri", 12), variable=Mutation_Swap_Flag, bg="#425b9a", width=int(X_Size/70))
@@ -207,14 +211,14 @@ def main_screen():
                               troughcolor="#6580c3", bg="#425b9a", length=X_Size // 7.5)
     AddNonMutationScale.place(x=X_Size // 1.2, y=Y_Size // 1.37)
 
-    main_Canv.create_text(X_Size//1.11, Y_Size//2.39, text="Number of iterations", font=('Helvetica', 14), fill='#FFBBDD')
+    main_Canv.create_text(X_Size//1.11, Y_Size//2.35, text="Number of iterations", font=('Helvetica', 14), fill='#f4f2d8')
     IterationsEntry = Entry(Root, fg='#081117', width=int(X_Size / 60), font=("Calibri", 12))
     IterationsEntry.insert(0, '100')
-    IterationsEntry.place(x=X_Size//1.2, y=Y_Size//2.3)
+    IterationsEntry.place(x=X_Size//1.2, y=Y_Size//2.2)
     CreateToolTip.CreateToolTip(IterationsEntry, "Insert number of iterations. Sometimes big number of iterations doesn't change anything.")
 
     main_Canv.create_text(X_Size // 1.11, Y_Size // 2.9, text="Number of Individuals", font=('Helvetica', 14),
-                          fill='#FFBBDD')
+                          fill='#f4f2d8')
     IndividualsEntry = Entry(Root, fg='#081117', width=int(X_Size / 60), font=("Calibri", 12))
     IndividualsEntry.insert(0, '50')
     IndividualsEntry.place(x=X_Size // 1.2, y=Y_Size // 2.7)
@@ -258,7 +262,10 @@ def main_screen():
 
     """ SAVE button"""
     SaveButton = TkinterCustomButton(text="Save", corner_radius=5,
-                                     command=lambda: SaveEverything(Root, Mutation_Swap_Flag.get(), Mutation_AddNon_Flag.get(), SwapMutationScale.get(), AddNonMutationScale.get(), Selection.get(), int(IterationsEntry.get()), int(IndividualsEntry.get()), int(DormType.get()), SimText),
+                                     command=lambda: SaveEverything(Root, Mutation_Swap_Flag.get(),
+                                                                    Mutation_AddNon_Flag.get(), SwapMutationScale.get(),
+                                                                    AddNonMutationScale.get(), Selection.get(), int(IterationsEntry.get()),
+                                                                    int(IndividualsEntry.get()), int(DormType.get()), SimText),
                                      bg_color="#aaaaFF")
     SaveButton.place(x=X_Size//1.2, y=Y_Size//10)
     CreateToolTip.CreateToolTip(SaveButton, text="Click this button to actualize parameters of simulation")

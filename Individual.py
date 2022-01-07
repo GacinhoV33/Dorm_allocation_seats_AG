@@ -5,6 +5,7 @@ from Dorm import Dorm
 import numpy as np
 from random import randint
 
+
 class Individual:
     def __init__(self, length: int, dorm: Dorm, ppl: list):
         self.ppl = ppl

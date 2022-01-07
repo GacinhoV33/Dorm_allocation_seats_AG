@@ -5,7 +5,7 @@
 """ IMPORT FILES"""
 from plots import show_best_score, show_score_individual, show_frequency_Individual, show_best_score_iter
 from Dorm import Dorm
-from generate_people import read_from_excel, generate_random_people
+from generate_people import read_from_excel, generate_random_people, write_to_excel
 from Population import Population
 from time import time
 from random import randint
@@ -24,11 +24,13 @@ D_2 + D_3 = D (Algorithm should try find proportional amount of boys ang girls)
 
 def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, n_of_individuals: int=50, mutation_non_included_probability: float=0.1,
                      mutation_swap_probability: float=0.1, mutation_swap_flag: bool=True, mutation_non_included_flag:bool=True,
-                 rullet_selection_flag: bool=True, tournament_selection_flag=False, rank_selection_flag:bool=False, DormType: int=1, info_flag:bool=True):
+                 rullet_selection_flag: bool=True, tournament_selection_flag=False, rank_selection_flag:bool=False, DormType: int=1, info_flag:bool=True,
+                     data_name: str=''):
     if path:
         ppl = read_from_excel(path)
     elif n_of_people:
         ppl = generate_random_people(n_of_people)
+        write_to_excel(f'Data/{data_name}', ppl)
     else:
         raise ImportError("Running simulation without parameters")
 
@@ -54,7 +56,7 @@ def start_simulation(path: str=None, n_of_people: int=None, iteration: int=100, 
     print(f"Simulation took {end - st} seconds.")
     show_best_score_iter(Simulation_Population.best_solutions_iter, Simulation_Population.number_of_individuals)
     show_best_score(Simulation_Population.best_solutions_lst)
-    return Simulation_Population.best_solution
+    return Simulation_Population.best_solution, end - st
 
 
 if __name__ == "__main__":

@@ -7,7 +7,8 @@ import time
 
 
 class PDF(FPDF):
-    def __init__(self, best_solution):
+    def __init__(self, best_solution, iterations, individuals, rullet_flag, rank_flag, tour_flag,  mut_add_flag,
+                 mut_swap_flag, mut_add_prob, mut_swap_prob, computing_time):
         super().__init__()
         self.file_path = f'Reports/{date.today()}{time.strftime("%H%M")}.pdf'
         self.n_of_students = 200
@@ -16,6 +17,16 @@ class PDF(FPDF):
         self.n_of_3room = 20
         self.n_of_2room = 20
         self.ppl = best_solution.ppl
+        self.iterations = iterations
+        self.individuals = individuals
+        self.rullet_flag = rullet_flag
+        self.rank_flag = rank_flag
+        self.tour_flag = tour_flag
+        self.mut_add_flag = mut_add_flag
+        self.mut_swap_flag = mut_swap_flag
+        self.mut_add_prob = mut_add_prob
+        self.mut_swap_prob = mut_swap_prob
+        self.computing_time = computing_time
 
     def header(self):
         # Logo
@@ -49,12 +60,63 @@ class PDF(FPDF):
         """Simulation"""
         self.cell(200, h=10, ln=1)
         self.set_font('Arial', 'B', 20)
-        self.cell(w=200, h=10, align='C', txt='Simulation', ln=1)
+        self.cell(w=200, h=10, align='C', txt='Data', ln=1)
+        self.set_font('Arial', 'B', 14)
+        self.cell(w=50, h=10, txt=f'Number of students:')
         self.set_font('Arial', '', 14)
-        self.cell(w=200, h=10, txt=f'Number of students: {self.n_of_students}', ln=1)
-        self.cell(w=200, h=10, txt=f'Dorm name: {self.dorm_name}', ln=1)
-        self.cell(w=200, h=10, txt=f'Number of place in dorm: {self.n_of_place}', ln=1)
-        self.cell(w=200, h=10, txt=f'Rooms: {self.n_of_3room} x 3people  {self.n_of_2room} x 2people')
+        self.cell(w=60, h=10, txt=f'{self.n_of_students}', ln=1)
+
+        self.set_font('Arial', 'B', 14)
+        self.cell(w=60, h=10, txt=f'Number of place in dorm:')
+        self.set_font('Arial', '', 14)
+        self.cell(w=60, h=10, txt=f'{self.n_of_place}', ln=1)
+
+        self.set_font('Arial', 'B', 14)
+        self.cell(w=30, h=10, txt=f'Dorm name:')
+        self.set_font('Arial', '', 14)
+        self.cell(w=60, h=10, txt=f'{self.dorm_name}', ln=1)
+
+
+        self.set_font('Arial', 'B', 20)
+        self.cell(w=200, h=10, align='C', txt='Simulation Parameters', ln=1)
+        self.set_font('Arial', 'B', 14)
+        self.cell(w=24, h=10, txt=f'Iterations:')
+        self.set_font('Arial', '', 14)
+        self.cell(w=60, h=10, txt=f'{self.iterations}', ln=1)
+        self.set_font('Arial', 'B', 14)
+        self.cell(w=28, h=10, txt=f'Individuals:')
+        self.set_font('Arial', '', 14)
+        self.cell(w=60, h=10, txt=f'{self.individuals}', ln=1)
+        self.set_font('Arial', 'B', 14)
+        self.cell(w=24, h=10, txt=f'Selection:')
+        if self.rank_flag:
+            self.set_font('Arial', '', 14)
+            self.cell(w=60, h=10, txt=f'Ranking Selection', ln=1)
+        elif self.tour_flag:
+            self.set_font('Arial', '', 14)
+            self.cell(w=60, h=10, txt=f'Tournament Selection', ln=1)
+        elif self.rullet_flag:
+            self.set_font('Arial', '', 14)
+            self.cell(w=60, h=10, txt=f'Roulette Selection', ln=1)
+        else:
+            self.cell(ln=1)
+
+        self.set_font('Arial', 'B', 14)
+        self.cell(w=40, h=10, txt='Mutations:', ln=1)
+        if self.mut_add_flag:
+            self.set_font('Arial', '', 14)
+            self.cell(w=80, h=10, txt=f' - Add Non Included Mutation with probability {float(self.mut_add_prob * 100)}%', ln=1)
+        if self.mut_swap_flag:
+            self.set_font('Arial', '', 14)
+            self.cell(w=80, h=10, txt=f' - Swap Mutation with probability {float(self.mut_add_prob) * 100}%', ln=1)
+        if not self.mut_swap_flag and not self.mut_swap_flag:
+            self.set_font('Arial', '', 14)
+            self.cell(w=80, h=10, txt=' -None')
+
+        self.set_font('Arial', 'B', 14)
+        self.cell(w=40, h=10, txt=f'Computing Time: ')
+        self.set_font('Arial', '', 14)
+        self.cell(w=60, h=10, txt=f'{int(self.computing_time)} seconds.')
 
     def second_page(self):
         """People who gets room"""

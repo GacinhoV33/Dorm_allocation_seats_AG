@@ -212,7 +212,7 @@ class Population:
         print(f'Iteration: {current_iteration}/{self.number_of_iterations}')
         if label:
             pass
-            #TODO showing how much left
+
 
     def Genetic_Algorithm(self, ):
         for i in tqdm(range(self.number_of_iterations), desc='Simulation in progress: '):

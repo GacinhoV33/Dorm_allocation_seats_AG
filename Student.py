@@ -96,5 +96,7 @@ class Student:
 
 
 if __name__ == "__main__":
-    lst = []
-    print(len(set(lst)))
+    lst = [2 , 5]
+    x = lst.pop()
+    print(x)
+    print(lst)

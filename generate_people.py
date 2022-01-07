@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import random
-import time
 
 import xlrd
 import xlwt
@@ -360,11 +359,12 @@ def write_to_excel(name: str, data: list):
 
 
 if __name__ == "__main__":
-    t = time.time()
+    # t = time.time()
+    pass
     # ppl = generate_random_people(100)
     """Writing data to excel"""
     # write_to_excel("Main1", ppl)
-    write_to_excel("Data/200ppl_test.xls", generate_random_people(200))
+    # write_to_excel("Data/200ppl_test.xls", generate_random_people(200))
     # print(len(ppl))
     # at = time.time()
     # print(f"It took {float(at - t)} seconds.")
