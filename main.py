@@ -182,9 +182,6 @@ def main_screen():
                                                command=lambda: Generate_Report(Root, SimText), bg_color="#425b9a")
     GenerateReportButton.place(x=X_Size//7.5, y=Y_Size//1.95)
 
-    """Help Button -> When clicked it opens new window with description how to use program"""
-    # HelpButton = TkinterCustomButton(text="Help", corner_radius=10, width=BigB_X, height=BigB_Y, command=Help_User, bg_color="#4f6aaf")
-    # HelpButton.place(x=X_Size//10, y=Y_Size//2.39)
     """Choose file with data -> When clicked the browsers opens and user can choose file with data"""
     ChoseButton = TkinterCustomButton(text="Open File", corner_radius=8, command=Openfile, width=BigB_X, height=BigB_Y, bg_color="#6580c3")
     ChoseButton.place(x=X_Size//7.5, y=Y_Size//2.8)

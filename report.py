@@ -12,13 +12,16 @@ class PDF(FPDF):
         super().__init__()
         self.file_path = f'Reports/{date.today()}{time.strftime("%H%M")}.pdf'
         self.n_of_students = 200
-        self.n_of_place = 100
+
         if dorm_type == 1:
             self.dorm_name = "Olimp"
+            self.n_of_place = 120
         elif dorm_type == 2:
             self.dorm_name = "Filutek"
+            self.n_of_place = 100
         elif dorm_type == 3:
             self.dorm_name = "Bablion"
+            self.n_of_place = 350
         else:
             self.dorm_name = "Test_dorm"
 
@@ -157,13 +160,11 @@ class PDF(FPDF):
                 self.set_font('Arial', '', 12)
                 self.set_text_color(10, 10, 10)
 
-            # self.cell(200, h=10, ln=1)
             self.set_font('Arial', '', 12)
             self.set_text_color(10, 10, 10)
             self.cell(30, 10, f'{person.first_name}')
             self.cell(30, 10, f'{person.last_name}')
             self.set_font('Arial', 'I', 12)
-            # self.cell(30, 10, 'Status: ')
             if person.actual_room is None:
                 self.set_text_color(255, 0, 0)
                 self.cell(30, 10, txt=f"Negative", align='C')

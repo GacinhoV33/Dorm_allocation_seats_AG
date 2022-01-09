@@ -49,6 +49,14 @@ class TestPopulation(unittest.TestCase):
         self.assertNotEqual(pop.best_solution, None)
         self.assertEqual(len(pop.best_solutions_lst), 0)
 
+    def test_Pop(self):
+        dorm = Dorm("TEST_DORM", n_floors=5, n_rooms=4, ppl=generate_random_people())
+        pop = Population(20, len(dorm.ppl), dorm.ppl, dorm, 30)
+        pop.Genetic_Algorithm()
+        self.assertEqual(pop.number_of_individuals, 20)
+        self.assertNotEqual(pop.best_solution, None)
+        self.assertEqual(len(pop.Individual_lst[3].score_lst), 30)
+
 
 if __name__ == "__main__":
     unittest.main()

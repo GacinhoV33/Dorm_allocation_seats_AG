@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-"""Chromosom"""
 class Student:
     def __init__(self, first_name: str, last_name: str, distance: float, year_of_studies: int,
                  standard_of_room: int, income: float, gpa: float,  PESEL: str, sex: str,
@@ -96,7 +95,4 @@ class Student:
 
 
 if __name__ == "__main__":
-    lst = [2 , 5]
-    x = lst.pop()
-    print(x)
-    print(lst)
+    pass

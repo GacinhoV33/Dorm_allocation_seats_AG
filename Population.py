@@ -60,7 +60,6 @@ class Population:
             )
         for individual in self.Individual_lst:
             individual.initialize_Individual()
-            # individual.set_rooms() x2
             if self.best_solution:
                 if individual.score:
                     if individual.score > self.best_solution.score:
@@ -87,7 +86,8 @@ class Population:
     def crossing(self, individual1: Individual, individual2: Individual):
         r = randint(0, self.number_of_students - 1)
         individual1.arr_bin[r:], individual2.arr_bin[r:] = individual2.arr_bin[r:], individual1.arr_bin[r:]
-        individual1.actualize_Individual(), individual2.actualize_Individual()
+        individual1.actualize_Individual(flag_act=True)
+        individual2.actualize_Individual(flag_act=True)
 
     def cross_population(self):
         """ We generate random int to chose in what way we should take individuals to crossing"""
@@ -114,7 +114,7 @@ class Population:
             end = individual.arr_bin[-r:]
             individual.arr_bin[:r] = end
             individual.arr_bin[-r:] = beginning
-            individual.actualize_Individual(True, it, mutation_type=MUTATION_SWAP)
+            individual.actualize_Individual(False, it, mutation_type=MUTATION_SWAP)
             individual.n_of_mutations += 1
 
     def mutation_add_non_included(self, individual, actual_iteration):
@@ -132,7 +132,7 @@ class Population:
                     individual.arr_bin[freq_low_lst[0][i]] = individual.arr_bin[freq_max_lst[0][i]]
                     individual.arr_bin[freq_max_lst[0][i]] = 0
 
-            individual.actualize_Individual(flag_act=True, it=actual_iteration, mutation_type=MUTATION_NON)
+            individual.actualize_Individual(False, it=actual_iteration, mutation_type=MUTATION_NON)
             individual.n_of_mutations += 1
 
 

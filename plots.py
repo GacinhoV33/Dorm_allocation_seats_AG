@@ -3,13 +3,6 @@
 
 from matplotlib import pyplot as plt
 
-#TODO
-# 1 Punishment through iterations (for specific individual)
-# 2 Punishment through iterations with actual score (for specific individual)
-# 3 Comparison the tournament selection with rullet
-# 4 Comparison with and without mutations
-# 5
-
 
 def show_best_score(bst_score: list):
     """Function shows best score from population through time of iterations"""
@@ -35,21 +28,23 @@ def show_score_individual(score_lst: list, mutation_lst: list):
     n_of_iteration = len(score_lst)
     iterations = [i for i in range(n_of_iteration)]
     plt.figure(num=2, figsize=[30, 15])
+
+    plt.title('Score of Individual through the iterations')
     for i, mut in enumerate(['MUTATION_NON', 'MUTATION_SWAP']):
         plt.plot([point[0] for j, point in enumerate(mutation_lst) if cmap_[j] == mutations[i]],
-                 [point[1] for j, point in enumerate(mutation_lst) if cmap_[j] == mutations[i]],
-                 marker='o', linestyle='', markersize=12, label=mut)
+                    [point[1] for j, point in enumerate(mutation_lst) if cmap_[j] == mutations[i]],
+                    marker='o', linestyle='', markersize=12, label=mut)
+    plt.plot(iterations, score_lst, c='r', label='Score')
+
     plt.xlabel("N of iteration")
     plt.ylabel("Score")
     plt.grid()
-    plt.title('Score of Individual through the iterations')
-    plt.plot(iterations, score_lst, c='r', label='Score')
     plt.legend()
     plt.show()
 
 
 def show_frequency_Individual(frequency_lst: list):
-    """Functions shows frequency of every student. #TODO"""
+    """Functions shows frequency of every student"""
     n_of_iteration = len(frequency_lst)
     iterations = [i for i in range(n_of_iteration)]
     plt.figure(num=3)

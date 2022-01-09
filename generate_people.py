@@ -167,7 +167,6 @@ def generate_random_people(n:int = 100) -> list:
     standards = generate_standard(n)
     PESELs = generate_PESEL(n)
     incomes = generate_income(n)
-    #TOREPORT - zaznaczyc że studenci pierwszego roko otrzymują średnią z liceum
     gpas = generate_gpa(n)
     """ CREATING INSTANCES OF CLASS STUDENT"""
     people = list()
@@ -359,12 +358,4 @@ def write_to_excel(name: str, data: list):
 
 
 if __name__ == "__main__":
-    # t = time.time()
     pass
-    # ppl = generate_random_people(100)
-    """Writing data to excel"""
-    # write_to_excel("Main1", ppl)
-    # write_to_excel("Data/200ppl_test.xls", generate_random_people(200))
-    # print(len(ppl))
-    # at = time.time()
-    # print(f"It took {float(at - t)} seconds.")

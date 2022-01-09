@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from random import shuffle
 from Dorm import Dorm
 import numpy as np
 from random import randint
@@ -40,8 +39,8 @@ class Individual:
         self.calc_score()
         if mutation_type != 0:
             self.mutation_lst.append([it, mutation_type])
+        self.check_diversity()
         if flag_act:
-            self.check_diversity()
             self.score_lst.append(self.score)
 
     def calc_score(self):
